@@ -2,7 +2,7 @@
   "name": "Deep Talk",
   "short_name": "Deep Talk",
   "start_url": "./index.html",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#f4f4f4",
   "theme_color": "#f4f4f4",
   "orientation": "portrait",
