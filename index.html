@@ -32,7 +32,6 @@
             align-items: center;
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
-            /* Verhindert "Bouncen" der Seite */
             overscroll-behavior: none;
         }
 
@@ -55,12 +54,10 @@
 
         .screen.active { display: flex; z-index: 10; }
 
-        /* Typografie */
         h1 { font-size: 2.5rem; margin-bottom: 10px; letter-spacing: 3px; text-transform: uppercase; font-weight: 900; }
         h2 { font-size: 1.5rem; margin-bottom: 20px; text-transform: uppercase; }
         p { font-size: 1rem; line-height: 1.5; }
 
-        /* Inputs & Buttons */
         input { padding: 15px; font-size: 1.2rem; border-radius: 12px; border: 1px solid #ccc; margin-bottom: 20px; text-align: center; width: 80%; max-width: 300px; outline: none; }
 
         .btn-primary {
@@ -92,7 +89,6 @@
             margin-top: 10px;
         }
 
-        /* Option Buttons (15, 20, Custom) */
         .options-container {
             display: flex;
             gap: 10px;
@@ -118,7 +114,6 @@
             box-shadow: 0 5px 10px rgba(0,0,0,0.1);
         }
 
-        /* Das Karten-Design */
         #card-display {
             background: var(--card-bg);
             width: 85%;
@@ -136,7 +131,6 @@
             position: relative;
             transition: all 0.3s ease;
             cursor: pointer;
-            /* Wichtig für Text-Rendering */
             -webkit-font-smoothing: antialiased;
         }
         
@@ -154,7 +148,7 @@
 
         .back-btn { 
             position: absolute; 
-            top: 50px; /* Tiefer wegen iPhone Notch */
+            top: 50px; 
             left: 20px; 
             background: rgba(255,255,255,0.8); 
             backdrop-filter: blur(5px);
@@ -170,10 +164,9 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        /* Der "Nächstes Level" Button (Popup) */
         #next-level-btn {
             position: absolute;
-            bottom: 8%; /* Schwebt unten über dem Boden */
+            bottom: 8%; 
             background-color: #111;
             color: white;
             padding: 15px 30px;
@@ -181,7 +174,7 @@
             font-weight: bold;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             z-index: 50;
-            display: none; /* Erstmal versteckt */
+            display: none; 
             animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -192,7 +185,6 @@
         .fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Anleitung */
         .scroll-content {
             text-align: left;
             max-height: 60vh;
@@ -233,7 +225,6 @@
         </div>
 
         <button class="btn-primary" onclick="initGame()">START</button>
-        
         <button class="btn-secondary" onclick="showScreen('rules-screen')">Anleitung</button>
     </div>
 
@@ -241,18 +232,17 @@
         <h2>Anleitung</h2>
         <div class="scroll-content">
             <h3>So wird gespielt</h3>
-            <p><strong>Das Ziel:</strong> Lernt euch besser kennen. Es gibt 3 Level, die immer tiefer gehen.</p>
+            <p><strong>Das Ziel:</strong> Lernt euch besser kennen. Es gibt 3 Level.</p>
             <ol>
                 <li>Legt das Handy zwischen euch.</li>
                 <li><strong>Start:</strong> Schaut euch tief in die Augen. Wer zuerst blinzelt, fängt an.</li>
                 <li>Lest die Frage laut vor. Beide können antworten.</li>
-                <li>Wechselt euch ab.</li>
             </ol>
             <p><strong>Die Level:</strong></p>
             <ul style="padding-left: 20px;">
-                <li>Level 1: Wahrnehmung (Erster Eindruck)</li>
-                <li>Level 2: Verbindung (Deep Talk)</li>
-                <li>Level 3: Reflexion (Über uns)</li>
+                <li>Level 1: Wahrnehmung</li>
+                <li>Level 2: Verbindung</li>
+                <li>Level 3: Reflexion</li>
             </ul>
         </div>
         <button class="btn-secondary" onclick="showScreen('menu-screen')">Zurück</button>
@@ -272,7 +262,6 @@
     </div>
 
     <script>
-        // --- DATENBANK ---
         const finalCardText = "Jeder Spieler schreibt eine Nachricht an den anderen. Faltet und tauscht diese aus. Öffnet sie erst, wenn ihr alleine seid.";
 
         const database = {
@@ -448,17 +437,14 @@
             ]
         };
 
-        // --- VARIABLEN ---
         let currentStack = [];
         let currentLevel = 1;
         let cardsPlayedCount = 0;
-        let cardsLimit = 15; // Standard
+        let cardsLimit = 15; 
         
-        // --- FUNKTIONEN ---
-
         function checkPassword() {
             const input = document.getElementById('password-input').value;
-            // ÄNDERE HIER DEIN PASSWORT
+            // PASSWORT HIER:
             if (input === "banane") { 
                 showScreen('menu-screen');
             } else {
@@ -471,9 +457,7 @@
             document.getElementById(screenId).classList.add('active');
         }
 
-        // --- RUNDEN ANZAHL EINSTELLEN ---
         function setLimit(value) {
-            // Alle Buttons resetten
             document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('custom-input-container').style.display = 'none';
 
@@ -493,7 +477,6 @@
             if(val) cardsLimit = parseInt(val);
         }
 
-        // --- SPIEL STARTEN ---
         function initGame() {
             currentLevel = 1;
             loadLevel(1);
@@ -502,22 +485,18 @@
 
         function loadLevel(level) {
             currentLevel = level;
-            cardsPlayedCount = 0; // Zähler resetten
+            cardsPlayedCount = 0; 
             
-            // Verstecke "Nächstes Level" Button
             document.getElementById('next-level-btn').style.display = 'none';
 
             if (!database[level]) { alert("Fehler: Level leer"); return; }
 
-            // Stapel kopieren & mischen
             currentStack = [...database[level]];
             shuffleArray(currentStack);
             
-            // UI Update
             document.getElementById('level-indicator').innerText = "Level " + level;
             
-            // Erste Karte ziehen
-            nextCard(true); // true = initial draw
+            nextCard(true);
         }
 
         function shuffleArray(array) {
@@ -528,7 +507,6 @@
         }
 
         function nextCard(isInitial = false) {
-            // Wenn nicht der allererste Aufruf, Zähler erhöhen
             if (!isInitial) {
                 cardsPlayedCount++;
             }
@@ -538,31 +516,32 @@
             const levelInd = document.getElementById('level-indicator');
             const nextBtn = document.getElementById('next-level-btn');
 
-            // --- PRÜFUNG: Limit erreicht? ---
-            // Wenn wir das Limit erreichen UND noch nicht im letzten Level sind
-            if (cardsPlayedCount >= cardsLimit && currentLevel < 3) {
-                nextBtn.innerText = "WEITER ZU LEVEL " + (currentLevel + 1);
-                nextBtn.style.display = "block"; // Button erscheint
+            // --- NEUE LOGIK FÜR DAS LIMIT ---
+            if (cardsPlayedCount >= cardsLimit) {
+                nextBtn.style.display = "block";
+                
+                if (currentLevel < 3) {
+                    nextBtn.innerText = "WEITER ZU LEVEL " + (currentLevel + 1);
+                } else {
+                    // Level 3 Limit erreicht -> Zeige Abschluss-Button
+                    nextBtn.innerText = "ZUM ABSCHLUSS";
+                }
             }
 
-            // --- PRÜFUNG: Stapel leer? ---
             if (currentStack.length === 0) {
                 if (currentLevel < 3) {
-                    // Level leer -> Zwinge Button zur Anzeige
                     cardText.innerText = "Level " + currentLevel + " durchgespielt!";
                     nextBtn.innerText = "WEITER ZU LEVEL " + (currentLevel + 1);
                     nextBtn.style.display = "block";
-                    cardDisplay.className = ""; // Neutral
+                    cardDisplay.className = ""; 
                     return;
                 } else {
-                    // Level 3 leer -> Endcard anzeigen
                     showEndCard();
                     return;
                 }
             }
 
-            // Normale Karte ziehen
-            // Animation Reset
+            // Animation
             cardDisplay.classList.remove('fade-in');
             void cardDisplay.offsetWidth; 
             cardDisplay.classList.add('fade-in');
@@ -571,7 +550,6 @@
             cardText.innerText = card.text;
             levelInd.innerText = "Level " + currentLevel;
 
-            // Design ändern
             if (card.type === "wildcard") {
                 cardDisplay.className = "wildcard fade-in";
             } else {
@@ -593,14 +571,13 @@
             const levelInd = document.getElementById('level-indicator');
             const nextBtn = document.getElementById('next-level-btn');
 
-            nextBtn.style.display = 'none'; // Button weg
+            nextBtn.style.display = 'none'; 
             
             cardText.innerText = finalCardText;
             cardDisplay.className = "endcard fade-in";
             levelInd.innerText = "Finale";
         }
 
-        // Service Worker
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
             .then(() => console.log("SW ready"))
