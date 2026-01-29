@@ -1,0 +1,220 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2867
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html lang="de">\
+<head>\
+    <meta charset="UTF-8">\
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">\
+    <title>Deep Talk</title>\
+    <link rel="manifest" href="manifest.json">\
+    <meta name="apple-mobile-web-app-capable" content="yes">\
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">\
+    <link rel="apple-touch-icon" href="icon.png"> \
+    \
+    <style>\
+        /* --- CSS: Das Design --- */\
+        body \{\
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;\
+            margin: 0;\
+            padding: 0;\
+            background-color: #f4f4f4; /* Hellgrauer Hintergrund */\
+            color: #333;\
+            height: 100vh;\
+            display: flex;\
+            justify-content: center;\
+            align-items: center;\
+            overflow: hidden;\
+        \}\
+\
+        .screen \{\
+            width: 100%;\
+            height: 100%;\
+            display: none; /* Alle Screens erst mal ausblenden */\
+            flex-direction: column;\
+            justify-content: center;\
+            align-items: center;\
+            padding: 20px;\
+            box-sizing: border-box;\
+            text-align: center;\
+        \}\
+\
+        /* Zeige den Screen, der die Klasse 'active' hat */\
+        .screen.active \{ display: flex; \}\
+\
+        h1 \{ font-size: 2rem; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; \}\
+        \
+        input \{ padding: 15px; font-size: 1.2rem; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 20px; text-align: center; \}\
+\
+        button \{\
+            background-color: #111;\
+            color: white;\
+            border: none;\
+            padding: 15px 30px;\
+            font-size: 1rem;\
+            border-radius: 50px;\
+            cursor: pointer;\
+            margin: 10px;\
+            text-transform: uppercase;\
+            letter-spacing: 1px;\
+            transition: transform 0.1s;\
+        \}\
+        button:active \{ transform: scale(0.95); \}\
+\
+        /* Das Karten-Design */\
+        #card-display \{\
+            background: white;\
+            width: 90%;\
+            max-width: 400px;\
+            height: 60vh;\
+            border-radius: 20px;\
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);\
+            display: flex;\
+            justify-content: center;\
+            align-items: center;\
+            padding: 40px;\
+            font-size: 1.5rem;\
+            font-weight: bold;\
+            position: relative;\
+            transition: background 0.3s, color 0.3s;\
+        \}\
+\
+        /* Design f\'fcr Wildcards */\
+        #card-display.wildcard \{\
+            background: #b82326; /* Dunkelrot */\
+            color: white;\
+        \}\
+\
+        .small-text \{ font-size: 0.8rem; opacity: 0.6; position: absolute; bottom: 20px; \}\
+        .back-btn \{ position: absolute; top: 20px; left: 20px; background: transparent; color: #333; padding: 0; \}\
+\
+    </style>\
+</head>\
+<body>\
+\
+    <div id="login-screen" class="screen active">\
+        <h1>Deep Talk</h1>\
+        <p>Bitte Passwort eingeben</p>\
+        <input type="password" id="password-input" placeholder="Passwort">\
+        <button onclick="checkPassword()">Starten</button>\
+    </div>\
+\
+    <div id="menu-screen" class="screen">\
+        <h1>W\'e4hle Level</h1>\
+        <button onclick="startGame(1)">Level 1: Wahrnehmung</button>\
+        <button onclick="startGame(2)">Level 2: Verbindung</button>\
+        <button onclick="startGame(3)">Level 3: Reflexion</button>\
+    </div>\
+\
+    <div id="game-screen" class="screen">\
+        <button class="back-btn" onclick="showScreen('menu-screen')">\uc0\u8592  Zur\'fcck</button>\
+        \
+        <div id="card-display" onclick="nextCard()">\
+            <span id="card-text">Klicke f\'fcr erste Karte</span>\
+            <div class="small-text" id="level-indicator">Level 1</div>\
+        </div>\
+        \
+        <p style="margin-top: 20px; opacity: 0.5;">Tippen f\'fcr n\'e4chste Karte</p>\
+    </div>\
+\
+    <script>\
+        // --- JAVASCRIPT: Die Logik ---\
+\
+        // 1. DEINE DATENBANK\
+        // Hier tr\'e4gst du deine Fragen ein. \
+        const database = \{\
+            1: [\
+                \{ text: "Was war dein erster Eindruck von mir?", type: "normal" \},\
+                \{ text: "Was glaubst du, mache ich beruflich?", type: "normal" \},\
+                \{ text: "WILDCARD: Schau deinem Gegen\'fcber 30 Sek in die Augen.", type: "wildcard" \}\
+            ],\
+            2: [\
+                \{ text: "Was ist deine gr\'f6\'dfte Angst?", type: "normal" \},\
+                \{ text: "Wann hast du zuletzt geweint?", type: "normal" \},\
+                \{ text: "WILDCARD: Umarme dein Gegen\'fcber.", type: "wildcard" \}\
+            ],\
+            3: [\
+                \{ text: "Was w\'fcrdest du an dir \'e4ndern?", type: "normal" \},\
+                \{ text: "Was bereust du am meisten?", type: "normal" \}\
+            ]\
+        \};\
+\
+        // Variablen f\'fcr den Spielzustand\
+        let currentStack = [];\
+        let currentLevel = 1;\
+\
+        // Passwort-Schutz\
+        function checkPassword() \{\
+            const input = document.getElementById('password-input').value;\
+            // \'c4NDERE HIER DEIN PASSWORT ("banane")\
+            if (input === "banane") \{ \
+                showScreen('menu-screen');\
+            \} else \{\
+                alert("Falsches Passwort!");\
+            \}\
+        \}\
+\
+        // Hilfsfunktion zum Wechseln der Ansicht\
+        function showScreen(screenId) \{\
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));\
+            document.getElementById(screenId).classList.add('active');\
+        \}\
+\
+        // Spiel starten\
+        function startGame(level) \{\
+            currentLevel = level;\
+            // Wir machen eine Kopie der Fragen, damit wir sie aus dem Stapel l\'f6schen k\'f6nnen (damit nichts doppelt kommt)\
+            // [...] erstellt eine Kopie des Arrays\
+            if (!database[level]) \{ alert("Level leer!"); return; \}\
+            \
+            currentStack = [...database[level]]; \
+            \
+            // Mische den Stapel (Fisher-Yates Shuffle)\
+            for (let i = currentStack.length - 1; i > 0; i--) \{\
+                const j = Math.floor(Math.random() * (i + 1));\
+                [currentStack[i], currentStack[j]] = [currentStack[j], currentStack[i]];\
+            \}\
+\
+            showScreen('game-screen');\
+            document.getElementById('level-indicator').innerText = "Level " + level;\
+            nextCard();\
+        \}\
+\
+        // N\'e4chste Karte ziehen\
+        function nextCard() \{\
+            const cardDisplay = document.getElementById('card-display');\
+            const cardText = document.getElementById('card-text');\
+\
+            if (currentStack.length === 0) \{\
+                cardText.innerText = "Level beendet!";\
+                cardDisplay.className = ""; // Styles zur\'fccksetzen\
+                return;\
+            \}\
+\
+            // Die erste Karte aus dem gemischten Stapel nehmen und entfernen\
+            const card = currentStack.pop();\
+\
+            cardText.innerText = card.text;\
+\
+            // Design \'e4ndern, wenn es eine Wildcard ist\
+            if (card.type === "wildcard") \{\
+                cardDisplay.className = "wildcard";\
+            \} else \{\
+                cardDisplay.className = "";\
+            \}\
+        \}\
+\
+        // --- SERVICE WORKER REGISTRIERUNG (F\'fcr Offline Modus) ---\
+        if ('serviceWorker' in navigator) \{\
+            navigator.serviceWorker.register('sw.js')\
+            .then(() => console.log("Service Worker registriert"))\
+            .catch(err => console.log("Service Worker Fehler", err));\
+        \}\
+\
+    </script>\
+</body>\
+</html>}
