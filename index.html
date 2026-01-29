@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Deep Talk</title>
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,7 +10,6 @@
     <link rel="apple-touch-icon" href="icon.png"> 
     
     <style>
-        /* --- CSS: Das Design --- */
         :root {
             --bg-color: #f4f4f4;
             --card-bg: #ffffff;
@@ -18,6 +17,7 @@
             --wildcard-bg: #b82326;
             --wildcard-text: #ffffff;
             --btn-color: #111;
+            --accent-color: #e0e0e0;
         }
 
         body {
@@ -32,6 +32,8 @@
             align-items: center;
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
+            /* Verhindert "Bouncen" der Seite */
+            overscroll-behavior: none;
         }
 
         .screen {
@@ -48,86 +50,161 @@
             top: 0;
             left: 0;
             background-color: var(--bg-color);
+            z-index: 1;
         }
 
         .screen.active { display: flex; z-index: 10; }
 
-        h1 { font-size: 2rem; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
+        /* Typografie */
+        h1 { font-size: 2.5rem; margin-bottom: 10px; letter-spacing: 3px; text-transform: uppercase; font-weight: 900; }
         h2 { font-size: 1.5rem; margin-bottom: 20px; text-transform: uppercase; }
+        p { font-size: 1rem; line-height: 1.5; }
 
-        input { padding: 15px; font-size: 1.2rem; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 20px; text-align: center; width: 80%; max-width: 300px; }
+        /* Inputs & Buttons */
+        input { padding: 15px; font-size: 1.2rem; border-radius: 12px; border: 1px solid #ccc; margin-bottom: 20px; text-align: center; width: 80%; max-width: 300px; outline: none; }
 
-        button {
+        .btn-primary {
             background-color: var(--btn-color);
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 1rem;
+            padding: 18px 40px;
+            font-size: 1.1rem;
             border-radius: 50px;
             cursor: pointer;
-            margin: 10px;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+        .btn-primary:active { transform: scale(0.95); }
+
+        .btn-secondary {
+            background-color: #ddd;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: transform 0.1s;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-top: 10px;
         }
-        button:active { transform: scale(0.95); }
 
-        /* Scrollbarer Bereich für Anleitung */
-        .scroll-content {
-            text-align: left;
-            max-height: 70vh;
-            overflow-y: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            line-height: 1.6;
+        /* Option Buttons (15, 20, Custom) */
+        .options-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            margin-top: 10px;
         }
-        .scroll-content h3 { margin-top: 20px; margin-bottom: 10px; border-bottom: 2px solid #eee; padding-bottom: 5px; }
+        .opt-btn {
+            background: white;
+            border: 2px solid transparent;
+            padding: 12px 20px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #888;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+        .opt-btn.active {
+            border-color: #111;
+            color: #111;
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
 
         /* Das Karten-Design */
         #card-display {
             background: var(--card-bg);
             width: 85%;
-            max-width: 400px;
-            aspect-ratio: 3/4; /* Kartenverhältnis */
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            max-width: 380px;
+            aspect-ratio: 3/4;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 40px;
             font-size: 1.6rem;
             font-weight: bold;
             position: relative;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
             cursor: pointer;
-            flex-direction: column;
-        }
-
-        /* Design für Wildcards */
-        #card-display.wildcard {
-            background: var(--wildcard-bg);
-            color: var(--wildcard-text);
+            /* Wichtig für Text-Rendering */
+            -webkit-font-smoothing: antialiased;
         }
         
-        /* Design für Endcard */
-        #card-display.endcard {
-            background: #111;
-            color: #fff;
-            border: 2px solid #fff;
+        #card-display.wildcard { background: var(--wildcard-bg); color: var(--wildcard-text); }
+        #card-display.endcard { background: #111; color: #fff; border: 2px solid #fff; }
+
+        .small-text { 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            opacity: 0.4; 
+            position: absolute; 
+            bottom: 30px; 
         }
 
-        #card-text { width: 100%; word-wrap: break-word; }
-        .small-text { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5; position: absolute; bottom: 30px; }
-        .back-btn { position: absolute; top: 20px; left: 20px; background: transparent; color: #333; padding: 10px; box-shadow: none; font-size: 1.2rem; z-index: 20; }
+        .back-btn { 
+            position: absolute; 
+            top: 50px; /* Tiefer wegen iPhone Notch */
+            left: 20px; 
+            background: rgba(255,255,255,0.8); 
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
+            width: 40px; 
+            height: 40px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 1.2rem; 
+            border: none;
+            z-index: 20; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
-        /* Animation beim Wechseln */
-        .fade-in { animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Der "Nächstes Level" Button (Popup) */
+        #next-level-btn {
+            position: absolute;
+            bottom: 8%; /* Schwebt unten über dem Boden */
+            background-color: #111;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 50;
+            display: none; /* Erstmal versteckt */
+            animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        @keyframes popUp { from { transform: scale(0.5) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Anleitung */
+        .scroll-content {
+            text-align: left;
+            max-height: 60vh;
+            overflow-y: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .scroll-content h3 { border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 0; }
 
     </style>
 </head>
@@ -135,67 +212,71 @@
 
     <div id="login-screen" class="screen active">
         <h1>Deep Talk</h1>
-        <p>Zugang nur für Freunde</p>
+        <p style="opacity: 0.6; margin-top: -10px; margin-bottom: 30px;">Private Edition</p>
         <input type="password" id="password-input" placeholder="Passwort">
-        <button onclick="checkPassword()">Eintreten</button>
+        <button class="btn-primary" onclick="checkPassword()">Eintreten</button>
     </div>
 
     <div id="menu-screen" class="screen">
-        <h1>Wähle Level</h1>
-        <button onclick="startGame(1)">Level 1: Wahrnehmung</button>
-        <button onclick="startGame(2)">Level 2: Verbindung</button>
-        <button onclick="startGame(3)">Level 3: Reflexion</button>
-        <div style="height: 30px;"></div>
-        <button onclick="showScreen('rules-screen')" style="background-color: #666; font-size: 0.8rem;">Anleitung</button>
+        <h1 style="font-size: 3rem;">DEEP<br>TALK</h1>
+        
+        <p style="margin-top: 30px; font-weight: bold; opacity: 0.5; font-size: 0.8rem; letter-spacing: 1px;">KARTEN PRO LEVEL</p>
+        
+        <div class="options-container">
+            <button id="opt-15" class="opt-btn active" onclick="setLimit(15)">15</button>
+            <button id="opt-20" class="opt-btn" onclick="setLimit(20)">20</button>
+            <button id="opt-custom" class="opt-btn" onclick="setLimit('custom')">Custom</button>
+        </div>
+        
+        <div id="custom-input-container" style="display:none; margin-bottom: 10px;">
+            <input type="number" id="custom-number" placeholder="Anzahl" style="width: 100px; padding: 10px;" oninput="updateCustomValue()">
+        </div>
+
+        <button class="btn-primary" onclick="initGame()">START</button>
+        
+        <button class="btn-secondary" onclick="showScreen('rules-screen')">Anleitung</button>
     </div>
 
     <div id="rules-screen" class="screen">
         <h2>Anleitung</h2>
         <div class="scroll-content">
-            <h3>Ziel des Spiels</h3>
-            <p>Kennst du deinen besten Freund wirklich? Wie gut kennst du deine Mutter, deine Schwester oder deinen Partner?</p>
-            <p>Dies ist ein Spiel mit einem Ziel: Beziehungen zu vertiefen. 3 sorgfältig ausgearbeitete Level.</p>
-            
-            <h3>So wird gespielt (2 Spieler)</h3>
+            <h3>So wird gespielt</h3>
+            <p><strong>Das Ziel:</strong> Lernt euch besser kennen. Es gibt 3 Level, die immer tiefer gehen.</p>
             <ol>
-                <li>Setzt euch einander gegenüber. Legt das Handy zwischen euch.</li>
-                <li><strong>Start:</strong> Schaut euch tief in die Augen. Wer zuerst blinzelt, muss anfangen.</li>
-                <li>Spieler A liest die Karte vor, Spieler B antwortet (oder beide antworten, je nach Lust).</li>
+                <li>Legt das Handy zwischen euch.</li>
+                <li><strong>Start:</strong> Schaut euch tief in die Augen. Wer zuerst blinzelt, fängt an.</li>
+                <li>Lest die Frage laut vor. Beide können antworten.</li>
                 <li>Wechselt euch ab.</li>
             </ol>
-
-            <h3>Die Level</h3>
-            <p><strong>Level 1: Wahrnehmung.</strong> Weißt du, wie andere dich sehen? Hier geht es um den ersten Eindruck und darum, Annahmen zu hinterfragen.</p>
-            <p><strong>Level 2: Verbindung.</strong> Wer bist du wirklich? Hier werden Fragen gestellt, die man selten stellt.</p>
-            <p><strong>Level 3: Reflexion.</strong> Zeit, über das Erlebnis nachzudenken.</p>
-
-            <h3>Spezialkarten</h3>
-            <p><strong>Wildcards:</strong> Wenn eine Wildcard erscheint, müsst ihr die Anweisung befolgen (meistens spontan und etwas albern).</p>
-            <p><strong>Endcard:</strong> Jedes Level endet mit einer finalen Aufgabe.</p>
+            <p><strong>Die Level:</strong></p>
+            <ul style="padding-left: 20px;">
+                <li>Level 1: Wahrnehmung (Erster Eindruck)</li>
+                <li>Level 2: Verbindung (Deep Talk)</li>
+                <li>Level 3: Reflexion (Über uns)</li>
+            </ul>
         </div>
-        <button onclick="showScreen('menu-screen')">Zurück zum Menü</button>
+        <button class="btn-secondary" onclick="showScreen('menu-screen')">Zurück</button>
     </div>
 
     <div id="game-screen" class="screen">
         <button class="back-btn" onclick="showScreen('menu-screen')">✕</button>
         
         <div id="card-display" onclick="nextCard()">
-            <span id="card-text">Klicke zum Starten</span>
+            <span id="card-text">Lade...</span>
             <div class="small-text" id="level-indicator">Level 1</div>
         </div>
         
-        <p style="margin-top: 30px; opacity: 0.4; font-size: 0.9rem;">Tippen für nächste Karte</p>
+        <button id="next-level-btn" onclick="advanceToNextLevel()">Nächstes Level →</button>
+        
+        <p style="margin-top: 30px; opacity: 0.3; font-size: 0.8rem;">Tippen für nächste Karte</p>
     </div>
 
     <script>
         // --- DATENBANK ---
-        // Basierend auf deinen Uploads. Texte wurden bereinigt und formatiert.
-        
         const finalCardText = "Jeder Spieler schreibt eine Nachricht an den anderen. Faltet und tauscht diese aus. Öffnet sie erst, wenn ihr alleine seid.";
 
         const database = {
             1: [
-                // Level 1: Wahrnehmung [Source: 149-215]
                 { text: "Was ist deiner Meinung nach das Schwierigste an meinem Beruf?", type: "normal" },
                 { text: "Welche Reality-Show werde ich mir wohl am ehesten ansehen? Erkläre.", type: "normal" },
                 { text: "Was ist das Erste, was dir an mir aufgefallen ist?", type: "normal" },
@@ -235,7 +316,6 @@
                 { text: "Was an mir ist dir besonders fremd oder ungewohnt?", type: "normal" },
                 { text: "Was sagt mein Bildschirmhintergrund über mich aus?", type: "normal" },
                 { text: "Was glaubst du, wer ist mein Prominentenschwarm?", type: "normal" },
-                // Wildcards Level 1
                 { text: "Wildcard: Stellen und beantworten Sie die nächste Frage in einem anderen Akzent.", type: "wildcard" },
                 { text: "Wildcard: Erfinde deine eigene Frage.", type: "wildcard" },
                 { text: "Wildcard: Schreibe dein wichtigstes Ziel für den nächsten Monat auf. Vergleiche.", type: "wildcard" },
@@ -250,7 +330,6 @@
                 { text: "Wildcard: Schließe deine Augen. Welche Farbe haben meine Augen?", type: "wildcard" }
             ],
             2: [
-                // Level 2: Verbindung [Source: 69-148]
                 { text: "Was war deine schönste Erinnerung im vergangenen Jahr?", type: "normal" },
                 { text: "Hast du in letzter Zeit deine Meinung über etwas geändert?", type: "normal" },
                 { text: "Was war deine früheste Erinnerung an Glück?", type: "normal" },
@@ -298,7 +377,6 @@
                 { text: "Worüber hast du deine Mutter zuletzt angelogen?", type: "normal" },
                 { text: "Was war das beste Kompliment, das dir ein Fremder je gemacht hat?", type: "normal" },
                 { text: "Gibt es ein Gefühl, das du vermisst?", type: "normal" },
-                // Wildcards Level 2
                 { text: "Wildcard: Schreibe die 3 wichtigsten Dinge für eine Beziehung auf. Vergleiche.", type: "wildcard" },
                 { text: "Wildcard: Schreibe auf, was dich beim Dating am meisten stört. Vergleiche.", type: "wildcard" },
                 { text: "Wildcard: Zeichne deine aktuelle Stimmung.", type: "wildcard" },
@@ -314,7 +392,6 @@
                 { text: "Wildcard: Zeige das erste Foto deiner Galerie. Erkläre es.", type: "wildcard" }
             ],
             3: [
-                // Level 3: Reflexion [Source: 1-68]
                 { text: "Was würdest du mir aufgrund dessen, was du über mich erfahren hast, zum Lesen empfehlen?", type: "normal" },
                 { text: "Was an mir hat dich überrascht?", type: "normal" },
                 { text: "Hast du eine Netflix-Empfehlung für mich, basierend auf dem, was du weißt?", type: "normal" },
@@ -352,7 +429,6 @@
                 { text: "Wann hast du dich in diesem Spiel am meisten mit mir verbunden gefühlt?", type: "normal" },
                 { text: "Mit einem Wort: Wie würdest du unser Gespräch beschreiben?", type: "normal" },
                 { text: "Bin ich so, wie du mich erwartet hast?", type: "normal" },
-                // Wildcards Level 3
                 { text: "Wildcard: Fordere deinen Partner auf, nächste Woche etwas außerhalb seiner Komfortzone zu tun.", type: "wildcard" },
                 { text: "Wildcard: Wenn du mir für den Rest des Monats etwas verordnen könntest, was wäre das?", type: "wildcard" },
                 { text: "Wildcard: Schreibt gegenseitig eure Dating-App-Biografien um (30 Sek).", type: "wildcard" },
@@ -372,13 +448,17 @@
             ]
         };
 
+        // --- VARIABLEN ---
         let currentStack = [];
         let currentLevel = 1;
-        let isEndCardShown = false; // Status für die letzte Karte
+        let cardsPlayedCount = 0;
+        let cardsLimit = 15; // Standard
+        
+        // --- FUNKTIONEN ---
 
         function checkPassword() {
             const input = document.getElementById('password-input').value;
-            // PASSWORT:
+            // ÄNDERE HIER DEIN PASSWORT
             if (input === "banane") { 
                 showScreen('menu-screen');
             } else {
@@ -391,21 +471,53 @@
             document.getElementById(screenId).classList.add('active');
         }
 
-        function startGame(level) {
-            currentLevel = level;
-            isEndCardShown = false; // Reset End Card Status
-            
-            if (!database[level]) { alert("Level leer!"); return; }
-            
-            // Kopie erstellen und mischen
-            currentStack = [...database[level]]; 
-            shuffleArray(currentStack);
+        // --- RUNDEN ANZAHL EINSTELLEN ---
+        function setLimit(value) {
+            // Alle Buttons resetten
+            document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('custom-input-container').style.display = 'none';
 
+            if (value === 'custom') {
+                document.getElementById('opt-custom').classList.add('active');
+                document.getElementById('custom-input-container').style.display = 'block';
+                const customVal = document.getElementById('custom-number').value;
+                cardsLimit = customVal ? parseInt(customVal) : 999;
+            } else {
+                document.getElementById('opt-' + value).classList.add('active');
+                cardsLimit = value;
+            }
+        }
+
+        function updateCustomValue() {
+            const val = document.getElementById('custom-number').value;
+            if(val) cardsLimit = parseInt(val);
+        }
+
+        // --- SPIEL STARTEN ---
+        function initGame() {
+            currentLevel = 1;
+            loadLevel(1);
             showScreen('game-screen');
+        }
+
+        function loadLevel(level) {
+            currentLevel = level;
+            cardsPlayedCount = 0; // Zähler resetten
+            
+            // Verstecke "Nächstes Level" Button
+            document.getElementById('next-level-btn').style.display = 'none';
+
+            if (!database[level]) { alert("Fehler: Level leer"); return; }
+
+            // Stapel kopieren & mischen
+            currentStack = [...database[level]];
+            shuffleArray(currentStack);
+            
+            // UI Update
             document.getElementById('level-indicator').innerText = "Level " + level;
             
-            // Sofort erste Karte anzeigen
-            nextCard();
+            // Erste Karte ziehen
+            nextCard(true); // true = initial draw
         }
 
         function shuffleArray(array) {
@@ -415,38 +527,49 @@
             }
         }
 
-        function nextCard() {
+        function nextCard(isInitial = false) {
+            // Wenn nicht der allererste Aufruf, Zähler erhöhen
+            if (!isInitial) {
+                cardsPlayedCount++;
+            }
+
             const cardDisplay = document.getElementById('card-display');
             const cardText = document.getElementById('card-text');
             const levelInd = document.getElementById('level-indicator');
+            const nextBtn = document.getElementById('next-level-btn');
 
-            // Animation Reset
-            cardDisplay.classList.remove('fade-in');
-            void cardDisplay.offsetWidth; // Trigger Reflow
-            cardDisplay.classList.add('fade-in');
+            // --- PRÜFUNG: Limit erreicht? ---
+            // Wenn wir das Limit erreichen UND noch nicht im letzten Level sind
+            if (cardsPlayedCount >= cardsLimit && currentLevel < 3) {
+                nextBtn.innerText = "WEITER ZU LEVEL " + (currentLevel + 1);
+                nextBtn.style.display = "block"; // Button erscheint
+            }
 
-            // LOGIK: Wenn Stapel leer ist
+            // --- PRÜFUNG: Stapel leer? ---
             if (currentStack.length === 0) {
-                // Wenn Endcard noch NICHT gezeigt wurde, zeige sie jetzt
-                if (!isEndCardShown) {
-                    cardText.innerText = finalCardText;
-                    cardDisplay.className = "endcard fade-in"; // Spezielles Design
-                    levelInd.innerText = "Finale Karte";
-                    isEndCardShown = true; // Merken, dass sie gezeigt wurde
+                if (currentLevel < 3) {
+                    // Level leer -> Zwinge Button zur Anzeige
+                    cardText.innerText = "Level " + currentLevel + " durchgespielt!";
+                    nextBtn.innerText = "WEITER ZU LEVEL " + (currentLevel + 1);
+                    nextBtn.style.display = "block";
+                    cardDisplay.className = ""; // Neutral
                     return;
-                } 
-                // Wenn Endcard SCHON gezeigt wurde, geh zurück zum Menü
-                else {
-                    showScreen('menu-screen');
+                } else {
+                    // Level 3 leer -> Endcard anzeigen
+                    showEndCard();
                     return;
                 }
             }
 
             // Normale Karte ziehen
-            const card = currentStack.pop();
+            // Animation Reset
+            cardDisplay.classList.remove('fade-in');
+            void cardDisplay.offsetWidth; 
+            cardDisplay.classList.add('fade-in');
 
+            const card = currentStack.pop();
             cardText.innerText = card.text;
-            levelInd.innerText = "Level " + currentLevel + " (" + (currentStack.length + 1) + " übrig)";
+            levelInd.innerText = "Level " + currentLevel;
 
             // Design ändern
             if (card.type === "wildcard") {
@@ -456,11 +579,32 @@
             }
         }
 
-        // Service Worker für Offline Modus
+        function advanceToNextLevel() {
+            if (currentLevel < 3) {
+                loadLevel(currentLevel + 1);
+            } else {
+                showEndCard();
+            }
+        }
+
+        function showEndCard() {
+            const cardDisplay = document.getElementById('card-display');
+            const cardText = document.getElementById('card-text');
+            const levelInd = document.getElementById('level-indicator');
+            const nextBtn = document.getElementById('next-level-btn');
+
+            nextBtn.style.display = 'none'; // Button weg
+            
+            cardText.innerText = finalCardText;
+            cardDisplay.className = "endcard fade-in";
+            levelInd.innerText = "Finale";
+        }
+
+        // Service Worker
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
-            .then(() => console.log("Service Worker registriert"))
-            .catch(err => console.log("Service Worker Fehler", err));
+            .then(() => console.log("SW ready"))
+            .catch(err => console.log("SW fail", err));
         }
 
     </script>
