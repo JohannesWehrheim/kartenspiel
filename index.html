@@ -17,7 +17,7 @@
             --wildcard-bg: #b82326;
             --wildcard-text: #ffffff;
             --btn-color: #111;
-            --accent-color: #e0e0e0;
+            --active-pack: #e0e0e0;
         }
 
         body {
@@ -42,7 +42,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 20px 20px 40px 20px; /* Mehr Padding unten */
             box-sizing: border-box;
             text-align: center;
             position: absolute;
@@ -50,70 +50,146 @@
             left: 0;
             background-color: var(--bg-color);
             z-index: 1;
+            overflow-y: auto; /* Scrollen ermöglichen bei vielen Optionen */
         }
 
         .screen.active { display: flex; z-index: 10; }
 
         h1 { font-size: 2.5rem; margin-bottom: 10px; letter-spacing: 3px; text-transform: uppercase; font-weight: 900; }
-        h2 { font-size: 1.5rem; margin-bottom: 20px; text-transform: uppercase; }
-        p { font-size: 1rem; line-height: 1.5; }
+        
+        /* Scrollbarer Bereich für Einstellungen im Menü */
+        .menu-scroll-area {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            padding-bottom: 20px;
+        }
 
-        input { padding: 15px; font-size: 1.2rem; border-radius: 12px; border: 1px solid #ccc; margin-bottom: 20px; text-align: center; width: 80%; max-width: 300px; outline: none; }
+        .section-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: bold;
+            opacity: 0.6;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            width: 100%;
+            text-align: left;
+            padding-left: 10px;
+        }
 
+        /* Pack Auswahl Grid */
+        .pack-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .pack-btn {
+            background: white;
+            border: 2px solid transparent;
+            padding: 15px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #888;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+        }
+
+        .pack-btn.active {
+            border-color: #111;
+            color: #111;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .pack-icon { font-size: 1.5rem; margin-bottom: 5px; }
+
+        /* Rotations Toggle */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        
+        .toggle-label { font-weight: bold; font-size: 1rem; }
+        .toggle-switch {
+            width: 50px;
+            height: 28px;
+            background: #ddd;
+            border-radius: 50px;
+            position: relative;
+            transition: background 0.3s;
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .toggle-container.active .toggle-switch { background: #111; }
+        .toggle-container.active .toggle-switch::after { transform: translateX(22px); }
+
+        /* Start Button */
         .btn-primary {
             background-color: var(--btn-color);
             color: white;
             border: none;
-            padding: 18px 40px;
-            font-size: 1.1rem;
+            padding: 18px 50px;
+            font-size: 1.2rem;
             border-radius: 50px;
             cursor: pointer;
-            margin: 20px 0;
+            margin-top: 20px;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
             transition: transform 0.1s;
+            width: 100%;
         }
         .btn-primary:active { transform: scale(0.95); }
 
-        .btn-secondary {
-            background-color: #ddd;
-            color: #333;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 10px;
-        }
-
-        .options-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            margin-top: 10px;
-        }
+        /* Rundenanzahl Buttons */
+        .options-container { display: flex; gap: 10px; width: 100%; }
         .opt-btn {
+            flex: 1;
             background: white;
             border: 2px solid transparent;
-            padding: 12px 20px;
+            padding: 12px;
             border-radius: 15px;
             font-weight: bold;
             font-size: 1rem;
             color: #888;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: all 0.2s;
         }
-        .opt-btn.active {
-            border-color: #111;
-            color: #111;
-            background: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-        }
+        .opt-btn.active { border-color: #111; color: #111; transform: translateY(-2px); }
 
+        /* Karte */
         #card-display {
             background: var(--card-bg);
             width: 85%;
@@ -126,47 +202,34 @@
             justify-content: center;
             align-items: center;
             padding: 40px;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: bold;
             position: relative;
-            transition: all 0.3s ease;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); /* Smoothe Rotation */
             cursor: pointer;
             -webkit-font-smoothing: antialiased;
         }
-        
+
         #card-display.wildcard { background: var(--wildcard-bg); color: var(--wildcard-text); }
         #card-display.endcard { background: #111; color: #fff; border: 2px solid #fff; }
+        
+        /* Rotations-Klasse */
+        .rotated { transform: rotate(180deg); }
 
         .small-text { 
             font-size: 0.75rem; 
             text-transform: uppercase; 
             letter-spacing: 2px; 
-            opacity: 0.4; 
+            opacity: 0.5; 
             position: absolute; 
             bottom: 30px; 
+            width: 100%;
         }
 
-        .back-btn { 
-            position: absolute; 
-            top: 50px; 
-            left: 20px; 
-            background: rgba(255,255,255,0.8); 
-            backdrop-filter: blur(5px);
-            border-radius: 50%;
-            width: 40px; 
-            height: 40px;
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            font-size: 1.2rem; 
-            border: none;
-            z-index: 20; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
+        /* Next Level Button */
         #next-level-btn {
             position: absolute;
-            bottom: 8%; 
+            bottom: 8%;
             background-color: #111;
             color: white;
             padding: 15px 30px;
@@ -174,29 +237,15 @@
             font-weight: bold;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             z-index: 50;
-            display: none; 
-            animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
+            display: none;
+            animation: popUp 0.4s ease;
         }
 
-        @keyframes popUp { from { transform: scale(0.5) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes popUp { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .fade-in-text { animation: textFade 0.5s ease-out; }
+        @keyframes textFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .scroll-content {
-            text-align: left;
-            max-height: 60vh;
-            overflow-y: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        .scroll-content h3 { border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        input { padding: 10px; font-size: 1rem; border-radius: 8px; border: 1px solid #ccc; width: 60%; margin-bottom: 10px; text-align: center; }
 
     </style>
 </head>
@@ -210,50 +259,69 @@
     </div>
 
     <div id="menu-screen" class="screen">
-        <h1 style="font-size: 3rem;">DEEP<br>TALK</h1>
+        <h1 style="font-size: 2.2rem; margin-top: 10px;">DEEP TALK</h1>
         
-        <p style="margin-top: 30px; font-weight: bold; opacity: 0.5; font-size: 0.8rem; letter-spacing: 1px;">KARTEN PRO LEVEL</p>
-        
-        <div class="options-container">
-            <button id="opt-15" class="opt-btn active" onclick="setLimit(15)">15</button>
-            <button id="opt-20" class="opt-btn" onclick="setLimit(20)">20</button>
-            <button id="opt-custom" class="opt-btn" onclick="setLimit('custom')">Custom</button>
-        </div>
-        
-        <div id="custom-input-container" style="display:none; margin-bottom: 10px;">
-            <input type="number" id="custom-number" placeholder="Anzahl" style="width: 100px; padding: 10px;" oninput="updateCustomValue()">
-        </div>
+        <div class="menu-scroll-area">
+            
+            <div class="section-title">Fragen-Bibliotheken</div>
+            <div class="pack-grid">
+                <div id="pack-standard" class="pack-btn active" onclick="togglePack('standard')">
+                    <span class="pack-icon">🎲</span> Standard
+                </div>
+                <div id="pack-relationship" class="pack-btn" onclick="togglePack('relationship')">
+                    <span class="pack-icon">❤️</span> Relationship
+                </div>
+                <div id="pack-ai" class="pack-btn" onclick="togglePack('ai')">
+                    <span class="pack-icon">🧠</span> Psychologie
+                </div>
+                <div id="pack-christian" class="pack-btn" onclick="togglePack('christian')">
+                    <span class="pack-icon">⛪</span> Glaube & Zweifel
+                </div>
+            </div>
 
-        <button class="btn-primary" onclick="initGame()">START</button>
-        <button class="btn-secondary" onclick="showScreen('rules-screen')">Anleitung</button>
+            <div class="section-title">Einstellungen</div>
+            
+            <div class="toggle-container" id="rotation-toggle" onclick="toggleRotationSetting()">
+                <span class="toggle-label">Tisch-Modus (Auto-Drehen)</span>
+                <div class="toggle-switch"></div>
+            </div>
+
+            <div class="section-title">Karten pro Runde</div>
+            <div class="options-container">
+                <button id="opt-15" class="opt-btn active" onclick="setLimit(15)">15</button>
+                <button id="opt-20" class="opt-btn" onclick="setLimit(20)">20</button>
+                <button id="opt-all" class="opt-btn" onclick="setLimit(999)">Alle</button>
+            </div>
+
+            <button class="btn-primary" onclick="initGame()">STARTEN</button>
+            <button style="background:none; border:none; color:#888; margin-top:15px; text-decoration:underline;" onclick="showScreen('rules-screen')">Anleitung</button>
+        </div>
     </div>
 
-    <div id="rules-screen" class="screen">
-        <h2>Anleitung</h2>
-        <div class="scroll-content">
-            <h3>So wird gespielt</h3>
-            <p><strong>Das Ziel:</strong> Lernt euch besser kennen. Es gibt 3 Level.</p>
-            <ol>
-                <li>Legt das Handy zwischen euch.</li>
-                <li><strong>Start:</strong> Schaut euch tief in die Augen. Wer zuerst blinzelt, fängt an.</li>
-                <li>Lest die Frage laut vor. Beide können antworten.</li>
-            </ol>
-            <p><strong>Die Level:</strong></p>
-            <ul style="padding-left: 20px;">
-                <li>Level 1: Wahrnehmung</li>
-                <li>Level 2: Verbindung</li>
-                <li>Level 3: Reflexion</li>
+    <div id="rules-screen" class="screen" style="justify-content: flex-start; text-align: left;">
+        <h2 style="margin-top:20px; align-self: center;">Anleitung</h2>
+        <div style="background:white; padding:20px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.05); line-height:1.6;">
+            <p><strong>Das Ziel:</strong> Lernt euch besser kennen. Ehrlichkeit ist der Schlüssel.</p>
+            <p><strong>Tisch-Modus:</strong> Wenn aktiviert, dreht sich die Karte nach jedem Tippen um 180°, damit dein Gegenüber die Frage lesen kann, ohne das Handy zu bewegen.</p>
+            <p><strong>Die Bibliotheken:</strong></p>
+            <ul style="padding-left:20px; font-size:0.9rem;">
+                <li><strong>Standard:</strong> Das klassische Spiel.</li>
+                <li><strong>Relationship:</strong> Speziell für Paare (Dating & Beziehung).</li>
+                <li><strong>Psychologie:</strong> Fragen für tiefe Verletzlichkeit (basierend auf Studien).</li>
+                <li><strong>Glaube & Zweifel:</strong> Für Gespräche über Glauben, Zweifel und Werte abseits von Klischees.</li>
             </ul>
         </div>
-        <button class="btn-secondary" onclick="showScreen('menu-screen')">Zurück</button>
+        <button style="margin-top:20px; padding:10px 30px; background:#ddd; border:none; border-radius:30px;" onclick="showScreen('menu-screen')">Zurück</button>
     </div>
 
     <div id="game-screen" class="screen">
-        <button class="back-btn" onclick="showScreen('menu-screen')">✕</button>
+        <button class="back-btn" onclick="quitGame()" style="position: absolute; top: 50px; left: 20px; background: rgba(255,255,255,0.8); border-radius: 50%; width: 40px; height: 40px; border:none; font-size:1.2rem; z-index:20;">✕</button>
         
         <div id="card-display" onclick="nextCard()">
-            <span id="card-text">Lade...</span>
-            <div class="small-text" id="level-indicator">Level 1</div>
+            <div id="card-content-wrapper">
+                <span id="card-text">Lade...</span>
+                <div class="small-text" id="level-indicator">Level 1</div>
+            </div>
         </div>
         
         <button id="next-level-btn" onclick="advanceToNextLevel()">Nächstes Level →</button>
@@ -262,190 +330,256 @@
     </div>
 
     <script>
-        const finalCardText = "Jeder Spieler schreibt eine Nachricht an den anderen. Faltet und tauscht diese aus. Öffnet sie erst, wenn ihr alleine seid.";
-
-        const database = {
-            1: [
-                { text: "Was ist deiner Meinung nach das Schwierigste an meinem Beruf?", type: "normal" },
-                { text: "Welche Reality-Show werde ich mir wohl am ehesten ansehen? Erkläre.", type: "normal" },
-                { text: "Was ist das Erste, was dir an mir aufgefallen ist?", type: "normal" },
-                { text: "Wenn es MySpace noch gäbe, wie würde mein Profilsong lauten?", type: "normal" },
-                { text: "Wenn du mir ein Geschenk kaufen würdest, nur basierend auf meinem Aussehen, was wäre es?", type: "normal" },
-                { text: "Auf einer Skala von 1-10, wie unordentlich ist mein Auto? (1=Sauber, 10=Katastrophe)", type: "normal" },
-                { text: "Glaubst du, dass Pflanzen in meiner Obhut gedeihen oder sterben?", type: "normal" },
-                { text: "Sehe ich nett aus? Erkläre.", type: "normal" },
-                { text: "Wirke ich eher wie ein kreativer oder ein analytischer Typ?", type: "normal" },
-                { text: "Wirke ich wie jemand, der sich einen Namen tätowieren lassen würde?", type: "normal" },
-                { text: "Beende den Satz: Wenn ich dich nur ansehe, würde ich denken...", type: "normal" },
-                { text: "Was sagen meine Schuhe über mich aus?", type: "normal" },
-                { text: "Glaubst du, dass ich schon einmal gefeuert worden bin? Wenn ja, warum?", type: "normal" },
-                { text: "Was war dein erster Eindruck von mir?", type: "normal" },
-                { text: "Wie würdest du meinen Typ in drei Worten beschreiben?", type: "normal" },
-                { text: "Was hältst du von meiner ersten Nachricht (falls wir geschrieben haben)?", type: "normal" },
-                { text: "Wer von uns beiden ist wohl der bessere WhatsApp-Schreiber?", type: "normal" },
-                { text: "Was sagt dir mein Instagram über mich?", type: "normal" },
-                { text: "Was fasziniert dich an mir?", type: "normal" },
-                { text: "Was denkst du, wofür ich am ehesten Geld ausgebe?", type: "normal" },
-                { text: "Was glaubst du, wollte ich als Kind werden?", type: "normal" },
-                { text: "Glaubst du, dass ich in der Schule beliebt war?", type: "normal" },
-                { text: "Wie viele Strafzettel habe ich wohl in meinem Leben bekommen?", type: "normal" },
-                { text: "Glaubst du, ich verliebe mich leicht?", type: "normal" },
-                { text: "Was denkst du, welches Kompliment höre ich am häufigsten?", type: "normal" },
-                { text: "Glaubst du, ich habe schon mal ein Ex-Telefon nach Beweisen durchsucht?", type: "normal" },
-                { text: "In welchem Schulfach war ich wohl gut und in welchem schlecht?", type: "normal" },
-                { text: "Bin ich eher Kaffee- oder Teetrinker? Gesüßt oder ungesüßt?", type: "normal" },
-                { text: "Wirke ich wie ein Morgenmensch oder eine Nachteule?", type: "normal" },
-                { text: "Komme ich normalerweise pünktlich oder zu spät?", type: "normal" },
-                { text: "Erinnere ich dich an jemanden, den du kennst?", type: "normal" },
-                { text: "Fühlst du dich von mir eingeschüchtert?", type: "normal" },
-                { text: "Was verrät dir meine Körpersprache in diesem Moment?", type: "normal" },
-                { text: "Wie wahrscheinlich ist es, dass ich Zelten gehe?", type: "normal" },
-                { text: "Welche Rolle würde ich in einem Film spielen?", type: "normal" },
-                { text: "Was ist wohl mein Lieblings-Karaoke-Song?", type: "normal" },
-                { text: "Was an mir ist dir besonders fremd oder ungewohnt?", type: "normal" },
-                { text: "Was sagt mein Bildschirmhintergrund über mich aus?", type: "normal" },
-                { text: "Was glaubst du, wer ist mein Prominentenschwarm?", type: "normal" },
-                { text: "Wildcard: Stellen und beantworten Sie die nächste Frage in einem anderen Akzent.", type: "wildcard" },
-                { text: "Wildcard: Erfinde deine eigene Frage.", type: "wildcard" },
-                { text: "Wildcard: Schreibe dein wichtigstes Ziel für den nächsten Monat auf. Vergleiche.", type: "wildcard" },
-                { text: "Wildcard: Bewerte deine Tanzfähigkeiten (1-10). Bei 3 sagt ihr es laut!", type: "wildcard" },
-                { text: "Wildcard: Zeichnet gemeinsam ein Bild (30 Sek).", type: "wildcard" },
-                { text: "Wildcard: Denke an deine Lieblingsmüsli-Marke. Sagt es auf 3 laut!", type: "wildcard" },
-                { text: "Wildcard: Denkt an eure Lieblingsserie aus der Kindheit. Sagt es auf 3 laut!", type: "wildcard" },
-                { text: "Wildcard: Schreibe etwas auf, was andere nie über dich erraten würden. Vergleiche.", type: "wildcard" },
-                { text: "Wildcard: Schaut euch für 30 Sekunden in die Augen. Was ist euch aufgefallen?", type: "wildcard" },
-                { text: "Wildcard: Stell eine Vermutung über mich auf.", type: "wildcard" },
-                { text: "Wildcard: Zeichne ein Porträt des anderen (1 Minute).", type: "wildcard" },
-                { text: "Wildcard: Schließe deine Augen. Welche Farbe haben meine Augen?", type: "wildcard" }
-            ],
-            2: [
-                { text: "Was war deine schönste Erinnerung im vergangenen Jahr?", type: "normal" },
-                { text: "Hast du in letzter Zeit deine Meinung über etwas geändert?", type: "normal" },
-                { text: "Was war deine früheste Erinnerung an Glück?", type: "normal" },
-                { text: "Bei welcher Lektion hast du am längsten gebraucht, um sie zu verlernen?", type: "normal" },
-                { text: "Belügst du dich selbst in Bezug auf irgendetwas?", type: "normal" },
-                { text: "Welche Frage versuchst du in deinem Leben gerade zu beantworten?", type: "normal" },
-                { text: "Wann hast du dich das letzte Mal selbst überrascht?", type: "normal" },
-                { text: "Welchen Titel würdest du diesem Kapitel in deinem Leben geben?", type: "normal" },
-                { text: "Wonach sehnst du dich mehr?", type: "normal" },
-                { text: "Beende den Satz: Fremde würden mich als ___ beschreiben, nur ich weiß, dass ich ___ bin.", type: "normal" },
-                { text: "Was war der schlimmste Schmerz, den du je erlebt hast (nicht körperlich)?", type: "normal" },
-                { text: "Hat ein Fremder jemals dein Leben verändert?", type: "normal" },
-                { text: "Wie lautet der Name deiner ersten Liebe und warum hast du dich verliebt?", type: "normal" },
-                { text: "Was würde dein jüngeres Ich über dein heutiges Leben nicht glauben?", type: "normal" },
-                { text: "Wie würdest du das Gefühl des Verliebtseins mit einem Wort beschreiben?", type: "normal" },
-                { text: "Wovor hast du mehr Angst: Versagen oder Erfolg? Warum?", type: "normal" },
-                { text: "Was ist ein Traum, den du aufgegeben hast?", type: "normal" },
-                { text: "Wenn du jemanden auf einer tieferen Ebene kennenlernen könntest, wer wäre das?", type: "normal" },
-                { text: "Wie heißt deine Mutter und was ist das Schönste an ihr?", type: "normal" },
-                { text: "Welcher Teil deines Lebens funktioniert, welcher Teil schmerzt?", type: "normal" },
-                { text: "Wie kannst du ein besserer Mensch werden?", type: "normal" },
-                { text: "Stimmt dein Selbstbild mit dem Bild überein, das andere von dir haben?", type: "normal" },
-                { text: "Vermisst du im Moment jemanden? Vermisst man dich auch?", type: "normal" },
-                { text: "An welchem Fastfood-Restaurant fahre ich wohl vorbei? Was ist meine Bestellung?", type: "normal" },
-                { text: "Wie oft antwortest du wahrheitsgemäß auf 'Wie geht es dir'?", type: "normal" },
-                { text: "Wie geht es dir wirklich?", type: "normal" },
-                { text: "Was ist das Unerklärlichste, das dir je passiert ist?", type: "normal" },
-                { text: "Erzähle mir eine nicht offensichtliche Sache über deinen Vater.", type: "normal" },
-                { text: "Beschreibe deinen perfekten Tag.", type: "normal" },
-                { text: "Welchen Ratschlag würdest du deinem jüngeren Ich geben?", type: "normal" },
-                { text: "Wie alt fühlst du dich gefühlsmäßig?", type: "normal" },
-                { text: "Werde ich deine Ex auf deinem Insta-Feed finden?", type: "normal" },
-                { text: "Was ist das Peinlichste, das dir bei einem Date passiert ist?", type: "normal" },
-                { text: "Was hättest du in früheren Beziehungen besser machen können?", type: "normal" },
-                { text: "Gibt es ein Bild, das du bei ersten Dates vermittelst, von dem du gerne loskommen würdest?", type: "normal" },
-                { text: "Was haben dir die Menschen, die dich großgezogen haben, über Liebe beigebracht?", type: "normal" },
-                { text: "Beschreibe das perfekte Date.", type: "normal" },
-                { text: "Was hast du über dich selbst gelernt, als du Single warst?", type: "normal" },
-                { text: "Welche Frage wird dir bei einem Date am ungernsten gestellt?", type: "normal" },
-                { text: "Wofür bist du leidenschaftlich?", type: "normal" },
-                { text: "Wofür nimmst du dir momentan nicht genug Zeit?", type: "normal" },
-                { text: "Was ist etwas, das du nicht an dir ändern möchtest?", type: "normal" },
-                { text: "Hast du jemals 'Ich liebe dich' gesagt und es nicht so gemeint?", type: "normal" },
-                { text: "Was willst du dir selbst noch beweisen?", type: "normal" },
-                { text: "Worüber hast du deine Mutter zuletzt angelogen?", type: "normal" },
-                { text: "Was war das beste Kompliment, das dir ein Fremder je gemacht hat?", type: "normal" },
-                { text: "Gibt es ein Gefühl, das du vermisst?", type: "normal" },
-                { text: "Wildcard: Schreibe die 3 wichtigsten Dinge für eine Beziehung auf. Vergleiche.", type: "wildcard" },
-                { text: "Wildcard: Schreibe auf, was dich beim Dating am meisten stört. Vergleiche.", type: "wildcard" },
-                { text: "Wildcard: Zeichne deine aktuelle Stimmung.", type: "wildcard" },
-                { text: "Wildcard: Stell eine Frage, die du dich sonst nicht trauen würdest.", type: "wildcard" },
-                { text: "Wildcard: Erfindet einen geheimen Händedruck.", type: "wildcard" },
-                { text: "Wildcard: Schreibe einen peinlichen Fakt über dich auf. Spielt Schnick-Schnack-Schnuck. Der Verlierer deckt auf.", type: "wildcard" },
-                { text: "Wildcard: Tausche den Platz mit deinem Partner.", type: "wildcard" },
-                { text: "Wildcard: Gib etwas zu.", type: "wildcard" },
-                { text: "Wildcard: Sing den Refrain deines Lieblingssongs.", type: "wildcard" },
-                { text: "Wildcard: Drücke 'Shuffle' bei deiner Musik. Erkläre den ersten Song.", type: "wildcard" },
-                { text: "Wildcard: Staring Contest! Der erste der blinzelt, muss ein persönliches Problem nennen.", type: "wildcard" },
-                { text: "Wildcard: Rufe jemanden an, den du bewunderst und sag ihm, warum du ihn schätzt.", type: "wildcard" },
-                { text: "Wildcard: Zeige das erste Foto deiner Galerie. Erkläre es.", type: "wildcard" }
-            ],
-            3: [
-                { text: "Was würdest du mir aufgrund dessen, was du über mich erfahren hast, zum Lesen empfehlen?", type: "normal" },
-                { text: "Was an mir hat dich überrascht?", type: "normal" },
-                { text: "Hast du eine Netflix-Empfehlung für mich, basierend auf dem, was du weißt?", type: "normal" },
-                { text: "Was denkst du, ist meine Superkraft?", type: "normal" },
-                { text: "Was denkst du, was unsere wichtigste Gemeinsamkeit ist?", type: "normal" },
-                { text: "Was ist eine Sache, die ich tun könnte, um mein Leben drastisch zu verbessern?", type: "normal" },
-                { text: "Was wäre das perfekte Geschenk für mich?", type: "normal" },
-                { text: "Wie würdest du mich einem Fremden beschreiben?", type: "normal" },
-                { text: "Was muss ich im Moment hören?", type: "normal" },
-                { text: "Stellen meine sozialen Medien mich richtig dar?", type: "normal" },
-                { text: "Was ist eine Lektion, die du aus unserem Gespräch mitnimmst?", type: "normal" },
-                { text: "Womit kann ich dir helfen?", type: "normal" },
-                { text: "Wovor habe ich deiner Meinung nach am meisten Angst?", type: "normal" },
-                { text: "In welchen Bereichen kann ich am besten Ratschläge geben?", type: "normal" },
-                { text: "Was an mir ist für dich am schwersten zu verstehen?", type: "normal" },
-                { text: "Wenn wir eine Band wären, wie würde unser Name lauten?", type: "normal" },
-                { text: "Welche Teile deiner selbst siehst du in mir?", type: "normal" },
-                { text: "Wie verdient man deine Offenheit? Habe ich sie verdient?", type: "normal" },
-                { text: "Was sollte ich deiner Meinung nach loslassen?", type: "normal" },
-                { text: "Was hast du in diesem Gespräch über dich selbst gelernt?", type: "normal" },
-                { text: "Was ist deiner Meinung nach mein Hauptmerkmal?", type: "normal" },
-                { text: "Vor welcher Frage hattest du am meisten Angst?", type: "normal" },
-                { text: "Was glaubst du, warum wir uns getroffen haben?", type: "normal" },
-                { text: "Wenn dieses Spiel vorbei ist, was wird dir von mir in Erinnerung bleiben?", type: "normal" },
-                { text: "Was denkst du, ist meine Schwäche?", type: "normal" },
-                { text: "Wie ergänzen sich unsere Persönlichkeiten?", type: "normal" },
-                { text: "Was sollte ich über mich wissen, was ich vielleicht noch nicht weiß?", type: "normal" },
-                { text: "Wodurch würdest du dich mir näher fühlen?", type: "normal" },
-                { text: "Was bewunderst du am meisten an mir?", type: "normal" },
-                { text: "Beschreibe mit einem Wort, wie du dich gerade fühlst.", type: "normal" },
-                { text: "Glaubst du, dass jeder eine Berufung hat? Habe ich meine gefunden?", type: "normal" },
-                { text: "Was können wir gemeinsam erschaffen?", type: "normal" },
-                { text: "Welche Antwort von mir hat dich zum Strahlen gebracht?", type: "normal" },
-                { text: "Was ist die attraktivste Eigenschaft an mir (nicht körperlich)?", type: "normal" },
-                { text: "Wann hast du dich in diesem Spiel am meisten mit mir verbunden gefühlt?", type: "normal" },
-                { text: "Mit einem Wort: Wie würdest du unser Gespräch beschreiben?", type: "normal" },
-                { text: "Bin ich so, wie du mich erwartet hast?", type: "normal" },
-                { text: "Wildcard: Fordere deinen Partner auf, nächste Woche etwas außerhalb seiner Komfortzone zu tun.", type: "wildcard" },
-                { text: "Wildcard: Wenn du mir für den Rest des Monats etwas verordnen könntest, was wäre das?", type: "wildcard" },
-                { text: "Wildcard: Schreibt gegenseitig eure Dating-App-Biografien um (30 Sek).", type: "wildcard" },
-                { text: "Wildcard: Zeichne deine Lieblingserinnerung mit mir.", type: "wildcard" },
-                { text: "Wildcard: Beide schreiben einen Brief an ihr jüngeres Ich.", type: "wildcard" },
-                { text: "Wildcard: Gebt euch gegenseitig Spitznamen.", type: "wildcard" },
-                { text: "Wildcard: Schreibe eine Sache auf, die du dieses Jahr loslassen möchtest. Laut lesen, dann zerreißen.", type: "wildcard" },
-                { text: "Wildcard: Schreibt ein Lied über euren Partner (30 Sek) und singt es.", type: "wildcard" },
-                { text: "Wildcard: Eine Runde Schere, Stein, Papier. Der Gewinner darf alles fragen.", type: "wildcard" },
-                { text: "Wildcard: Schreibe ein Ziel für dieses Jahr auf. Faltet und tauscht.", type: "wildcard" },
-                { text: "Wildcard: Gib deinem Partner eine Umarmung. Eine warme, flauschige.", type: "wildcard" },
-                { text: "Wildcard: Suche das Insta-Bild, das das Wesen deines Partners am besten repräsentiert.", type: "wildcard" },
-                { text: "Wildcard: Mach deinem Partner ein Kompliment, das er nicht oft genug hört.", type: "wildcard" },
-                { text: "Wildcard: Tausche einen Songvorschlag aus.", type: "wildcard" },
-                { text: "Wildcard: Macht ein Selfie zusammen.", type: "wildcard" },
-                { text: "Wildcard: Teilt etwas mit, wofür ihr gerade am dankbarsten seid.", type: "wildcard" }
-            ]
+        // --- DATENBANKEN (Packs) ---
+        
+        const databases = {
+            'standard': {
+                1: [
+                    "Was ist deiner Meinung nach das Schwierigste an meinem Beruf?",
+                    "Welche Reality-Show werde ich mir wohl am ehesten ansehen?",
+                    "Was ist das Erste, was dir an mir aufgefallen ist?",
+                    "Wenn du mir ein Geschenk kaufen würdest, nur basierend auf meinem Aussehen, was wäre es?",
+                    "Auf einer Skala von 1-10, wie unordentlich ist mein Auto?",
+                    "Glaubst du, dass Pflanzen in meiner Obhut gedeihen oder sterben?",
+                    "Sehe ich nett aus? Erkläre.",
+                    "Wirke ich eher wie ein kreativer oder ein analytischer Typ?",
+                    "Beende den Satz: Wenn ich dich nur ansehe, würde ich denken...",
+                    "Was sagen meine Schuhe über mich aus?",
+                    "Glaubst du, dass ich schon einmal gefeuert worden bin?",
+                    "Was war dein erster Eindruck von mir?",
+                    "Wie würdest du meinen Typ in drei Worten beschreiben?",
+                    "Was fasziniert dich an mir?",
+                    "Was denkst du, wofür ich am ehesten Geld ausgebe?",
+                    "Was glaubst du, wollte ich als Kind werden?",
+                    "Glaubst du, dass ich in der Schule beliebt war?",
+                    "Glaubst du, ich verliebe mich leicht?",
+                    "Was denkst du, welches Kompliment höre ich am häufigsten?",
+                    "Bin ich eher Kaffee- oder Teetrinker?",
+                    "Wirke ich wie ein Morgenmensch oder eine Nachteule?",
+                    "Erinnere ich dich an jemanden, den du kennst?",
+                    "Fühlst du dich von mir eingeschüchtert?",
+                    "Was verrät dir meine Körpersprache in diesem Moment?"
+                ],
+                2: [
+                    "Was war deine schönste Erinnerung im vergangenen Jahr?",
+                    "Hast du in letzter Zeit deine Meinung über etwas geändert?",
+                    "Was war deine früheste Erinnerung an Glück?",
+                    "Bei welcher Lektion hast du am längsten gebraucht, um sie zu verlernen?",
+                    "Belügst du dich selbst in Bezug auf irgendetwas?",
+                    "Welchen Titel würdest du diesem Kapitel in deinem Leben geben?",
+                    "Wonach sehnst du dich mehr?",
+                    "Was war der schlimmste Schmerz, den du je erlebt hast (nicht körperlich)?",
+                    "Hat ein Fremder jemals dein Leben verändert?",
+                    "Was würde dein jüngeres Ich über dein heutiges Leben nicht glauben?",
+                    "Wovor hast du mehr Angst: Versagen oder Erfolg? Warum?",
+                    "Was ist ein Traum, den du aufgegeben hast?",
+                    "Wenn du jemanden auf einer tieferen Ebene kennenlernen könntest, wer wäre das?",
+                    "Wie heißt deine Mutter und was ist das Schönste an ihr?",
+                    "Welcher Teil deines Lebens funktioniert, welcher Teil schmerzt?",
+                    "Wie kannst du ein besserer Mensch werden?",
+                    "Vermisst du im Moment jemanden? Vermisst man dich auch?",
+                    "Wie geht es dir wirklich?",
+                    "Erzähle mir eine nicht offensichtliche Sache über deinen Vater.",
+                    "Beschreibe deinen perfekten Tag.",
+                    "Welchen Ratschlag würdest du deinem jüngeren Ich geben?",
+                    "Wofür bist du leidenschaftlich?",
+                    "Was ist etwas, das du nicht an dir ändern möchtest?",
+                    "Hast du jemals 'Ich liebe dich' gesagt und es nicht so gemeint?",
+                    "Was willst du dir selbst noch beweisen?",
+                    "Worüber hast du deine Mutter zuletzt angelogen?",
+                    "Gibt es ein Gefühl, das du vermisst?"
+                ],
+                3: [
+                    "Was würdest du mir aufgrund dessen, was du über mich erfahren hast, zum Lesen empfehlen?",
+                    "Was an mir hat dich überrascht?",
+                    "Was denkst du, ist meine Superkraft?",
+                    "Was denkst du, was unsere wichtigste Gemeinsamkeit ist?",
+                    "Was ist eine Sache, die ich tun könnte, um mein Leben drastisch zu verbessern?",
+                    "Wie würdest du mich einem Fremden beschreiben?",
+                    "Was muss ich im Moment hören?",
+                    "Womit kann ich dir helfen?",
+                    "Wovor habe ich deiner Meinung nach am meisten Angst?",
+                    "In welchen Bereichen kann ich am besten Ratschläge geben?",
+                    "Was an mir ist für dich am schwersten zu verstehen?",
+                    "Welche Teile deiner selbst siehst du in mir?",
+                    "Wie verdient man deine Offenheit? Habe ich sie verdient?",
+                    "Was sollte ich deiner Meinung nach loslassen?",
+                    "Was hast du in diesem Gespräch über dich selbst gelernt?",
+                    "Was glaubst du, warum wir uns getroffen haben?",
+                    "Wenn dieses Spiel vorbei ist, was wird dir von mir in Erinnerung bleiben?",
+                    "Was denkst du, ist meine Schwäche?",
+                    "Wie ergänzen sich unsere Persönlichkeiten?",
+                    "Wodurch würdest du dich mir näher fühlen?",
+                    "Was bewunderst du am meisten an mir?",
+                    "Beschreibe mit einem Wort, wie du dich gerade fühlst.",
+                    "Glaubst du, dass jeder eine Berufung hat?",
+                    "Welche Antwort von mir hat dich zum Strahlen gebracht?",
+                    "Wann hast du dich in diesem Spiel am meisten mit mir verbunden gefühlt?",
+                    "Bin ich so, wie du mich erwartet hast?"
+                ],
+                wildcards: [
+                    "Wildcard: Stellen und beantworten Sie die nächste Frage in einem anderen Akzent.",
+                    "Wildcard: Erfinde deine eigene Frage.",
+                    "Wildcard: Schreibe dein wichtigstes Ziel für den nächsten Monat auf. Vergleiche.",
+                    "Wildcard: Schaut euch für 30 Sekunden in die Augen.",
+                    "Wildcard: Stell eine Vermutung über mich auf.",
+                    "Wildcard: Zeichne ein Porträt des anderen (1 Minute).",
+                    "Wildcard: Schließe deine Augen. Welche Farbe haben meine Augen?",
+                    "Wildcard: Gib etwas zu.",
+                    "Wildcard: Sing den Refrain deines Lieblingssongs.",
+                    "Wildcard: Staring Contest! Der erste der blinzelt, muss ein persönliches Problem nennen."
+                ]
+            },
+            'relationship': {
+                1: [
+                    "Was glaubst du, wie wichtig Geburtstage und Feiertage für mich sind? Erkläre.",
+                    "Was glaubst du, wer bei unserem ersten Treffen nervöser war? Erkläre.",
+                    "Was denkst du, wie mein perfekter Date-Abend aussehen würde?",
+                    "Was war das Erste, was dir an mir aufgefallen ist?",
+                    "Welche Vermutung hast du über mich geäußert, die sich als falsch herausgestellt hat?",
+                    "Auf einer Skala von 1-10, wie offen bin ich deiner Meinung nach dir gegenüber?"
+                ],
+                2: [
+                    "Wie würde ein Tag aussehen, an dem ich komplett verwöhnt werde?",
+                    "Das Schwierigste für mich, dir etwas über mich zu verraten, war...",
+                    "Wie verdient man sich dein Vertrauen? Habe ich es verdient?",
+                    "Was hat dir diese Beziehung über dich selbst beigebracht?",
+                    "Was ist das Romantischste, was ich in letzter Zeit für dich getan habe?",
+                    "Auf welche Weise kann ich ein besserer Partner sein?",
+                    "Was ist die attraktivste Sache, die ich tue, ohne es zu merken?",
+                    "Was hast du aus unserem schlimmsten Streit gelernt?",
+                    "Woran arbeitest du gerade, was ich nicht sehe?",
+                    "Welches Lied beschreibt unsere Beziehung am besten?",
+                    "Denkst du, dass mein Job mich positiv oder negativ beeinflusst?",
+                    "Worauf reagierst du in letzter Zeit besonders sensibel?",
+                    "Welche Gefühle fallen dir schwer, mir mitzuteilen?",
+                    "Was hat dich sofort zu mir hingezogen? Und was mit der Zeit?",
+                    "Was ist das beste Geschenk, das ich dir je gemacht habe (materiell oder immateriell)?",
+                    "Was an dir ist am schwersten zu lieben?",
+                    "Was würdest du dir wünschen, dass wir mehr tun würden?",
+                    "Warum hast du dich in mich verliebt?",
+                    "Gibt es Unsicherheiten aus früheren Beziehungen, die du mitgenommen hast?",
+                    "Welches Erlebnis hat dich in letzter Zeit näher zu mir gebracht?",
+                    "Wie ergänzen sich unsere Stärken und Schwächen?",
+                    "Was habe ich dir geholfen, an dir selbst zu schätzen?",
+                    "Wie zeige ich, dass ich dich liebe, ohne es zu sagen?",
+                    "Wann habe ich dich das letzte Mal verletzt, vielleicht ungewollt?",
+                    "Habe ich dir geholfen, deine Meinung über etwas zu ändern?",
+                    "Wie wirkt sich unser Altersunterschied (oder das Fehlen) auf uns aus?",
+                    "Welche Angst, glaubst du, hält mich am meisten zurück?",
+                    "Wie können wir unser Intimleben auf eine kleine Weise verbessern?"
+                ],
+                3: [
+                    "Welche meiner Antworten hat dich am meisten überrascht?",
+                    "Gibt es etwas, das du noch nicht über mich weißt, aber gerne wüsstest?",
+                    "Welches Ziel würdest du dieses Jahr am liebsten erreichen?",
+                    "Worauf bist du in unserer Beziehung am meisten stolz?",
+                    "Was hast du in diesem Gespräch über unsere Beziehung gelernt?",
+                    "Vervollständige: Danke, dass du mir geholfen hast, ___ über mich zu erkennen.",
+                    "Was haben wir in dieser Beziehung, das du nie für möglich gehalten hättest?"
+                ],
+                wildcards: [
+                    "Wildcard: Schreibe eine kleine Möglichkeit auf, wie du in dieser Beziehung besser sein kannst. (Beide Spieler)",
+                    "Wildcard: Skala 1-10: Wie wichtig ist es dir, Kinder zu haben? Vergleiche.",
+                    "Wildcard: Die 3 Dinge, die dein Partner tut, damit du dich geliebt fühlst.",
+                    "Wildcard: Schreibt ein Liebeslied für euren Partner (1 Min) und tragt es vor.",
+                    "Wildcard: Welchen Titel würdest du diesem Kapitel unserer Beziehung geben?",
+                    "Wildcard: Schreibe eine kurze Anleitung, wie man deinen Partner 'gut lieben' kann.",
+                    "Wildcard: Zeichne eine deiner schönsten Erinnerungen aus unserer Beziehung.",
+                    "Wildcard: Frage deinen Partner etwas, das du ihn noch nie gefragt hast.",
+                    "Wildcard: Schreibt die 3 Dinge auf, für die ihr beim Partner am dankbarsten seid.",
+                    "Wildcard: Schreibe deine 'Absicht' (Intention) für unsere Beziehung auf."
+                ]
+            },
+            'ai': {
+                1: [
+                    "Wenn du dir eine Eigenschaft von mir aussuchen könntest, welche hättest du gerne selbst?",
+                    "Wirke ich wie jemand, der Entscheidungen aus dem Bauch oder mit dem Kopf trifft?",
+                    "Welches Buch oder welcher Film passt deiner Meinung nach zu meinem Leben?",
+                    "Glaubst du, ich hatte eine glückliche Kindheit? Warum?",
+                    "Was glaubst du, mache ich, wenn ich komplett allein zu Hause bin?",
+                    "Wirke ich wie jemand, der gut Geheimnisse bewahren kann?",
+                    "Was denkst du: Bin ich eher Optimist, Realist oder Pessimist?"
+                ],
+                2: [
+                    "Was ist eine Erinnerung, die du sehr schätzt, aber fast nie erzählst?",
+                    "Wann hast du zuletzt vor einer anderen Person geweint?",
+                    "Was ist eine Sache, für die du dich in der Vergangenheit geschämt hast, über die du heute lachst?",
+                    "Wenn du morgen aufwachst und eine neue Fähigkeit hättest, welche wäre das?",
+                    "Was ist das Mutigste, das du je getan hast?",
+                    "Was würdest du tun, wenn du wüsstest, dass du nicht scheitern kannst?",
+                    "Welche Rolle spielt Dankbarkeit in deinem Alltag?",
+                    "Was bedeutet für dich 'Zuhause'?",
+                    "Wenn du mit einer historischen Person zu Abend essen könntest, wer wäre es und warum?",
+                    "Was ist deine Sprache der Liebe (Words, Touch, Gifts, Acts, Time)?"
+                ],
+                3: [
+                    "Teile ein persönliches Problem und frage dein Gegenüber, wie er/sie es lösen würde.",
+                    "Was schätzt du an unserer Freundschaft/Beziehung am meisten?",
+                    "Was ist eine Sache, die du an mir bewunderst, die ich selbst vielleicht gar nicht sehe?",
+                    "Wenn wir uns in 10 Jahren treffen, wo siehst du uns beide?",
+                    "Was bedeutet Verletzlichkeit für dich?",
+                    "Was würdest du an deiner Art, wie du erzogen wurdest, ändern, wenn du könntest?"
+                ],
+                wildcards: [
+                    "Wildcard: Erzähle deine Lebensgeschichte in 2 Minuten so detailliert wie möglich.",
+                    "Wildcard: Mache deinem Gegenüber drei ehrliche "Wir"-Komplimente.",
+                    "Wildcard: Schließe die Augen und beschreibe das Gesicht deines Gegenübers."
+                ]
+            },
+            'christian': {
+                1: [
+                    "Was ist ein frommes Klischee, das auf mich so gar nicht zutrifft?",
+                    "Wirke ich wie jemand, der im Gottesdienst eher die Hände hebt oder still sitzt?",
+                    "Glaubst du, ich habe mehr Zweifel oder mehr Gewissheit?",
+                    "Welche biblische Figur passt am ehesten zu meinem Charakter?",
+                    "Glaubst du, ich bin eher gesetzlich oder eher liberal?",
+                    "Was denkst du: Was ist mein Lieblingsbuch in der Bibel?"
+                ],
+                2: [
+                    "Welche religiöse Regel hast du gebrochen und dich dabei gut gefühlt?",
+                    "Wie hat sich dein Gottesbild in den letzten 5 Jahren verändert?",
+                    "Was ist eine Frage an Gott, auf die du noch keine Antwort hast?",
+                    "Wann hast du dich zuletzt von der Kirche/Gemeinde enttäuscht gefühlt?",
+                    "Was bedeutet für dich 'Gnade' im echten Leben, nicht theologisch?",
+                    "Welchen Teil der Bibel findest du schwierig oder sogar abstoßend?",
+                    "Wo hast du Gott zuletzt im Alltag erlebt (außerhalb vom Gottesdienst)?",
+                    "Was würdest du dem 'Du' von vor 10 Jahren über den Glauben sagen?",
+                    "Fühlst du dich in deiner Gemeinde wirklich gesehen?",
+                    "Was ist ein Glaubenssatz, den du dekonstruiert/abgelegt hast?"
+                ],
+                3: [
+                    "Was schätzt du an meiner Art, meinen Glauben (oder Zweifel) zu leben?",
+                    "Wo können wir uns gegenseitig in unserer geistlichen Reise unterstützen?",
+                    "Was glaubst du, ist meine geistliche Gabe?",
+                    "Was können wir tun, um unsere Werte authentischer zu leben?",
+                    "Was ist das 'Heiligste' in unserem gemeinsamen Leben?",
+                    "Wenn Jesus heute hier säße, was würde er zu uns sagen?"
+                ],
+                wildcards: [
+                    "Wildcard: Betet füreinander. Aber dankt Gott nur für Eigenschaften des anderen.",
+                    "Wildcard: Erzähle von einem Moment, in dem du an Gott gezweifelt hast.",
+                    "Wildcard: Teile deinen lieblings Worship-Song und warum er dich berührt."
+                ]
+            }
         };
 
+        const finalCardText = "Jeder Spieler schreibt eine Nachricht an den anderen. Faltet und tauscht diese aus. Öffnet sie erst, wenn ihr alleine seid.";
+
+        // --- STATE VARIABLES ---
+        let activePacks = ['standard'];
         let currentStack = [];
         let currentLevel = 1;
         let cardsPlayedCount = 0;
-        let cardsLimit = 15; 
-        
+        let cardsLimit = 15;
+        let isRotationEnabled = false;
+        let isRotated = false; // Toggle Zustand für Karte
+
+        // --- SETUP & UI FUNCTIONS ---
+
         function checkPassword() {
             const input = document.getElementById('password-input').value;
-            // PASSWORT HIER:
-            if (input === "banane") { 
+            if (input === "banane") { // DEIN PASSWORT
                 showScreen('menu-screen');
             } else {
                 alert("Falsches Passwort!");
@@ -457,25 +591,42 @@
             document.getElementById(screenId).classList.add('active');
         }
 
-        function setLimit(value) {
-            document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('custom-input-container').style.display = 'none';
-
-            if (value === 'custom') {
-                document.getElementById('opt-custom').classList.add('active');
-                document.getElementById('custom-input-container').style.display = 'block';
-                const customVal = document.getElementById('custom-number').value;
-                cardsLimit = customVal ? parseInt(customVal) : 999;
+        function togglePack(packName) {
+            const btn = document.getElementById('pack-' + packName);
+            
+            // Logik: Toggle an/aus
+            if (activePacks.includes(packName)) {
+                // Darf nicht das letzte Pack sein
+                if (activePacks.length > 1) {
+                    activePacks = activePacks.filter(p => p !== packName);
+                    btn.classList.remove('active');
+                } else {
+                    alert("Mindestens ein Pack muss aktiv sein!");
+                }
             } else {
-                document.getElementById('opt-' + value).classList.add('active');
-                cardsLimit = value;
+                activePacks.push(packName);
+                btn.classList.add('active');
             }
         }
 
-        function updateCustomValue() {
-            const val = document.getElementById('custom-number').value;
-            if(val) cardsLimit = parseInt(val);
+        function toggleRotationSetting() {
+            isRotationEnabled = !isRotationEnabled;
+            const container = document.getElementById('rotation-toggle');
+            if(isRotationEnabled) container.classList.add('active');
+            else container.classList.remove('active');
         }
+
+        function setLimit(value) {
+            document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+            if (value === 999) {
+                document.getElementById('opt-all').classList.add('active');
+            } else {
+                document.getElementById('opt-' + value).classList.add('active');
+            }
+            cardsLimit = value;
+        }
+
+        // --- SPIEL LOGIK ---
 
         function initGame() {
             currentLevel = 1;
@@ -483,19 +634,64 @@
             showScreen('game-screen');
         }
 
+        function quitGame() {
+            showScreen('menu-screen');
+            // Reset Rotation
+            const cardDisplay = document.getElementById('card-display');
+            cardDisplay.classList.remove('rotated');
+            isRotated = false;
+        }
+
         function loadLevel(level) {
             currentLevel = level;
             cardsPlayedCount = 0; 
-            
             document.getElementById('next-level-btn').style.display = 'none';
-
-            if (!database[level]) { alert("Fehler: Level leer"); return; }
-
-            currentStack = [...database[level]];
-            shuffleArray(currentStack);
-            
             document.getElementById('level-indicator').innerText = "Level " + level;
+
+            // 1. Fragen aus allen aktiven Packs sammeln
+            let levelQuestions = [];
+            let wildcards = [];
+
+            activePacks.forEach(pack => {
+                // Normale Fragen
+                if (databases[pack][level]) {
+                    levelQuestions = levelQuestions.concat(databases[pack][level].map(t => ({text: t, type: 'normal'})));
+                }
+                // Wildcards sammeln (für den globalen Mix)
+                if (databases[pack]['wildcards']) {
+                    wildcards = wildcards.concat(databases[pack]['wildcards'].map(t => ({text: t, type: 'wildcard'})));
+                }
+            });
+
+            if (levelQuestions.length === 0) {
+                // Fallback: Wenn Level leer (z.B. Pack hat nur Level 1), geh weiter
+                if (level < 3) loadLevel(level + 1);
+                else showEndCard();
+                return;
+            }
+
+            // 2. Stapel mischen
+            shuffleArray(levelQuestions);
+            shuffleArray(wildcards);
+
+            // 3. Wildcards einfügen (Globaler Mix)
+            // Wir fügen Wildcards zufällig in den GESAMTEN Stapel ein
+            // Ratio: ca. 1 Wildcard alle 5-6 Karten (ähnlich Original)
+            const insertEvery = 6; 
+            let combinedStack = [...levelQuestions];
             
+            // Wir nehmen so viele Wildcards, wie es Sinn macht (nicht 100 Wildcards auf 10 Fragen)
+            const maxWildcards = Math.floor(combinedStack.length / 4);
+            const wildcardsToAdd = wildcards.slice(0, maxWildcards > 0 ? maxWildcards : 1);
+
+            wildcardsToAdd.forEach(wc => {
+                const randomPos = Math.floor(Math.random() * combinedStack.length);
+                combinedStack.splice(randomPos, 0, wc);
+            });
+
+            currentStack = combinedStack;
+
+            // Erste Karte zeigen
             nextCard(true);
         }
 
@@ -507,27 +703,30 @@
         }
 
         function nextCard(isInitial = false) {
-            if (!isInitial) {
-                cardsPlayedCount++;
-            }
+            if (!isInitial) cardsPlayedCount++;
 
             const cardDisplay = document.getElementById('card-display');
             const cardText = document.getElementById('card-text');
-            const levelInd = document.getElementById('level-indicator');
             const nextBtn = document.getElementById('next-level-btn');
 
-            // --- NEUE LOGIK FÜR DAS LIMIT ---
-            if (cardsPlayedCount >= cardsLimit) {
-                nextBtn.style.display = "block";
-                
-                if (currentLevel < 3) {
-                    nextBtn.innerText = "WEITER ZU LEVEL " + (currentLevel + 1);
-                } else {
-                    // Level 3 Limit erreicht -> Zeige Abschluss-Button
-                    nextBtn.innerText = "ZUM ABSCHLUSS";
-                }
+            // --- ROTATION LOGIK ---
+            if (isRotationEnabled && !isInitial) {
+                isRotated = !isRotated; // Toggle Zustand
+                if (isRotated) cardDisplay.classList.add('rotated');
+                else cardDisplay.classList.remove('rotated');
+            } else if (isInitial) {
+                // Reset beim Start
+                isRotated = false;
+                cardDisplay.classList.remove('rotated');
             }
 
+            // --- LIMIT LOGIK ---
+            if (cardsPlayedCount >= cardsLimit) {
+                nextBtn.style.display = "block";
+                nextBtn.innerText = currentLevel < 3 ? "WEITER ZU LEVEL " + (currentLevel + 1) : "ZUM ABSCHLUSS";
+            }
+
+            // --- LEERER STAPEL ---
             if (currentStack.length === 0) {
                 if (currentLevel < 3) {
                     cardText.innerText = "Level " + currentLevel + " durchgespielt!";
@@ -541,19 +740,20 @@
                 }
             }
 
-            // Animation
-            cardDisplay.classList.remove('fade-in');
-            void cardDisplay.offsetWidth; 
-            cardDisplay.classList.add('fade-in');
+            // Animation Reset (Text fade)
+            const content = document.getElementById('card-content-wrapper');
+            content.classList.remove('fade-in-text');
+            void content.offsetWidth; 
+            content.classList.add('fade-in-text');
 
             const card = currentStack.pop();
             cardText.innerText = card.text;
-            levelInd.innerText = "Level " + currentLevel;
 
+            // Design ändern
             if (card.type === "wildcard") {
-                cardDisplay.className = "wildcard fade-in";
+                cardDisplay.className = "wildcard";
             } else {
-                cardDisplay.className = "fade-in";
+                cardDisplay.className = "";
             }
         }
 
@@ -572,16 +772,27 @@
             const nextBtn = document.getElementById('next-level-btn');
 
             nextBtn.style.display = 'none'; 
-            
             cardText.innerText = finalCardText;
-            cardDisplay.className = "endcard fade-in";
+            cardDisplay.className = "endcard";
             levelInd.innerText = "Finale";
+            
+            // Endcard immer richtig herum drehen
+            cardDisplay.classList.remove('rotated');
+            isRotated = false;
         }
 
+        // Service Worker Update Check
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-            .then(() => console.log("SW ready"))
-            .catch(err => console.log("SW fail", err));
+            navigator.serviceWorker.register('sw.js').then(reg => {
+                reg.onupdatefound = () => {
+                    const installingWorker = reg.installing;
+                    installingWorker.onstatechange = () => {
+                        if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            console.log('Neues Update verfügbar!');
+                        }
+                    };
+                };
+            });
         }
 
     </script>
