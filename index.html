@@ -42,7 +42,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px 20px 40px 20px; /* Mehr Padding unten */
+            padding: 20px 20px 40px 20px;
             box-sizing: border-box;
             text-align: center;
             position: absolute;
@@ -50,14 +50,13 @@
             left: 0;
             background-color: var(--bg-color);
             z-index: 1;
-            overflow-y: auto; /* Scrollen ermöglichen bei vielen Optionen */
+            overflow-y: auto; 
         }
 
         .screen.active { display: flex; z-index: 10; }
 
         h1 { font-size: 2.5rem; margin-bottom: 10px; letter-spacing: 3px; text-transform: uppercase; font-weight: 900; }
         
-        /* Scrollbarer Bereich für Einstellungen im Menü */
         .menu-scroll-area {
             width: 100%;
             max-width: 400px;
@@ -65,7 +64,7 @@
             flex-direction: column;
             align-items: center;
             overflow-y: auto;
-            padding-bottom: 20px;
+            padding-bottom: 50px; /* Platz unten */
         }
 
         .section-title {
@@ -81,7 +80,6 @@
             padding-left: 10px;
         }
 
-        /* Pack Auswahl Grid */
         .pack-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -117,7 +115,6 @@
         
         .pack-icon { font-size: 1.5rem; margin-bottom: 5px; }
 
-        /* Rotations Toggle */
         .toggle-container {
             display: flex;
             align-items: center;
@@ -129,6 +126,7 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             margin-bottom: 10px;
             cursor: pointer;
+            box-sizing: border-box;
         }
         
         .toggle-label { font-weight: bold; font-size: 1rem; }
@@ -155,7 +153,6 @@
         .toggle-container.active .toggle-switch { background: #111; }
         .toggle-container.active .toggle-switch::after { transform: translateX(22px); }
 
-        /* Start Button */
         .btn-primary {
             background-color: var(--btn-color);
             color: white;
@@ -174,7 +171,6 @@
         }
         .btn-primary:active { transform: scale(0.95); }
 
-        /* Rundenanzahl Buttons */
         .options-container { display: flex; gap: 10px; width: 100%; }
         .opt-btn {
             flex: 1;
@@ -189,7 +185,6 @@
         }
         .opt-btn.active { border-color: #111; color: #111; transform: translateY(-2px); }
 
-        /* Karte */
         #card-display {
             background: var(--card-bg);
             width: 85%;
@@ -205,7 +200,7 @@
             font-size: 1.5rem;
             font-weight: bold;
             position: relative;
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); /* Smoothe Rotation */
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             cursor: pointer;
             -webkit-font-smoothing: antialiased;
         }
@@ -213,7 +208,6 @@
         #card-display.wildcard { background: var(--wildcard-bg); color: var(--wildcard-text); }
         #card-display.endcard { background: #111; color: #fff; border: 2px solid #fff; }
         
-        /* Rotations-Klasse */
         .rotated { transform: rotate(180deg); }
 
         .small-text { 
@@ -226,7 +220,6 @@
             width: 100%;
         }
 
-        /* Next Level Button */
         #next-level-btn {
             position: absolute;
             bottom: 8%;
@@ -245,7 +238,7 @@
         .fade-in-text { animation: textFade 0.5s ease-out; }
         @keyframes textFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        input { padding: 10px; font-size: 1rem; border-radius: 8px; border: 1px solid #ccc; width: 60%; margin-bottom: 10px; text-align: center; }
+        input { padding: 15px; font-size: 1.2rem; border-radius: 12px; border: 1px solid #ccc; margin-bottom: 20px; text-align: center; width: 80%; max-width: 300px; outline: none; }
 
     </style>
 </head>
@@ -294,7 +287,7 @@
             </div>
 
             <button class="btn-primary" onclick="initGame()">STARTEN</button>
-            <button style="background:none; border:none; color:#888; margin-top:15px; text-decoration:underline;" onclick="showScreen('rules-screen')">Anleitung</button>
+            <button style="background:none; border:none; color:#888; margin-top:15px; text-decoration:underline; font-size:0.9rem;" onclick="showScreen('rules-screen')">Anleitung</button>
         </div>
     </div>
 
@@ -311,11 +304,11 @@
                 <li><strong>Glaube & Zweifel:</strong> Für Gespräche über Glauben, Zweifel und Werte abseits von Klischees.</li>
             </ul>
         </div>
-        <button style="margin-top:20px; padding:10px 30px; background:#ddd; border:none; border-radius:30px;" onclick="showScreen('menu-screen')">Zurück</button>
+        <button style="margin-top:20px; padding:10px 30px; background:#ddd; border:none; border-radius:30px; font-weight:bold;" onclick="showScreen('menu-screen')">Zurück</button>
     </div>
 
     <div id="game-screen" class="screen">
-        <button class="back-btn" onclick="quitGame()" style="position: absolute; top: 50px; left: 20px; background: rgba(255,255,255,0.8); border-radius: 50%; width: 40px; height: 40px; border:none; font-size:1.2rem; z-index:20;">✕</button>
+        <button class="back-btn" onclick="quitGame()" style="position: absolute; top: 50px; left: 20px; background: rgba(255,255,255,0.8); border-radius: 50%; width: 40px; height: 40px; border:none; font-size:1.2rem; z-index:20; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">✕</button>
         
         <div id="card-display" onclick="nextCard()">
             <div id="card-content-wrapper">
@@ -523,7 +516,8 @@
                 ],
                 wildcards: [
                     "Wildcard: Erzähle deine Lebensgeschichte in 2 Minuten so detailliert wie möglich.",
-                    "Wildcard: Mache deinem Gegenüber drei ehrliche "Wir"-Komplimente.",
+                    // HIER WAR DER FEHLER: Die Gänsefüßchen bei "Wir" durch einfache Anführungszeichen ersetzt
+                    "Wildcard: Mache deinem Gegenüber drei ehrliche 'Wir'-Komplimente.",
                     "Wildcard: Schließe die Augen und beschreibe das Gesicht deines Gegenübers."
                 ]
             },
@@ -573,24 +567,27 @@
         let cardsPlayedCount = 0;
         let cardsLimit = 15;
         let isRotationEnabled = false;
-        let isRotated = false; // Toggle Zustand für Karte
+        let isRotated = false;
 
         // --- SETUP & UI FUNCTIONS ---
 
         function checkPassword() {
-            // Holen, Leerzeichen wegmachen (.trim), alles klein machen (.toLowerCase)
-            const rawInput = document.getElementById('password-input').value;
+            // Unempfindlich gegen Leerzeichen und Groß/Kleinschreibung
+            const inputElement = document.getElementById('password-input');
+            if(!inputElement) {
+                alert("Fehler: Eingabefeld nicht gefunden.");
+                return;
+            }
+            const rawInput = inputElement.value;
             const cleanInput = rawInput.trim().toLowerCase();
             
-            // Debugging-Hilfe (nur für dich, falls es klemmt)
-            console.log("Eingegeben:", rawInput, "Geprüft als:", cleanInput);
-
             if (cleanInput === "banane") { 
                 showScreen('menu-screen');
             } else {
-                alert("Falsches Passwort! Du hast eingegeben: '" + rawInput + "'");
+                alert("Falsches Passwort!");
             }
         }
+
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
@@ -598,10 +595,7 @@
 
         function togglePack(packName) {
             const btn = document.getElementById('pack-' + packName);
-            
-            // Logik: Toggle an/aus
             if (activePacks.includes(packName)) {
-                // Darf nicht das letzte Pack sein
                 if (activePacks.length > 1) {
                     activePacks = activePacks.filter(p => p !== packName);
                     btn.classList.remove('active');
@@ -641,7 +635,6 @@
 
         function quitGame() {
             showScreen('menu-screen');
-            // Reset Rotation
             const cardDisplay = document.getElementById('card-display');
             cardDisplay.classList.remove('rotated');
             isRotated = false;
@@ -653,39 +646,29 @@
             document.getElementById('next-level-btn').style.display = 'none';
             document.getElementById('level-indicator').innerText = "Level " + level;
 
-            // 1. Fragen aus allen aktiven Packs sammeln
             let levelQuestions = [];
             let wildcards = [];
 
             activePacks.forEach(pack => {
-                // Normale Fragen
                 if (databases[pack][level]) {
                     levelQuestions = levelQuestions.concat(databases[pack][level].map(t => ({text: t, type: 'normal'})));
                 }
-                // Wildcards sammeln (für den globalen Mix)
                 if (databases[pack]['wildcards']) {
                     wildcards = wildcards.concat(databases[pack]['wildcards'].map(t => ({text: t, type: 'wildcard'})));
                 }
             });
 
             if (levelQuestions.length === 0) {
-                // Fallback: Wenn Level leer (z.B. Pack hat nur Level 1), geh weiter
                 if (level < 3) loadLevel(level + 1);
                 else showEndCard();
                 return;
             }
 
-            // 2. Stapel mischen
             shuffleArray(levelQuestions);
             shuffleArray(wildcards);
 
-            // 3. Wildcards einfügen (Globaler Mix)
-            // Wir fügen Wildcards zufällig in den GESAMTEN Stapel ein
-            // Ratio: ca. 1 Wildcard alle 5-6 Karten (ähnlich Original)
             const insertEvery = 6; 
             let combinedStack = [...levelQuestions];
-            
-            // Wir nehmen so viele Wildcards, wie es Sinn macht (nicht 100 Wildcards auf 10 Fragen)
             const maxWildcards = Math.floor(combinedStack.length / 4);
             const wildcardsToAdd = wildcards.slice(0, maxWildcards > 0 ? maxWildcards : 1);
 
@@ -695,8 +678,6 @@
             });
 
             currentStack = combinedStack;
-
-            // Erste Karte zeigen
             nextCard(true);
         }
 
@@ -714,24 +695,20 @@
             const cardText = document.getElementById('card-text');
             const nextBtn = document.getElementById('next-level-btn');
 
-            // --- ROTATION LOGIK ---
             if (isRotationEnabled && !isInitial) {
-                isRotated = !isRotated; // Toggle Zustand
+                isRotated = !isRotated;
                 if (isRotated) cardDisplay.classList.add('rotated');
                 else cardDisplay.classList.remove('rotated');
             } else if (isInitial) {
-                // Reset beim Start
                 isRotated = false;
                 cardDisplay.classList.remove('rotated');
             }
 
-            // --- LIMIT LOGIK ---
             if (cardsPlayedCount >= cardsLimit) {
                 nextBtn.style.display = "block";
                 nextBtn.innerText = currentLevel < 3 ? "WEITER ZU LEVEL " + (currentLevel + 1) : "ZUM ABSCHLUSS";
             }
 
-            // --- LEERER STAPEL ---
             if (currentStack.length === 0) {
                 if (currentLevel < 3) {
                     cardText.innerText = "Level " + currentLevel + " durchgespielt!";
@@ -745,7 +722,6 @@
                 }
             }
 
-            // Animation Reset (Text fade)
             const content = document.getElementById('card-content-wrapper');
             content.classList.remove('fade-in-text');
             void content.offsetWidth; 
@@ -754,7 +730,6 @@
             const card = currentStack.pop();
             cardText.innerText = card.text;
 
-            // Design ändern
             if (card.type === "wildcard") {
                 cardDisplay.className = "wildcard";
             } else {
@@ -781,12 +756,10 @@
             cardDisplay.className = "endcard";
             levelInd.innerText = "Finale";
             
-            // Endcard immer richtig herum drehen
             cardDisplay.classList.remove('rotated');
             isRotated = false;
         }
 
-        // Service Worker Update Check
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').then(reg => {
                 reg.onupdatefound = () => {
@@ -799,6 +772,9 @@
                 };
             });
         }
+
+        // Kleiner Test, um zu sehen ob das Script lädt
+        console.log("App Script erfolgreich geladen.");
 
     </script>
 </body>
