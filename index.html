@@ -30,7 +30,6 @@
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
             overscroll-behavior: none;
-            /* Safe Areas für Notch und Home-Bar */
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
             box-sizing: border-box;
@@ -51,14 +50,21 @@
             z-index: 1;
         }
 
-        /* LAYOUT OPTIMIERUNG: Mittig zentriert */
+        /* STARTSEITE: Perfekt mittig zwischen Notch und Home-Bar */
         #menu-screen {
-            /* Wir nutzen den verfügbaren Platz zwischen Notch und unten */
             height: 100%;
-            justify-content: center; /* Vertikal mittig */
+            justify-content: center; 
             padding-top: calc(env(safe-area-inset-top) + 20px); 
             padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
-            gap: 20px; /* Abstand zwischen den Blöcken */
+            gap: 20px; 
+        }
+
+        /* ANLEITUNG: Sicherer Abstand zur Notch */
+        #rules-screen {
+            justify-content: flex-start;
+            padding-top: max(50px, env(safe-area-inset-top)); 
+            padding-bottom: 40px;
+            overflow-y: auto; /* Scrollen erlauben */
         }
 
         .screen.active { display: flex; z-index: 10; }
@@ -77,7 +83,7 @@
             max-width: 380px;
             display: flex;
             flex-direction: column;
-            gap: 15px; /* Abstand der Sektionen */
+            gap: 15px; 
         }
 
         .section-title {
@@ -114,7 +120,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 85px; /* Kompakte Höhe */
+            height: 85px; 
         }
 
         .pack-btn.active {
@@ -378,18 +384,29 @@
         <button style="background:none; border:none; color:#999; text-decoration:underline; font-size:0.8rem; margin-top: 10px;" onclick="showScreen('rules-screen')">Anleitung</button>
     </div>
 
-    <div id="rules-screen" class="screen" style="justify-content: flex-start;">
-        <h2 style="margin-top:40px;">Anleitung</h2>
+    <div id="rules-screen" class="screen">
+        <h2 style="margin-top:10px;">Anleitung</h2>
         <div style="background:white; padding:25px; border-radius:20px; box-shadow:0 5px 20px rgba(0,0,0,0.05); line-height:1.5; text-align: left; max-width: 400px; width: 100%; font-size: 0.9rem;">
-            <p><strong>Ziel:</strong> Lernt euch besser kennen. Ehrlichkeit ist der Schlüssel.</p>
-            <p><strong>Timer:</strong> Manche Wildcards haben Zeitlimits (z.B. "2 Min"). Ein Button erscheint dann automatisch auf der Karte.</p>
-            <p><strong>Tisch-Modus:</strong> Karten drehen sich für das Gegenüber.</p>
-            <ul style="padding-left:20px;">
-                <li><strong>Standard:</strong> Das Original.</li>
-                <li><strong>Beziehung:</strong> Für Paare.</li>
-                <li><strong>Psychologie:</strong> Deep Talk (Studien).</li>
-                <li><strong>Glaube:</strong> Zweifel & Hoffnung.</li>
+            
+            <p><strong>So wird gespielt:</strong></p>
+            <ol style="padding-left: 20px; margin-top: 5px;">
+                <li>Setzt euch gegenüber.</li>
+                <li>Schaut euch tief in die Augen. <strong>Wer zuerst blinzelt, fängt an.</strong></li>
+                <li>Lest die Frage laut vor. Beide können antworten.</li>
+            </ol>
+
+            <p><strong>Die Bibliotheken:</strong></p>
+            <ul style="padding-left:20px; margin-top: 5px;">
+                <li><strong>Standard:</strong> Das Original (~190 Karten).</li>
+                <li><strong>Beziehung:</strong> Für Paare (~50 Karten).</li>
+                <li><strong>Psychologie:</strong> Selbstreflexion & Deep Talk (~80 Karten).</li>
+                <li><strong>Glaube:</strong> Zweifel & Hoffnung (~80 Karten).</li>
             </ul>
+
+            <p><strong>Spezialkarten:</strong></p>
+            <p><strong>Wildcards:</strong> Spontane Aufgaben. Wenn eine Zeitangabe (z.B. "2 Min") dabei steht, erscheint ein Timer-Button. Diese Karten werden untergemischt.</p>
+            
+            <p><strong>Tipp:</strong> Aktiviert den "Tisch-Modus", wenn das Handy flach liegt. Die Karten drehen sich dann automatisch zum Vorlesen.</p>
         </div>
         <button style="margin-top:20px; padding:12px 30px; background:#ddd; border:none; border-radius:30px; font-weight:bold; color: #333;" onclick="showScreen('menu-screen')">Zurück</button>
     </div>
@@ -452,13 +469,13 @@
                     "Wenn du dir eine Eigenschaft von mir aussuchen könntest, welche hättest du gerne selbst?", "Wirke ich wie jemand, der Entscheidungen aus dem Bauch oder mit dem Kopf trifft?", "Welches Buch oder welcher Film passt deiner Meinung nach zu meinem Leben?", "Glaubst du, ich hatte eine glückliche Kindheit? Warum?", "Was glaubst du, mache ich, wenn ich komplett allein zu Hause bin?", "Wirke ich wie jemand, der gut Geheimnisse bewahren kann?", "Was denkst du: Bin ich eher Optimist, Realist oder Pessimist?", "Welche Emotion zeige ich deiner Meinung nach am schwierigsten (Wut, Trauer, Angst, Freude)?", "Was ist eine 'kleine Freude', die mir den Tag retten kann?", "Bin ich eher jemand, der Konflikte sucht, harmonisiert oder vermeidet?", "Wirke ich wie jemand, der gerne alleine reist?", "Auf einer Skala von 1-10: Wie wichtig ist mir soziale Anerkennung deiner Meinung nach?", "Welcher 'Archetyp' passt zu mir? (z.B. der Held, der Fürsorger, der Rebell, der Schöpfer...)", "Glaube ich eher an Schicksal oder an freien Willen?", "Wirke ich wie jemand, der gut 'Nein' sagen kann?", "Was ist wohl mein größter 'Pet Peeve' (was nervt mich tierisch)?", "Bin ich eher ein Planer oder lebe ich im Chaos?", "Wirke ich, als wäre ich mit mir selbst im Reinen?", "Welches Tier repräsentiert meine Energie am besten?", "Glaubst du, ich bin nachtragend?", "Wirke ich eher wie ein 'Geber' oder ein 'Nehmer' in Beziehungen?", "Was glaubst du, stresst mich am meisten?", "Habe ich eher ein 'Growth Mindset' (ich kann alles lernen) oder ein 'Fixed Mindset' (ich bin halt so)?", "Wirke ich wie jemand, der gut Komplimente annehmen kann?"
                 ],
                 2: [
-                    "Was ist eine Erinnerung, die du sehr schätzt, aber fast nie erzählst?", "Wann hast du zuletzt vor einer anderen Person geweint?", "Was ist eine Sache, für die du dich in der Vergangenheit geschämt hast, über die du heute lachst?", "Wenn du morgen aufwachst und eine neue mentale Fähigkeit hättest, welche wäre das?", "Was ist das Mutigste, das du je getan hast?", "Was würdest du tun, wenn du wüsstest, dass du nicht scheitern kannst?", "Welche Rolle spielt Dankbarkeit in deinem Alltag? Fühlst du sie wirklich oder ist es nur ein Konzept?", "Was bedeutet für dich 'Zuhause'? Ist es ein Ort oder ein Gefühl?", "Wenn du mit einer historischen Person zu Abend essen könntest, wer wäre es und warum?", "Was ist deine primäre 'Sprache der Liebe'? Lob & Anerkennung (Komplimente), Zweisamkeit (Quality Time), Geschenke, Hilfsbereitschaft (Acts of Service) oder körperliche Nähe?", "Was ist dein Bindungsstil (sicher, ängstlich, vermeidend) und wie beeinflusst er deine Beziehungen?", "Was ist eine Sache, die du deinen Eltern noch nie gesagt hast?", "Wenn du eine Kristallkugel hättest, die dir die Wahrheit über dich, dein Leben oder die Zukunft verrät, was würdest du wissen wollen?", "Gibt es etwas, das du schon lange tun wolltest? Warum hast du es noch nicht getan?", "Welcher Glaubenssatz über dich selbst hält dich am meisten zurück?", "Wann fühlst du dich am einsamsten?", "Was ist dein größter 'Trigger'? Was bringt dich sofort auf 180?", "Wie gehst du mit Neid um? Was sagt dein Neid über deine unerfüllten Wünsche aus?", "Welchen Teil deiner Persönlichkeit versteckst du vor den meisten Menschen (dein 'Schatten')?", "Hast du das Gefühl, genug zu sein?", "Wofür möchtest du in Erinnerung bleiben (dein Legacy)?", "Welche Eigenschaft deiner Eltern hast du übernommen, die du eigentlich ablegen wolltest?", "Was ist der schwerste Abschied, den du je nehmen musstest?", "Wann hast du das letzte Mal deine Intuition ignoriert und es bereut?", "Was bedeutet 'Männlichkeit' bzw. 'Weiblichkeit' für dich persönlich, abseits von Klischees?", "In welchem Bereich deines Lebens belügst du dich noch selbst?", "Was brauchst du, wenn du traurig bist: Raum für dich oder Nähe?", "Welches Kompliment glaubst du Menschen oft nicht?"
+                    "Was ist eine Erinnerung, die du sehr schätzt, aber fast nie erzählst?", "Wann hast du zuletzt vor einer anderen Person geweint?", "Was ist eine Sache, für die du dich in der Vergangenheit geschämt hast, über die du heute lachst?", "Wenn du morgen aufwachst und eine neue mentale Fähigkeit hättest, welche wäre das?", "Was ist das Mutigste, das du je getan hast?", "Was würdest du tun, wenn du wüsstest, dass du nicht scheitern kannst?", "Welche Rolle spielt Dankbarkeit in deinem Alltag? Fühkst du sie wirklich oder ist es nur ein Konzept?", "Was bedeutet für dich 'Zuhause'? Ist es ein Ort oder ein Gefühl?", "Wenn du mit einer historischen Person zu Abend essen könntest, wer wäre es und warum?", "Was ist deine primäre 'Sprache der Liebe'? Lob & Anerkennung (Komplimente), Zweisamkeit (Quality Time ), Geschenke, Hilfsbereitschaft (Acts of Service - Entlastung) oder körperliche Nähe (Physical Touch)?", "Was ist dein Bindungsstil (sicher, ängstlich, vermeidend) und wie beeinflusst er deine Beziehungen?", "Was ist eine Sache, die du deinen Eltern noch nie gesagt hast?", "Wenn du eine Kristallkugel hättest, die dir die Wahrheit über dich, dein Leben oder die Zukunft verrät, was würdest du wissen wollen?", "Gibt es etwas, das du schon lange tun wolltest? Warum hast du es noch nicht getan?", "Welcher Glaubenssatz über dich selbst hält dich am meisten zurück?", "Wann fühlst du dich am einsamsten?", "Was ist dein größter 'Trigger'? Was bringt dich sofort auf 180?", "Wie gehst du mit Neid um? Was sagt dein Neid über deine unerfüllten Wünsche aus?", "Welchen Teil deiner Persönlichkeit versteckst du vor den meisten Menschen (dein 'Schatten')?", "Hast du das Gefühl, genug zu sein?", "Wofür möchtest du in Erinnerung bleiben (dein Legacy)?", "Welche Eigenschaft deiner Eltern hast du übernommen, die du eigentlich ablegen wolltest?", "Was ist der schwerste Abschied, den du je nehmen musstest?", "Wann hast du das letzte Mal deine Intuition ignoriert und es bereut?", "Was bedeutet 'Männlichkeit' bzw. 'Weiblichkeit' für dich persönlich, abseits von Klischees?", "In welchem Bereich deines Lebens belügst du dich noch selbst?", "Was brauchst du, wenn du traurig bist: Raum für dich oder Nähe?", "Welches Kompliment glaubst du Menschen oft nicht?"
                 ],
                 3: [
                     "Teile ein persönliches Problem und frage dein Gegenüber, wie er/sie es lösen würde.", "Was schätzt du an unserer Freundschaft/Beziehung am meisten?", "Was ist eine Sache, die du an mir bewunderst, die ich selbst vielleicht gar nicht sehe?", "Wenn wir uns in 10 Jahren treffen, wo siehst du uns beide?", "Was bedeutet Verletzlichkeit für dich? Haben wir sie heute gezeigt?", "Was würdest du an deiner Art, wie du erzogen wurdest, ändern, wenn du könntest?", "Wenn du heute Abend sterben würdest, ohne mit jemandem sprechen zu können: Was würdest du am meisten bereuen, nicht gesagt zu haben?", "Erzähle mir von einem Moment, in dem du dich richtig stolz auf dich gefühlt hast.", "Was ist für dich zu ernst, um darüber Witze zu machen?", "Welche Rolle spiele ich in deinem Leben? (Sei ehrlich).", "Was hast du in diesem Gespräch über mich gelernt, das dein Bild von mir verändert hat?", "Wo siehst du bei mir noch ungenutztes Potenzial?", "Was ist eine Grenze, die du in Zukunft besser setzen möchtest?", "Wie können wir uns gegenseitig helfen, psychisch gesund zu bleiben?", "Was ist eine Frage, die du mir schon immer stellen wolltest, dich aber nie getraut hast?", "Wenn unser Gespräch eine Farbe hätte, welche wäre es?", "Fühlst du dich von mir wirklich gesehen?", "Was wünschst du mir für mein nächstes Lebensjahr?"
                 ],
                 wildcards: [
-                    "Wildcard: Erzähle deine Lebensgeschichte in 2 Minuten so detailliert wie möglich. (Timer: 2 Min)", "Wildcard: Mache deinem Gegenüber drei ehrliche 'Wir'-Komplimente. (Bezieht sich auf die Dynamik zwischen euch, z.B. 'Ich liebe, wie humorvoll wir Konflikte lösen').", "Wildcard: Schließe die Augen und beschreibe das Gesicht deines Gegenübers so genau wie möglich.", "Wildcard: 'Eye Gazing': Schaut euch 2 Minuten lang in die Augen, ohne zu sprechen. (Timer: 2 Min)", "Wildcard: Atmet 1 Minute lang synchron. Versucht, einen gemeinsamen Rhythmus zu finden. (Timer: 1 Min)", "Wildcard: Aktives Zuhören: Einer erzählt 2 Minuten von einem Problem. Der andere darf NICHTS sagen, nur nicken. Danach fasst der Zuhörer zusammen. (Timer: 2 Min)", "Wildcard: Zeige mir das letzte Foto in deiner Galerie, das dich glücklich gemacht hat.", "Wildcard: Jeder schreibt eine positive Eigenschaft des anderen auf einen Zettel und tauscht ihn aus."
+                    "Wildcard: Erzähle deine Lebensgeschichte in 2 Minuten so detailliert wie möglich. (Timer: 2 Min)", "Wildcard: Mache deinem Gegenüber drei ehrliche 'Wir'-Komplimente. (Bezieht sich auf die Dynamik zwischen euch, z.B. 'Ich liebe, wie humorvoll wir Konflikte lösen' oder 'Ich mag, wie wir zusammen schweigen können').", "Wildcard: Schließe die Augen und beschreibe das Gesicht deines Gegenübers so genau wie möglich.", "Wildcard: 'Eye Gazing': Schaut euch 2 Minuten lang in die Augen, ohne zu sprechen. (Timer: 2 Min)", "Wildcard: Atmet 1 Minute lang synchron. Versucht, einen gemeinsamen Rhythmus zu finden.", "Wildcard: Aktives Zuhören: Einer erzählt 2 Minuten von einem Problem. Der andere darf NICHTS sagen, nur nicken. Danach fasst der Zuhörer zusammen. (Timer: 2 Min)", "Wildcard: Zeige mir das letzte Foto in deiner Galerie, das dich glücklich gemacht hat.", "Wildcard: Jeder schreibt eine positive Eigenschaft des anderen auf einen Zettel und tauscht ihn aus."
                 ]
             },
             'christian': {
@@ -466,10 +483,10 @@
                     "Was ist ein frommes Klischee, das auf mich so gar nicht zutrifft?", "Wirke ich wie jemand, der im Gottesdienst eher die Hände hebt oder still sitzt?", "Glaubst du, ich habe mehr Zweifel oder mehr Gewissheit in meinem Glauben?", "Welche biblische Figur passt am ehesten zu meinem Charakter?", "Glaubst du, ich bin eher gesetzlich (Regeln) oder eher liberal (Freiheit)?", "Welches christliche Lied kannst du heimlich nicht mehr hören?", "Was ist ein Vorurteil über Christen, das dich nervt?", "Was denkst du: Was ist mein Lieblingsbuch in der Bibel?", "Welche christliche Phrase benutzt du oft, weißt aber eigentlich gar nicht, was sie bedeutet? (z.B. 'Gott hat mir aufs Herz gelegt...')", "Wenn du Gott eine Frage stellen könntest, die er sofort beantwortet, welche wäre das?", "Wirke ich wie jemand, der gerne theologische Diskussionen führt?", "Was war deine erste Erinnerung an 'Kirche' oder 'Glauben'? War sie positiv?", "Glaubst du, mein Gottesbild ist eher ein strenger Vater oder ein gütiger Freund?", "Was denkst du: Bete ich regelmäßig?", "In welcher Konfession oder Denomination bist du aufgewachsen?", "Welches christliche Buch hat dich geprägt (positiv oder negativ)?", "Was ist dein 'Go-To' Bibelvers? Oder hast du keinen?", "Wirke ich wie jemand, der an Wunder glaubt?", "Was denkst du, was ich am heutigen Christentum am meisten kritisiere?", "Glaubst du, ich habe Angst vor dem Tod?"
                 ],
                 2: [
-                    "Welche religiöse Regel hast du gebrochen und dich dabei gut gefühlt?", "Wie hat sich dein Gottesbild in den letzten 5 Jahren verändert?", "Hast du dich schon mal für deine Gemeinde geschämt?", "Was ist eine Frage an Gott, auf die du noch keine Antwort hast?", "Wann hast du dich zuletzt von der Kirche/Gemeinde enttäuscht gefühlt?", "Was bedeutet für dich 'Gnade' im echten Leben, nicht als theologischer Begriff?", "Welchen Teil der Bibel findest du schwierig, grausam oder abstoßend?", "Gibt es eine Sünde, die wir als Christen zu wichtig nehmen, und eine, die wir ignorieren?", "Wie gehst du mit dem 'Schweigen Gottes' um? Kennst du die 'dunkle Nacht der Seele'?", "Wo hast du Gott zuletzt im Alltag erlebt (außerhalb vom Gottesdienst)?", "Was würdest du dem 'Du' von vor 10 Jahren über den Glauben sagen?", "Fühlst du dich in deiner Gemeinde wirklich gesehen, so wie du bist?", "Was ist ein Glaubenssatz, den du dekonstruiert (abgelegt/hinterfragt) hast?", "Wann hast du das letzte Mal gebetet und hattest das Gefühl, niemand hört zu?", "Welche theologische Überzeugung hast du komplett geändert?", "Was bedeutet 'Freiheit' im Glauben für dich?", "Glaubst du an die Hölle? Wenn ja, wie passt das zu einem liebenden Gott?", "Wie stehst du zum Thema 'Frauen in der Gemeinde'?", "Wie gehst du mit dem Spannungsfeld Glaube und Wissenschaft um?", "Hast du schon mal geistlichen Missbrauch oder Manipulation erlebt?", "Was denkst du über Homosexualität und Kirche?", "Ist die Bibel für dich 'Wort Gottes' oder 'Menschenwort über Gott'?", "Was bedeutet das Kreuz für dich heute? (Sühnopfer oder Solidarität?)", "Wann hast du Gott am meisten gebraucht?", "Was macht dich wütend, wenn du an die Kirchengeschichte denkst?", "Kann man Christ sein ohne Gemeinde?", "Was ist für dich 'Sünde'? Ist es eine Tat oder ein Zustand?", "Wie erklärst du dir das Leid in der Welt (Theodizee)?"
+                    "Welche religiöse Regel hast du gebrochen und dich dabei gut gefühlt?", "Wie hat sich dein Gottesbild in den letzten 5 Jahren verändert?", "Hast du dich schon mal für deine Gemeinde geschämt?", "Was ist eine Frage an Gott, auf die du noch keine Antwort hast?", "Wann hast du dich zuletzt von der Kirche/Gemeinde enttäuscht gefühlt?", "Was bedeutet für dich 'Gnade' im echten Leben, nicht als theologischer Begriff?", "Welchen Teil der Bibel findest du schwierig, grausam oder abstoßend?", "Gibt es eine Sünde, die wir als Christen zu wichtig nehmen, und eine, die wir ignorieren?", "Wie gehst du mit dem 'Schweigen Gottes' um? Kennst du die 'dunkle Nacht der Seele'?", "Wo hast du Gott zuletzt im Alltag erlebt (außerhalb vom Gottesdienst)?", "Was würdest du dir von vor 10 Jahren über den Glauben sagen?", "Fühlst du dich in deiner Gemeinde wirklich gesehen, so wie du bist?", "Was ist ein Glaubenssatz, den du dekonstruiert (abgelegt/hinterfragt) hast?", "Wann hast du das letzte Mal gebetet und hattest das Gefühl, niemand hört zu?", "Welche theologische Überzeugung hast du komplett geändert?", "Was bedeutet 'Freiheit' im Glauben für dich?", "Glaubst du an die Hölle? Wenn ja, wie passt das zu einem liebenden Gott? (Stichwort: Allversöhnung?)", "Wie stehst du zum Thema 'Frauen in der Gemeinde'?", "Wie gehst du mit dem Spannungsfeld Glaube und Wissenschaft um?", "Hast du schon mal geistlichen Missbrauch oder Manipulation erlebt?", "Was denkst du über Homosexualität und Kirche?", "Ist die Bibel für dich 'Wort Gottes' oder 'Menschenwort über Gott'?", "Was bedeutet das Kreuz für dich heute? (Sühnopfer oder Solidarität?)", "Wann hast du Gott am meisten gebraucht?", "Was macht dich wütend, wenn du an die Kirchengeschichte denkst?", "Kann man Christ sein ohne Gemeinde?", "Was ist für dich 'Sünde'? Ist es eine Tat oder ein Zustand?", "Wie erklärst du dir das Leid in der Welt (Theodizee)?"
                 ],
                 3: [
-                    "Was schätzt du an meiner Art, meinen Glauben (oder Zweifel) zu leben?", "Wo können wir uns gegenseitig in unserer geistlichen Reise unterstützen?", "Was glaubst du, ist meine geistliche Gabe (Charisma)?", "Was ist das Mutigste, das du in deinem Glaubensleben je getan hast?", "Was können wir tun, um unsere Werte authentischer zu leben?", "Was ist das 'Heiligste' in unserem gemeinsamen Leben?", "Welche geistliche Verletzung trägst du noch mit dir rum?", "Wenn Jesus heute hier säße, was würde er zu uns sagen?", "Glaubst du, dass Zweifel zum Glauben dazugehören?", "Was bedeutet 'Nächstenliebe' konkret für unsere Beziehung?", "Was möchtest du in Bezug auf Glauben an deine Kinder weitergeben - und was auf keinen Fall?", "Was ist der Kern des Evangeliums für dich in einem Satz?", "Wo siehst du Gott in mir?", "Was gibt dir Hoffnung, wenn die Welt dunkel aussieht?", "Wie sieht für dich eine 'gesunde' Spiritualität aus?", "Was bedeutet Auferstehung für dich? Fakt oder Metapher für neues Leben?", "Wenn du die Kirche reformieren könntest, was würdest du als erstes ändern?", "Wofür bist du Gott am dankbarsten?", "Fühlst du dich von Gott geliebt?", "Was ist deine Vision für dein Leben aus geistlicher Sicht?"
+                    "Was schätzt du an meiner Art, meinen Glauben (oder Zweifel) zu leben?", "Wo können wir uns gegenseitig in unserer geistlichen Reise unterstützen?", "Was glaubst du, ist meine geistliche Gabe (Charisma)?", "Was ist das Mutigste, das du in deinem Glaubensleben je getan hast?", "Was können wir tun, um unsere Werte authentischer zu leben?", "Was ist das 'Heiligste' in unserem gemeinsamen Leben?", "Welche geistliche Verletzung trägst du noch mit dir rum?", "Wenn Jesus heute hier säße, was würde er zu uns sagen?", "Glaubst du, dass Zweifel zum Glauben dazugehören?", "Was bedeutet 'Nächstenliebe' konkret für unsere Beziehung?", "Was möchtest du in Bezug auf Glauben an deine Kinder (oder die nächste Generation) weitergeben - und was auf keinen Fall?", "Was ist der Kern des Evangeliums für dich in einem Satz?", "Wo siehst du Gott in mir?", "Was gibt dir Hoffnung, wenn die Welt dunkel aussieht?", "Wie sieht für dich eine 'gesunde' Spiritualität aus?", "Was bedeutet Auferstehung für dich? Fakt oder Metapher für neues Leben?", "Wenn du die Kirche reformieren könntest, was würdest du als erstes ändern?", "Wofür bist du Gott am dankbarsten?", "Fühlst du dich von Gott geliebt?", "Was ist deine Vision für dein Leben aus geistlicher Sicht?"
                 ],
                 wildcards: [
                     "Wildcard: Betet füreinander. Aber Regel: Dankt Gott nur für Eigenschaften des anderen, bittet um nichts.", "Wildcard: Erzähle von einem Moment, in dem du an der Existenz Gottes gezweifelt hast.", "Wildcard: Teile deinen lieblings Worship-Song (oder ein weltliches Lied, das für dich spirituell ist) und erkläre warum.", "Wildcard: Schweigt 1 Minute gemeinsam und horcht in euch hinein. (Timer: 1 Min)", "Wildcard: Segnet euch gegenseitig. Sprecht euch etwas Gutes für die kommende Woche zu.", "Wildcard: Lest gemeinsam einen Psalm (z.B. Psalm 23 oder 139) und sagt, welches Wort euch hängenbleibt.", "Wildcard: Erzähle deine 'Bekehrungsgeschichte' oder den Moment, wo der Glaube dir wichtig wurde. (Timer: 2 Min)", "Wildcard: Beichte dem anderen eine Sache, für die du dich schämst. (Nur wenn du dich sicher fühlst).", "Wildcard: Wenn du Gott eine Sache fragen könntest: Schreib sie auf einen Zettel.", "Wildcard: Diskutiert 2 Minuten: 'Ist der Mensch im Kern gut oder schlecht?' (Timer: 2 Min)", "Wildcard: Dankbarkeit: Findet 3 Dinge in diesem Raum, für die ihr dankbar seid."
@@ -482,7 +499,7 @@
         // --- STATE VARIABLES ---
         let activePacks = ['standard'];
         let currentStack = [];
-        let globalWildcardStack = []; // Der zentrale Topf für Wildcards
+        let globalWildcardStack = []; 
         let currentLevel = 1;
         let cardsPlayedCount = 0;
         let cardsLimit = 15;
@@ -712,9 +729,9 @@
                     // Flash Effekt
                     document.getElementById('card-display').classList.add('flash');
                     
-                    // VIBRATION HINZUFÜGEN
-                    // Muster: 500ms vibrieren, 200ms Pause, 500ms vibrieren
+                    // VIBRATION
                     if ("vibrate" in navigator) {
+                        // 500ms vibrieren, 200ms Pause, 500ms vibrieren
                         navigator.vibrate([500, 200, 500]);
                     }
                 }
