@@ -17,7 +17,6 @@
             --wildcard-bg: #b82326;
             --wildcard-text: #ffffff;
             --btn-color: #111;
-            --active-pack: #e0e0e0;
         }
 
         body {
@@ -57,6 +56,7 @@
 
         h1 { font-size: 2.5rem; margin-bottom: 10px; letter-spacing: 3px; text-transform: uppercase; font-weight: 900; }
         
+        /* Menü Styling */
         .menu-scroll-area {
             width: 100%;
             max-width: 400px;
@@ -64,7 +64,7 @@
             flex-direction: column;
             align-items: center;
             overflow-y: auto;
-            padding-bottom: 50px; /* Platz unten */
+            padding-bottom: 50px;
         }
 
         .section-title {
@@ -115,6 +115,7 @@
         
         .pack-icon { font-size: 1.5rem; margin-bottom: 5px; }
 
+        /* Toggle Switch */
         .toggle-container {
             display: flex;
             align-items: center;
@@ -153,6 +154,7 @@
         .toggle-container.active .toggle-switch { background: #111; }
         .toggle-container.active .toggle-switch::after { transform: translateX(22px); }
 
+        /* Buttons */
         .btn-primary {
             background-color: var(--btn-color);
             color: white;
@@ -185,6 +187,7 @@
         }
         .opt-btn.active { border-color: #111; color: #111; transform: translateY(-2px); }
 
+        /* Karte Styling */
         #card-display {
             background: var(--card-bg);
             width: 85%;
@@ -200,7 +203,9 @@
             font-size: 1.5rem;
             font-weight: bold;
             position: relative;
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            /* WICHTIG für Rotation: */
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), background-color 0.3s;
+            transform-style: preserve-3d;
             cursor: pointer;
             -webkit-font-smoothing: antialiased;
         }
@@ -208,8 +213,19 @@
         #card-display.wildcard { background: var(--wildcard-bg); color: var(--wildcard-text); }
         #card-display.endcard { background: #111; color: #fff; border: 2px solid #fff; }
         
+        /* Die Rotations-Klasse (wird per JS getoggelt) */
         .rotated { transform: rotate(180deg); }
 
+        /* Der Text-Wrapper (damit der Text beim Faden animiert werden kann) */
+        #card-content-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1; /* Nimmt den Platz ein */
+        }
+
+        /* Der Level Indikator - jetzt ABSOLUT positioniert am Elternelement */
         .small-text { 
             font-size: 0.75rem; 
             text-transform: uppercase; 
@@ -217,9 +233,13 @@
             opacity: 0.5; 
             position: absolute; 
             bottom: 30px; 
+            left: 0;
             width: 100%;
+            text-align: center;
+            pointer-events: none; /* Klicks gehen durch */
         }
 
+        /* Next Level Button */
         #next-level-btn {
             position: absolute;
             bottom: 8%;
@@ -295,13 +315,13 @@
         <h2 style="margin-top:20px; align-self: center;">Anleitung</h2>
         <div style="background:white; padding:20px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.05); line-height:1.6;">
             <p><strong>Das Ziel:</strong> Lernt euch besser kennen. Ehrlichkeit ist der Schlüssel.</p>
-            <p><strong>Tisch-Modus:</strong> Wenn aktiviert, dreht sich die Karte nach jedem Tippen um 180°, damit dein Gegenüber die Frage lesen kann, ohne das Handy zu bewegen.</p>
+            <p><strong>Tisch-Modus:</strong> Wenn aktiviert, dreht sich die Karte nach jedem Tippen um 180°, damit dein Gegenüber die Frage lesen kann. Perfekt, wenn das Handy auf dem Tisch liegt.</p>
             <p><strong>Die Bibliotheken:</strong></p>
             <ul style="padding-left:20px; font-size:0.9rem;">
                 <li><strong>Standard:</strong> Das klassische Spiel.</li>
                 <li><strong>Relationship:</strong> Speziell für Paare (Dating & Beziehung).</li>
                 <li><strong>Psychologie:</strong> Fragen für tiefe Verletzlichkeit (basierend auf Studien).</li>
-                <li><strong>Glaube & Zweifel:</strong> Für Gespräche über Glauben, Zweifel und Werte abseits von Klischees.</li>
+                <li><strong>Glaube & Zweifel:</strong> Über Dekonstruktion, Gemeindewunden, Zweifel und echte Hoffnung.</li>
             </ul>
         </div>
         <button style="margin-top:20px; padding:10px 30px; background:#ddd; border:none; border-radius:30px; font-weight:bold;" onclick="showScreen('menu-screen')">Zurück</button>
@@ -313,8 +333,8 @@
         <div id="card-display" onclick="nextCard()">
             <div id="card-content-wrapper">
                 <span id="card-text">Lade...</span>
-                <div class="small-text" id="level-indicator">Level 1</div>
             </div>
+            <div class="small-text" id="level-indicator">Level 1</div>
         </div>
         
         <button id="next-level-btn" onclick="advanceToNextLevel()">Nächstes Level →</button>
@@ -323,7 +343,7 @@
     </div>
 
     <script>
-        // --- DATENBANKEN (Packs) ---
+        // --- DATENBANKEN ---
         
         const databases = {
             'standard': {
@@ -516,8 +536,7 @@
                 ],
                 wildcards: [
                     "Wildcard: Erzähle deine Lebensgeschichte in 2 Minuten so detailliert wie möglich.",
-                    // HIER WAR DER FEHLER: Die Gänsefüßchen bei "Wir" durch einfache Anführungszeichen ersetzt
-                    "Wildcard: Mache deinem Gegenüber drei ehrliche 'Wir'-Komplimente.",
+                    "Wildcard: Mache deinem Gegenüber drei ehrliche Komplimente, die sich auf euch als Team beziehen (z.B. 'Ich liebe, wie wir...').",
                     "Wildcard: Schließe die Augen und beschreibe das Gesicht deines Gegenübers."
                 ]
             },
@@ -528,15 +547,20 @@
                     "Glaubst du, ich habe mehr Zweifel oder mehr Gewissheit?",
                     "Welche biblische Figur passt am ehesten zu meinem Charakter?",
                     "Glaubst du, ich bin eher gesetzlich oder eher liberal?",
+                    "Welches christliche Lied kannst du heimlich nicht mehr hören?",
+                    "Was ist ein Vorurteil über Christen, das dich nervt?",
                     "Was denkst du: Was ist mein Lieblingsbuch in der Bibel?"
                 ],
                 2: [
                     "Welche religiöse Regel hast du gebrochen und dich dabei gut gefühlt?",
                     "Wie hat sich dein Gottesbild in den letzten 5 Jahren verändert?",
+                    "Hast du dich schon mal für deine Gemeinde geschämt?",
                     "Was ist eine Frage an Gott, auf die du noch keine Antwort hast?",
                     "Wann hast du dich zuletzt von der Kirche/Gemeinde enttäuscht gefühlt?",
                     "Was bedeutet für dich 'Gnade' im echten Leben, nicht theologisch?",
                     "Welchen Teil der Bibel findest du schwierig oder sogar abstoßend?",
+                    "Gibt es eine Sünde, die wir als Christen zu wichtig nehmen, und eine, die wir ignorieren?",
+                    "Wie gehst du mit dem 'Schweigen Gottes' um?",
                     "Wo hast du Gott zuletzt im Alltag erlebt (außerhalb vom Gottesdienst)?",
                     "Was würdest du dem 'Du' von vor 10 Jahren über den Glauben sagen?",
                     "Fühlst du dich in deiner Gemeinde wirklich gesehen?",
@@ -546,8 +570,10 @@
                     "Was schätzt du an meiner Art, meinen Glauben (oder Zweifel) zu leben?",
                     "Wo können wir uns gegenseitig in unserer geistlichen Reise unterstützen?",
                     "Was glaubst du, ist meine geistliche Gabe?",
+                    "Was ist das Mutigste, das du in deinem Glaubensleben je getan hast?",
                     "Was können wir tun, um unsere Werte authentischer zu leben?",
                     "Was ist das 'Heiligste' in unserem gemeinsamen Leben?",
+                    "Welche geistliche Verletzung trägst du noch mit dir rum?",
                     "Wenn Jesus heute hier säße, was würde er zu uns sagen?"
                 ],
                 wildcards: [
@@ -581,10 +607,11 @@
             const rawInput = inputElement.value;
             const cleanInput = rawInput.trim().toLowerCase();
             
+            // DEIN PASSWORT:
             if (cleanInput === "banane") { 
                 showScreen('menu-screen');
             } else {
-                alert("Falsches Passwort!");
+                alert("Falsches Passwort! Du hast eingegeben: '" + rawInput + "'");
             }
         }
 
@@ -596,12 +623,9 @@
         function togglePack(packName) {
             const btn = document.getElementById('pack-' + packName);
             if (activePacks.includes(packName)) {
-                if (activePacks.length > 1) {
-                    activePacks = activePacks.filter(p => p !== packName);
-                    btn.classList.remove('active');
-                } else {
-                    alert("Mindestens ein Pack muss aktiv sein!");
-                }
+                // Wir erlauben jetzt das Abwählen aller Packs!
+                activePacks = activePacks.filter(p => p !== packName);
+                btn.classList.remove('active');
             } else {
                 activePacks.push(packName);
                 btn.classList.add('active');
@@ -628,6 +652,12 @@
         // --- SPIEL LOGIK ---
 
         function initGame() {
+            // PRÜFUNG JETZT HIER:
+            if (activePacks.length === 0) {
+                alert("Bitte wähle mindestens ein Pack aus!");
+                return;
+            }
+
             currentLevel = 1;
             loadLevel(1);
             showScreen('game-screen');
@@ -635,6 +665,7 @@
 
         function quitGame() {
             showScreen('menu-screen');
+            // Rotation resetten
             const cardDisplay = document.getElementById('card-display');
             cardDisplay.classList.remove('rotated');
             isRotated = false;
@@ -695,11 +726,16 @@
             const cardText = document.getElementById('card-text');
             const nextBtn = document.getElementById('next-level-btn');
 
+            // --- ROTATION LOGIK ---
             if (isRotationEnabled && !isInitial) {
-                isRotated = !isRotated;
-                if (isRotated) cardDisplay.classList.add('rotated');
-                else cardDisplay.classList.remove('rotated');
+                isRotated = !isRotated; // Switch state
+                if (isRotated) {
+                    cardDisplay.classList.add('rotated');
+                } else {
+                    cardDisplay.classList.remove('rotated');
+                }
             } else if (isInitial) {
+                // Reset beim Start
                 isRotated = false;
                 cardDisplay.classList.remove('rotated');
             }
@@ -714,7 +750,8 @@
                     cardText.innerText = "Level " + currentLevel + " durchgespielt!";
                     nextBtn.innerText = "WEITER ZU LEVEL " + (currentLevel + 1);
                     nextBtn.style.display = "block";
-                    cardDisplay.className = ""; 
+                    // Klassen resetten aber Rotation beibehalten (falls nötig)
+                    cardDisplay.classList.remove('wildcard', 'endcard');
                     return;
                 } else {
                     showEndCard();
@@ -723,6 +760,7 @@
             }
 
             const content = document.getElementById('card-content-wrapper');
+            // Animation neu triggern
             content.classList.remove('fade-in-text');
             void content.offsetWidth; 
             content.classList.add('fade-in-text');
@@ -730,10 +768,11 @@
             const card = currentStack.pop();
             cardText.innerText = card.text;
 
+            // Design ändern (Alte Klassen weg, neue dazu, Rotation darf bleiben!)
+            cardDisplay.classList.remove('wildcard', 'endcard');
+            
             if (card.type === "wildcard") {
-                cardDisplay.className = "wildcard";
-            } else {
-                cardDisplay.className = "";
+                cardDisplay.classList.add("wildcard");
             }
         }
 
@@ -753,11 +792,12 @@
 
             nextBtn.style.display = 'none'; 
             cardText.innerText = finalCardText;
-            cardDisplay.className = "endcard";
-            levelInd.innerText = "Finale";
             
-            cardDisplay.classList.remove('rotated');
+            cardDisplay.classList.remove('wildcard', 'rotated'); // Reset Rotation bei Endcard
+            cardDisplay.classList.add('endcard');
             isRotated = false;
+            
+            levelInd.innerText = "Finale";
         }
 
         if ('serviceWorker' in navigator) {
@@ -772,9 +812,8 @@
                 };
             });
         }
-
-        // Kleiner Test, um zu sehen ob das Script lädt
-        console.log("App Script erfolgreich geladen.");
+        
+        console.log("App V5 geladen");
 
     </script>
 </body>
