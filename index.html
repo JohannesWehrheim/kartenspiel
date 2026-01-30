@@ -50,21 +50,14 @@
             z-index: 1;
         }
 
-        /* STARTSEITE: Perfekt mittig zwischen Notch und Home-Bar */
+        /* --- STARTSEITE LAYOUT OPTIMIERUNG --- */
         #menu-screen {
-            height: 100%;
-            justify-content: center; 
-            padding-top: calc(env(safe-area-inset-top) + 20px); 
+            /* Flexbox verteilt den Platz vertikal */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; 
+            padding-top: calc(env(safe-area-inset-top) + 30px); 
             padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
-            gap: 20px; 
-        }
-
-        /* ANLEITUNG: Sicherer Abstand zur Notch */
-        #rules-screen {
-            justify-content: flex-start;
-            padding-top: max(50px, env(safe-area-inset-top)); 
-            padding-bottom: 40px;
-            overflow-y: auto; /* Scrollen erlauben */
         }
 
         .screen.active { display: flex; z-index: 10; }
@@ -78,12 +71,22 @@
             flex-shrink: 0;
         }
         
+        /* Der Hauptinhalt zentriert sich im verfügbaren Platz */
         .menu-content {
             width: 100%;
             max-width: 380px;
             display: flex;
             flex-direction: column;
-            gap: 15px; 
+            gap: 15px;
+            flex-grow: 1; /* Nimmt den Platz ein */
+            justify-content: center; /* Zentriert die Boxen vertikal */
+        }
+
+        /* Der Footer (Button + Link) wird nach unten geschoben */
+        .menu-footer {
+            width: 100%;
+            max-width: 380px;
+            margin-bottom: 10px;
         }
 
         .section-title {
@@ -198,9 +201,47 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
             transition: transform 0.1s;
             width: 100%;
-            margin-top: 10px;
+            margin-bottom: 20px; /* Platz zur Anleitung */
         }
         .btn-primary:active { transform: scale(0.96); }
+
+        /* ANLEITUNG SCREEN FIX */
+        #rules-screen {
+            justify-content: flex-start;
+            padding-top: max(40px, env(safe-area-inset-top)); 
+            padding-bottom: 40px;
+            overflow-y: auto; 
+            overflow-x: hidden; /* Verhindert seitliches Wackeln */
+            width: 100vw; /* Volle Breite erzwingen */
+        }
+
+        .rules-content {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            line-height: 1.6;
+            text-align: left;
+            max-width: 400px;
+            width: 100%; /* Passt sich an */
+            box-sizing: border-box; /* Wichtig für Padding */
+            font-size: 0.9rem;
+        }
+
+        .btn-red {
+            margin-top: 20px;
+            padding: 12px 40px;
+            background: #b82326; /* WNRS Rot */
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(184, 35, 38, 0.3);
+        }
 
         /* KARTEN DESIGN */
         #game-screen {
@@ -378,37 +419,41 @@
                 </div>
             </div>
 
-            <button class="btn-primary" onclick="initGame()">STARTEN</button>
         </div>
         
-        <button style="background:none; border:none; color:#999; text-decoration:underline; font-size:0.8rem; margin-top: 10px;" onclick="showScreen('rules-screen')">Anleitung</button>
+        <div class="menu-footer">
+            <button class="btn-primary" onclick="initGame()">STARTEN</button>
+            <button style="background:none; border:none; color:#999; text-decoration:underline; font-size:0.8rem; width:100%; cursor:pointer;" onclick="showScreen('rules-screen')">Anleitung</button>
+        </div>
     </div>
 
     <div id="rules-screen" class="screen">
         <h2 style="margin-top:10px;">Anleitung</h2>
-        <div style="background:white; padding:25px; border-radius:20px; box-shadow:0 5px 20px rgba(0,0,0,0.05); line-height:1.5; text-align: left; max-width: 400px; width: 100%; font-size: 0.9rem;">
+        <div class="rules-content">
             
             <p><strong>So wird gespielt:</strong></p>
             <ol style="padding-left: 20px; margin-top: 5px;">
-                <li>Setzt euch gegenüber.</li>
+                <li>Setzt euch einander gegenüber.</li>
                 <li>Schaut euch tief in die Augen. <strong>Wer zuerst blinzelt, fängt an.</strong></li>
-                <li>Lest die Frage laut vor. Beide können antworten.</li>
+                <li>Spieler A zieht eine Karte und liest sie vor. Spieler B antwortet.</li>
+                <li><em>(Optional: Spieler A darf danach auch antworten, wenn er möchte).</em></li>
+                <li>Dann wird gewechselt.</li>
             </ol>
 
-            <p><strong>Die Bibliotheken:</strong></p>
-            <ul style="padding-left:20px; margin-top: 5px;">
-                <li><strong>Standard:</strong> Das Original (~190 Karten).</li>
-                <li><strong>Beziehung:</strong> Für Paare (~50 Karten).</li>
-                <li><strong>Psychologie:</strong> Selbstreflexion & Deep Talk (~80 Karten).</li>
-                <li><strong>Glaube:</strong> Zweifel & Hoffnung (~80 Karten).</li>
-            </ul>
-
             <p><strong>Spezialkarten:</strong></p>
-            <p><strong>Wildcards:</strong> Spontane Aufgaben. Wenn eine Zeitangabe (z.B. "2 Min") dabei steht, erscheint ein Timer-Button. Diese Karten werden untergemischt.</p>
+            <p><strong>Wildcards:</strong> Aktionskarten, die das Spiel unterbrechen. Sie müssen sofort ausgeführt werden. Wenn eine Zeitangabe (z.B. "2 Min") dabei steht, erscheint ein Timer-Button. Diese Karten werden zufällig untergemischt.</p>
+
+            <p><strong>Die Bibliotheken:</strong></p>
+            <ul style="padding-left:20px; margin-top: 5px; font-size: 0.85rem; color: #555;">
+                <li>Standard: Das Original (~215 Karten)</li>
+                <li>Beziehung: Für Paare (~66 Karten)</li>
+                <li>Psychologie: Deep Talk & Studien (~80 Karten)</li>
+                <li>Glaube: Zweifel & Hoffnung (~80 Karten)</li>
+            </ul>
             
-            <p><strong>Tipp:</strong> Aktiviert den "Tisch-Modus", wenn das Handy flach liegt. Die Karten drehen sich dann automatisch zum Vorlesen.</p>
+            <p style="font-size: 0.8rem; opacity: 0.7;"><strong>Tipp:</strong> Aktiviert den "Tisch-Modus", wenn das Handy flach liegt. Die Karten drehen sich dann automatisch zum Vorlesen.</p>
         </div>
-        <button style="margin-top:20px; padding:12px 30px; background:#ddd; border:none; border-radius:30px; font-weight:bold; color: #333;" onclick="showScreen('menu-screen')">Zurück</button>
+        <button class="btn-red" onclick="showScreen('menu-screen')">Zurück</button>
     </div>
 
     <div id="game-screen" class="screen">
@@ -483,7 +528,7 @@
                     "Was ist ein frommes Klischee, das auf mich so gar nicht zutrifft?", "Wirke ich wie jemand, der im Gottesdienst eher die Hände hebt oder still sitzt?", "Glaubst du, ich habe mehr Zweifel oder mehr Gewissheit in meinem Glauben?", "Welche biblische Figur passt am ehesten zu meinem Charakter?", "Glaubst du, ich bin eher gesetzlich (Regeln) oder eher liberal (Freiheit)?", "Welches christliche Lied kannst du heimlich nicht mehr hören?", "Was ist ein Vorurteil über Christen, das dich nervt?", "Was denkst du: Was ist mein Lieblingsbuch in der Bibel?", "Welche christliche Phrase benutzt du oft, weißt aber eigentlich gar nicht, was sie bedeutet? (z.B. 'Gott hat mir aufs Herz gelegt...')", "Wenn du Gott eine Frage stellen könntest, die er sofort beantwortet, welche wäre das?", "Wirke ich wie jemand, der gerne theologische Diskussionen führt?", "Was war deine erste Erinnerung an 'Kirche' oder 'Glauben'? War sie positiv?", "Glaubst du, mein Gottesbild ist eher ein strenger Vater oder ein gütiger Freund?", "Was denkst du: Bete ich regelmäßig?", "In welcher Konfession oder Denomination bist du aufgewachsen?", "Welches christliche Buch hat dich geprägt (positiv oder negativ)?", "Was ist dein 'Go-To' Bibelvers? Oder hast du keinen?", "Wirke ich wie jemand, der an Wunder glaubt?", "Was denkst du, was ich am heutigen Christentum am meisten kritisiere?", "Glaubst du, ich habe Angst vor dem Tod?"
                 ],
                 2: [
-                    "Welche religiöse Regel hast du gebrochen und dich dabei gut gefühlt?", "Wie hat sich dein Gottesbild in den letzten 5 Jahren verändert?", "Hast du dich schon mal für deine Gemeinde geschämt?", "Was ist eine Frage an Gott, auf die du noch keine Antwort hast?", "Wann hast du dich zuletzt von der Kirche/Gemeinde enttäuscht gefühlt?", "Was bedeutet für dich 'Gnade' im echten Leben, nicht als theologischer Begriff?", "Welchen Teil der Bibel findest du schwierig, grausam oder abstoßend?", "Gibt es eine Sünde, die wir als Christen zu wichtig nehmen, und eine, die wir ignorieren?", "Wie gehst du mit dem 'Schweigen Gottes' um? Kennst du die 'dunkle Nacht der Seele'?", "Wo hast du Gott zuletzt im Alltag erlebt (außerhalb vom Gottesdienst)?", "Was würdest du dir von vor 10 Jahren über den Glauben sagen?", "Fühlst du dich in deiner Gemeinde wirklich gesehen, so wie du bist?", "Was ist ein Glaubenssatz, den du dekonstruiert (abgelegt/hinterfragt) hast?", "Wann hast du das letzte Mal gebetet und hattest das Gefühl, niemand hört zu?", "Welche theologische Überzeugung hast du komplett geändert?", "Was bedeutet 'Freiheit' im Glauben für dich?", "Glaubst du an die Hölle? Wenn ja, wie passt das zu einem liebenden Gott? (Stichwort: Allversöhnung?)", "Wie stehst du zum Thema 'Frauen in der Gemeinde'?", "Wie gehst du mit dem Spannungsfeld Glaube und Wissenschaft um?", "Hast du schon mal geistlichen Missbrauch oder Manipulation erlebt?", "Was denkst du über Homosexualität und Kirche?", "Ist die Bibel für dich 'Wort Gottes' oder 'Menschenwort über Gott'?", "Was bedeutet das Kreuz für dich heute? (Sühnopfer oder Solidarität?)", "Wann hast du Gott am meisten gebraucht?", "Was macht dich wütend, wenn du an die Kirchengeschichte denkst?", "Kann man Christ sein ohne Gemeinde?", "Was ist für dich 'Sünde'? Ist es eine Tat oder ein Zustand?", "Wie erklärst du dir das Leid in der Welt (Theodizee)?"
+                    "Welche religiöse Regel hast du gebrochen und dich dabei gut gefühlt?", "Wie hat sich dein Gottesbild in den letzten 5 Jahren verändert?", "Hast du dich schon mal für deine Gemeinde geschämt?", "Was ist eine Frage an Gott, auf die du noch keine Antwort hast?", "Wann hast du dich zuletzt von der Kirche/Gemeinde enttäuscht gefühlt?", "Was bedeutet für dich 'Gnade' im echten Leben, nicht als theologischer Begriff?", "Welchen Teil der Bibel findest du schwierig, grausam oder abstoßend?", "Gibt es eine Sünde, die wir als Christen zu wichtig nehmen, und eine, die wir ignorieren?", "Wie gehst du mit dem 'Schweigen Gottes' um? Kennst du die 'dunkle Nacht der Seele'?", "Wo hast du Gott zuletzt im Alltag erlebt (außerhalb vom Gottesdienst)?", "Was würdest du dem 'Du' von vor 10 Jahren über den Glauben sagen?", "Fühlst du dich in deiner Gemeinde wirklich gesehen, so wie du bist?", "Was ist ein Glaubenssatz, den du dekonstruiert (abgelegt/hinterfragt) hast?", "Wann hast du das letzte Mal gebetet und hattest das Gefühl, niemand hört zu?", "Welche theologische Überzeugung hast du komplett geändert?", "Was bedeutet 'Freiheit' im Glauben für dich?", "Glaubst du an die Hölle? Wenn ja, wie passt das zu einem liebenden Gott?", "Wie stehst du zum Thema 'Frauen in der Gemeinde'?", "Wie gehst du mit dem Spannungsfeld Glaube und Wissenschaft um?", "Hast du schon mal geistlichen Missbrauch oder Manipulation erlebt?", "Was denkst du über Homosexualität und Kirche?", "Ist die Bibel für dich 'Wort Gottes' oder 'Menschenwort über Gott'?", "Was bedeutet das Kreuz für dich heute? (Sühnopfer oder Solidarität?)", "Wann hast du Gott am meisten gebraucht?", "Was macht dich wütend, wenn du an die Kirchengeschichte denkst?", "Kann man Christ sein ohne Gemeinde?", "Was ist für dich 'Sünde'? Ist es eine Tat oder ein Zustand?", "Wie erklärst du dir das Leid in der Welt (Theodizee)?"
                 ],
                 3: [
                     "Was schätzt du an meiner Art, meinen Glauben (oder Zweifel) zu leben?", "Wo können wir uns gegenseitig in unserer geistlichen Reise unterstützen?", "Was glaubst du, ist meine geistliche Gabe (Charisma)?", "Was ist das Mutigste, das du in deinem Glaubensleben je getan hast?", "Was können wir tun, um unsere Werte authentischer zu leben?", "Was ist das 'Heiligste' in unserem gemeinsamen Leben?", "Welche geistliche Verletzung trägst du noch mit dir rum?", "Wenn Jesus heute hier säße, was würde er zu uns sagen?", "Glaubst du, dass Zweifel zum Glauben dazugehören?", "Was bedeutet 'Nächstenliebe' konkret für unsere Beziehung?", "Was möchtest du in Bezug auf Glauben an deine Kinder (oder die nächste Generation) weitergeben - und was auf keinen Fall?", "Was ist der Kern des Evangeliums für dich in einem Satz?", "Wo siehst du Gott in mir?", "Was gibt dir Hoffnung, wenn die Welt dunkel aussieht?", "Wie sieht für dich eine 'gesunde' Spiritualität aus?", "Was bedeutet Auferstehung für dich? Fakt oder Metapher für neues Leben?", "Wenn du die Kirche reformieren könntest, was würdest du als erstes ändern?", "Wofür bist du Gott am dankbarsten?", "Fühlst du dich von Gott geliebt?", "Was ist deine Vision für dein Leben aus geistlicher Sicht?"
@@ -731,7 +776,6 @@
                     
                     // VIBRATION
                     if ("vibrate" in navigator) {
-                        // 500ms vibrieren, 200ms Pause, 500ms vibrieren
                         navigator.vibrate([500, 200, 500]);
                     }
                 }
