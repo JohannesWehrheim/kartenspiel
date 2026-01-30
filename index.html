@@ -40,9 +40,8 @@
             height: 100%;
             display: none;
             flex-direction: column;
-            justify-content: center; 
             align-items: center;
-            padding: 20px;
+            padding: 0 20px; /* Weniger seitliches Padding */
             box-sizing: border-box;
             text-align: center;
             position: absolute;
@@ -51,43 +50,40 @@
             z-index: 1;
         }
 
-        /* Startseite Optimierung: Mehr Platz oben */
+        /* ONE SCREEN LAYOUT: Flexbox verteilt den Platz */
         #menu-screen {
-            justify-content: flex-start; 
-            padding-top: max(60px, env(safe-area-inset-top)); /* Deutlich mehr Abstand zur Notch */
-            overflow-y: auto;
-            height: 100%;
+            justify-content: space-between; 
+            padding-top: max(20px, env(safe-area-inset-top)); 
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
         }
 
         .screen.active { display: flex; z-index: 10; }
 
         h1 { 
-            font-size: 2.8rem; /* Etwas größer */
-            margin: 20px 0 30px 0; /* Mehr Abstand nach unten */
-            letter-spacing: 4px; 
+            font-size: 2.2rem; 
+            margin: 10px 0; 
+            letter-spacing: 3px; 
             text-transform: uppercase; 
             font-weight: 900; 
+            flex-shrink: 0; /* Darf nicht schrumpfen */
         }
         
-        .menu-scroll-area {
+        .menu-content {
             width: 100%;
             max-width: 400px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            /* Flex-grow sorgt dafür, dass wir den unteren Bereich füllen können */
-            min-height: 60vh; 
-            padding-bottom: 40px;
+            flex-grow: 1; /* Nimmt den restlichen Platz ein */
+            justify-content: space-evenly; /* Verteilt Elemente gleichmäßig */
         }
 
         .section-title {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             font-weight: bold;
             opacity: 0.5;
-            margin-top: 20px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             width: 100%;
             text-align: left;
             padding-left: 5px;
@@ -96,38 +92,39 @@
         .pack-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
             width: 100%;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         .pack-btn {
             background: white;
             border: 2px solid transparent;
-            padding: 15px 10px;
-            border-radius: 20px;
+            padding: 10px;
+            border-radius: 16px;
             font-weight: bold;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: #888;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
             transition: all 0.2s;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 95px; /* Etwas höher für bessere Proportion */
+            /* Höhe dynamisch oder kompakter */
+            aspect-ratio: 2/1.2; 
         }
 
         .pack-btn.active {
             border-color: #111;
             color: #111;
             background: white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transform: translateY(-1px);
         }
         
-        .pack-icon { font-size: 2rem; margin-bottom: 8px; }
+        .pack-icon { font-size: 1.5rem; margin-bottom: 5px; }
 
         .toggle-container {
             display: flex;
@@ -135,18 +132,17 @@
             justify-content: space-between;
             width: 100%;
             background: white;
-            padding: 18px 20px; /* Etwas mehr Luft */
-            border-radius: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-            margin-bottom: 10px;
+            padding: 12px 15px; 
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
             cursor: pointer;
             box-sizing: border-box;
         }
         
-        .toggle-label { font-weight: bold; font-size: 1rem; }
+        .toggle-label { font-weight: bold; font-size: 0.9rem; }
         .toggle-switch {
-            width: 50px;
-            height: 30px;
+            width: 44px;
+            height: 26px;
             background: #ddd;
             border-radius: 50px;
             position: relative;
@@ -157,47 +153,47 @@
             position: absolute;
             top: 2px;
             left: 2px;
-            width: 26px;
-            height: 26px;
+            width: 22px;
+            height: 22px;
             background: white;
             border-radius: 50%;
             transition: transform 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         .toggle-container.active .toggle-switch { background: #111; }
-        .toggle-container.active .toggle-switch::after { transform: translateX(20px); }
+        .toggle-container.active .toggle-switch::after { transform: translateX(18px); }
+
+        .options-container { display: flex; gap: 8px; width: 100%; }
+        .opt-btn {
+            flex: 1;
+            background: white;
+            border: 2px solid transparent;
+            padding: 12px;
+            border-radius: 16px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #888;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .opt-btn.active { border-color: #111; color: #111; background: white; }
 
         .btn-primary {
             background-color: var(--btn-color);
             color: white;
             border: none;
-            padding: 20px 0;
-            font-size: 1.2rem;
+            padding: 16px 0;
+            font-size: 1.1rem;
             border-radius: 50px;
             cursor: pointer;
-            margin-top: 40px;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: bold;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
             transition: transform 0.1s;
             width: 100%;
+            margin-top: 10px;
         }
         .btn-primary:active { transform: scale(0.96); }
-
-        .options-container { display: flex; gap: 10px; width: 100%; }
-        .opt-btn {
-            flex: 1;
-            background: white;
-            border: 2px solid transparent;
-            padding: 15px;
-            border-radius: 18px;
-            font-weight: bold;
-            font-size: 1rem;
-            color: #888;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-        }
-        .opt-btn.active { border-color: #111; color: #111; background: white; }
 
         /* KARTEN DESIGN */
         #game-screen {
@@ -207,8 +203,8 @@
 
         #card-display {
             background: var(--card-bg);
-            width: 85%;
-            max-width: 350px;
+            width: 88%;
+            max-width: 360px;
             aspect-ratio: 3/4; 
             border-radius: 25px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.12);
@@ -231,14 +227,46 @@
         #card-display.wildcard { background: var(--wildcard-bg); color: var(--wildcard-text); }
         #card-display.endcard { background: #111; color: #fff; border: 2px solid #fff; }
         
+        /* Rotation & Flash Effekt */
         .rotated { transform: rotate(180deg); }
+        .flash { animation: flashAnim 0.5s ease-in-out; }
+        @keyframes flashAnim {
+            0%, 100% { background-color: var(--wildcard-bg); }
+            50% { background-color: #ffcccc; } /* Heller Blitz */
+        }
 
         #card-content-wrapper {
             width: 100%;
             height: 100%;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+        }
+
+        /* Timer Styles */
+        #timer-container {
+            margin-top: 20px;
+            display: none; /* Standardmäßig versteckt */
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .timer-btn {
+            background: rgba(255,255,255,0.3);
+            border: 2px solid currentColor;
+            color: inherit;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+        #timer-display {
+            font-size: 2rem;
+            font-weight: 900;
+            font-variant-numeric: tabular-nums;
         }
 
         .small-text { 
@@ -294,14 +322,11 @@
             color: #333;
         }
         
-        /* Spacer für das Menü, damit der Footer unten landet */
-        .spacer { flex-grow: 1; }
-
     </style>
 </head>
 <body>
 
-    <div id="login-screen" class="screen active">
+    <div id="login-screen" class="screen active" style="justify-content: center;">
         <h1>Deep Talk</h1>
         <p style="opacity: 0.6; margin-top: -10px; margin-bottom: 30px;">Private Edition</p>
         <input type="password" id="password-input" placeholder="Passwort">
@@ -311,56 +336,59 @@
     <div id="menu-screen" class="screen">
         <h1>Deep Talk</h1>
         
-        <div class="menu-scroll-area">
+        <div class="menu-content">
             
-            <div class="section-title">Fragen-Bibliotheken</div>
-            <div class="pack-grid">
-                <div id="pack-standard" class="pack-btn active" onclick="togglePack('standard')">
-                    <span class="pack-icon">🎲</span> Standard
-                </div>
-                <div id="pack-relationship" class="pack-btn" onclick="togglePack('relationship')">
-                    <span class="pack-icon">❤️</span> Relationship
-                </div>
-                <div id="pack-ai" class="pack-btn" onclick="togglePack('ai')">
-                    <span class="pack-icon">🧠</span> Psychologie
-                </div>
-                <div id="pack-christian" class="pack-btn" onclick="togglePack('christian')">
-                    <span class="pack-icon">⛪</span> Glaube & Zweifel
+            <div>
+                <div class="section-title">Fragen-Bibliotheken</div>
+                <div class="pack-grid">
+                    <div id="pack-standard" class="pack-btn active" onclick="togglePack('standard')">
+                        <span class="pack-icon">🎲</span> Standard
+                    </div>
+                    <div id="pack-relationship" class="pack-btn" onclick="togglePack('relationship')">
+                        <span class="pack-icon">❤️</span> Beziehung
+                    </div>
+                    <div id="pack-ai" class="pack-btn" onclick="togglePack('ai')">
+                        <span class="pack-icon">🧠</span> Psychologie
+                    </div>
+                    <div id="pack-christian" class="pack-btn" onclick="togglePack('christian')">
+                        <span class="pack-icon">⛪</span> Glaube
+                    </div>
                 </div>
             </div>
 
-            <div class="section-title">Einstellungen</div>
-            
-            <div class="toggle-container" id="rotation-toggle" onclick="toggleRotationSetting()">
-                <span class="toggle-label">Tisch-Modus (Auto-Drehen)</span>
-                <div class="toggle-switch"></div>
+            <div>
+                <div class="section-title">Einstellungen</div>
+                <div class="toggle-container" id="rotation-toggle" onclick="toggleRotationSetting()">
+                    <span class="toggle-label">Tisch-Modus (Auto-Drehen)</span>
+                    <div class="toggle-switch"></div>
+                </div>
             </div>
 
-            <div class="section-title">Karten pro Runde</div>
-            <div class="options-container">
-                <button id="opt-15" class="opt-btn active" onclick="setLimit(15)">15</button>
-                <button id="opt-20" class="opt-btn" onclick="setLimit(20)">20</button>
-                <button id="opt-all" class="opt-btn" onclick="setLimit(999)">Alle</button>
+            <div>
+                <div class="section-title">Karten pro Runde</div>
+                <div class="options-container">
+                    <button id="opt-15" class="opt-btn active" onclick="setLimit(15)">15</button>
+                    <button id="opt-20" class="opt-btn" onclick="setLimit(20)">20</button>
+                    <button id="opt-all" class="opt-btn" onclick="setLimit(999)">Alle</button>
+                </div>
             </div>
 
             <button class="btn-primary" onclick="initGame()">STARTEN</button>
-            
-            <div class="spacer"></div>
-            <button style="background:none; border:none; color:#888; margin-top:30px; text-decoration:underline; font-size:0.9rem; padding-bottom: 20px;" onclick="showScreen('rules-screen')">Anleitung</button>
+            <button style="background:none; border:none; color:#999; text-decoration:underline; font-size:0.8rem; margin-top: 5px;" onclick="showScreen('rules-screen')">Anleitung</button>
         </div>
     </div>
 
     <div id="rules-screen" class="screen" style="justify-content: flex-start;">
         <h2 style="margin-top:40px;">Anleitung</h2>
-        <div style="background:white; padding:25px; border-radius:20px; box-shadow:0 5px 20px rgba(0,0,0,0.05); line-height:1.6; text-align: left; max-width: 400px; width: 100%;">
-            <p><strong>Das Ziel:</strong> Lernt euch besser kennen. Ehrlichkeit ist der Schlüssel.</p>
-            <p><strong>Tisch-Modus:</strong> Die Karte dreht sich automatisch um 180°, damit das Gegenüber lesen kann. Ideal, wenn das Handy auf dem Tisch liegt.</p>
-            <p><strong>Die Bibliotheken:</strong></p>
-            <ul style="padding-left:20px; font-size:0.9rem;">
-                <li><strong>Standard:</strong> Das volle Original-Spiel.</li>
-                <li><strong>Relationship:</strong> Speziell für Paare.</li>
-                <li><strong>Psychologie:</strong> Deep Talk basierend auf Studien.</li>
-                <li><strong>Glaube & Zweifel:</strong> Über Dekonstruktion, Gemeindewunden und echte Hoffnung.</li>
+        <div style="background:white; padding:25px; border-radius:20px; box-shadow:0 5px 20px rgba(0,0,0,0.05); line-height:1.5; text-align: left; max-width: 400px; width: 100%; font-size: 0.9rem;">
+            <p><strong>Ziel:</strong> Lernt euch besser kennen. Ehrlichkeit ist der Schlüssel.</p>
+            <p><strong>Timer:</strong> Manche Wildcards haben Zeitlimits (z.B. "2 Min"). Ein Button erscheint dann automatisch auf der Karte.</p>
+            <p><strong>Tisch-Modus:</strong> Karten drehen sich für das Gegenüber.</p>
+            <ul style="padding-left:20px;">
+                <li><strong>Standard:</strong> Das Original.</li>
+                <li><strong>Beziehung:</strong> Für Paare.</li>
+                <li><strong>Psychologie:</strong> Deep Talk (Studien).</li>
+                <li><strong>Glaube:</strong> Zweifel & Hoffnung.</li>
             </ul>
         </div>
         <button style="margin-top:20px; padding:12px 30px; background:#ddd; border:none; border-radius:30px; font-weight:bold; color: #333;" onclick="showScreen('menu-screen')">Zurück</button>
@@ -372,6 +400,10 @@
         <div id="card-display" onclick="nextCard()">
             <div id="card-content-wrapper">
                 <span id="card-text">Lade...</span>
+                <div id="timer-container" onclick="event.stopPropagation()">
+                    <button class="timer-btn" onclick="startTimer()">Zeit starten</button>
+                    <div id="timer-display"></div>
+                </div>
             </div>
             <div class="small-text" id="level-indicator">Level 1</div>
         </div>
@@ -386,354 +418,61 @@
         const databases = {
             'standard': {
                 1: [
-                    "Was ist deiner Meinung nach das Schwierigste an meinem Beruf?",
-                    "Welche Reality-Show werde ich mir wohl am ehesten ansehen? Erkläre.",
-                    "Was ist das Erste, was dir an mir aufgefallen ist?",
-                    "Wenn es MySpace noch gäbe, wie würde mein Profilsong lauten?",
-                    "Wenn du mir ein Geschenk kaufen würdest, nur basierend auf meinem Aussehen, was wäre es?",
-                    "Auf einer Skala von 1-10, wie unordentlich ist mein Auto? (1=Sauber, 10=Katastrophe)",
-                    "Glaubst du, dass Pflanzen in meiner Obhut gedeihen oder sterben?",
-                    "Sehe ich nett aus? Erkläre.",
-                    "Wirke ich eher wie ein kreativer oder ein analytischer Typ?",
-                    "Wirke ich wie jemand, der sich einen Namen tätowieren lassen würde?",
-                    "Beende den Satz: Wenn ich dich nur ansehe, würde ich denken...",
-                    "Was sagen meine Schuhe über mich aus?",
-                    "Glaubst du, dass ich schon einmal gefeuert worden bin? Wenn ja, warum?",
-                    "Was war dein erster Eindruck von mir?",
-                    "Wie würdest du meinen Typ in drei Worten beschreiben?",
-                    "Was hältst du von meiner ersten Nachricht (falls wir geschrieben haben)?",
-                    "Wer von uns beiden ist wohl der bessere WhatsApp-Schreiber?",
-                    "Was sagt dir mein Instagram über mich?",
-                    "Was fasziniert dich an mir?",
-                    "Was denkst du, wofür ich am ehesten Geld ausgebe?",
-                    "Was glaubst du, wollte ich als Kind werden?",
-                    "Glaubst du, dass ich in der Schule beliebt war?",
-                    "Wie viele Strafzettel habe ich wohl in meinem Leben bekommen?",
-                    "Glaubst du, ich verliebe mich leicht?",
-                    "Was denkst du, welches Kompliment höre ich am häufigsten?",
-                    "Glaubst du, ich habe schon mal ein Ex-Telefon nach Beweisen durchsucht?",
-                    "In welchem Schulfach war ich wohl gut und in welchem schlecht?",
-                    "Bin ich eher Kaffee- oder Teetrinker? Gesüßt oder ungesüßt?",
-                    "Wirke ich wie ein Morgenmensch oder eine Nachteule?",
-                    "Komme ich normalerweise pünktlich oder zu spät?",
-                    "Erinnere ich dich an jemanden, den du kennst?",
-                    "Fühlst du dich von mir eingeschüchtert?",
-                    "Was verrät dir meine Körpersprache in diesem Moment?",
-                    "Wie wahrscheinlich ist es, dass ich Zelten gehe?",
-                    "Welche Rolle würde ich in einem Film spielen?",
-                    "Was ist wohl mein Lieblings-Karaoke-Song?",
-                    "Was an mir ist dir besonders fremd oder ungewohnt?",
-                    "Was sagt mein Bildschirmhintergrund über mich aus?",
-                    "Was glaubst du, wer ist mein Prominentenschwarm?",
-                    "Was war dein erster Eindruck von mir auf Bumble im Vergleich zu IRL?",
-                    "Glaubst du, ich war in der Schule beliebt? Erkläre.",
-                    "Was ist dein Lieblingssongtext, der dir spontan einfällt?",
-                    "Bin ich jemand, mit dem du dich normalerweise gut verstehst?",
-                    "Glaubst du, ich schüchtere andere ein?",
-                    "Was glaubst du, wie viele Strafzettel ich in meinem Leben bekommen habe?",
-                    "Wirke ich wie jemand, der Entscheidungen aus dem Bauch oder Kopf trifft?",
-                    "Was, glaubst du, wollte ich als Kind werden, wenn ich groß bin?",
-                    "Beende den Satz: Wenn ich dich so ansehe, würde ich denken...",
-                    "Was sagt dir mein Instagram über mich? Stell eine Vermutung an.",
-                    "Was glaubst du, wer bei unserem ersten Treffen nervöser war?"
+                    "Was ist deiner Meinung nach das Schwierigste an meinem Beruf?", "Welche Reality-Show werde ich mir wohl am ehesten ansehen? Erkläre.", "Was ist das Erste, was dir an mir aufgefallen ist?", "Wenn es MySpace noch gäbe, wie würde mein Profilsong lauten?", "Wenn du mir ein Geschenk kaufen würdest, nur basierend auf meinem Aussehen, was wäre es?", "Auf einer Skala von 1-10, wie unordentlich ist mein Auto?", "Glaubst du, dass Pflanzen in meiner Obhut gedeihen oder sterben?", "Sehe ich nett aus? Erkläre.", "Wirke ich eher wie ein kreativer oder ein analytischer Typ?", "Wirke ich wie jemand, der sich einen Namen tätowieren lassen würde?", "Beende den Satz: Wenn ich dich nur ansehe, würde ich denken...", "Was sagen meine Schuhe über mich aus?", "Glaubst du, dass ich schon einmal gefeuert worden bin?", "Was war dein erster Eindruck von mir?", "Wie würdest du meinen Typ in drei Worten beschreiben?", "Was hältst du von meiner ersten Nachricht?", "Wer von uns beiden ist wohl der bessere WhatsApp-Schreiber?", "Was sagt dir mein Instagram über mich?", "Was fasziniert dich an mir?", "Was denkst du, wofür ich am ehesten Geld ausgebe?", "Was glaubst du, wollte ich als Kind werden?", "Glaubst du, dass ich in der Schule beliebt war?", "Wie viele Strafzettel habe ich wohl in meinem Leben bekommen?", "Glaubst du, ich verliebe mich leicht?", "Was denkst du, welches Kompliment höre ich am häufigsten?", "Glaubst du, ich habe schon mal ein Ex-Telefon nach Beweisen durchsucht?", "In welchem Schulfach war ich wohl gut und in welchem schlecht?", "Bin ich eher Kaffee- oder Teetrinker?", "Wirke ich wie ein Morgenmensch oder eine Nachteule?", "Komme ich normalerweise pünktlich oder zu spät?", "Erinnere ich dich an jemanden, den du kennst?", "Fühlst du dich von mir eingeschüchtert?", "Was verrät dir meine Körpersprache in diesem Moment?", "Wie wahrscheinlich ist es, dass ich Zelten gehe?", "Welche Rolle würde ich in einem Film spielen?", "Was ist wohl mein Lieblings-Karaoke-Song?", "Was an mir ist dir besonders fremd oder ungewohnt?", "Was sagt mein Bildschirmhintergrund über mich aus?", "Was glaubst du, wer ist mein Prominentenschwarm?", "Was war dein erster Eindruck von mir auf Bumble im Vergleich zu IRL?", "Glaubst du, ich war in der Schule beliebt? Erkläre.", "Was ist dein Lieblingssongtext, der dir spontan einfällt?", "Bin ich jemand, mit dem du dich normalerweise gut verstehst?", "Glaubst du, ich schüchtere andere ein?", "Wirke ich wie jemand, der Entscheidungen aus dem Bauch oder Kopf trifft?", "Was, glaubst du, wollte ich als Kind werden, wenn ich groß bin?", "Beende den Satz: Wenn ich dich so ansehe, würde ich denken...", "Was sagt dir mein Instagram über mich? Stell eine Vermutung an.", "Was glaubst du, wer bei unserem ersten Treffen nervöser war?",
+                    "Was ist das Mutigste, das ich deiner Meinung nach tun könnte?", "Wenn wir uns in einer Bar treffen würden, was würde ich trinken?", "Welches Tier wäre ich?", "Glaubst du, ich bin eher ein Hunde- oder Katzenmensch?", "Was denkst du, ist meine schlechteste Angewohnheit?", "Was ist deiner Meinung nach mein größtes Talent?", "Wenn ich ein Buch schreiben würde, worüber würde es handeln?", "Glaubst du, ich kann gut kochen?", "Was denkst du, ist mein Traumreiseziel?", "Welche Farbe passt am besten zu meiner Persönlichkeit?", "Glaubst du, ich bin eher spontan oder geplant?", "Was denkst du, was ich am Wochenende am liebsten mache?", "Welches Genre Film mag ich wohl am liebsten?", "Glaubst du, ich singe unter der Dusche?", "Was denkst du, ist mein Lieblingsessen?", "Glaubst du, ich bin eher sportlich oder gemütlich?", "Was denkst du, ist mein Sternzeichen?"
                 ],
                 2: [
-                    "Was war deine schönste Erinnerung im vergangenen Jahr?",
-                    "Hast du in letzter Zeit deine Meinung über etwas geändert?",
-                    "Was war deine früheste Erinnerung an Glück?",
-                    "Bei welcher Lektion hast du am längsten gebraucht, um sie zu verlernen?",
-                    "Belügst du dich selbst in Bezug auf irgendetwas?",
-                    "Welche Frage versuchst du in deinem Leben gerade zu beantworten?",
-                    "Wann hast du dich das letzte Mal selbst überrascht?",
-                    "Welchen Titel würdest du diesem Kapitel in deinem Leben geben?",
-                    "Wonach sehnst du dich mehr?",
-                    "Beende den Satz: Fremde würden mich als ___ beschreiben, nur ich weiß, dass ich ___ bin.",
-                    "Was war der schlimmste Schmerz, den du je erlebt hast (nicht körperlich)?",
-                    "Hat ein Fremder jemals dein Leben verändert?",
-                    "Wie lautet der Name deiner ersten Liebe und warum hast du dich verliebt?",
-                    "Was würde dein jüngeres Ich über dein heutiges Leben nicht glauben?",
-                    "Wie würdest du das Gefühl des Verliebtseins mit einem Wort beschreiben?",
-                    "Wovor hast du mehr Angst: Versagen oder Erfolg? Warum?",
-                    "Was ist ein Traum, den du aufgegeben hast?",
-                    "Wenn du jemanden auf einer tieferen Ebene kennenlernen könntest, wer wäre das?",
-                    "Wie heißt deine Mutter und was ist das Schönste an ihr?",
-                    "Welcher Teil deines Lebens funktioniert, welcher Teil schmerzt?",
-                    "Wie kannst du ein besserer Mensch werden?",
-                    "Stimmt dein Selbstbild mit dem Bild überein, das andere von dir haben?",
-                    "Vermisst du im Moment jemanden? Vermisst man dich auch?",
-                    "An welchem Fastfood-Restaurant fahre ich wohl vorbei? Was ist meine Bestellung?",
-                    "Wie oft antwortest du wahrheitsgemäß auf 'Wie geht es dir'?",
-                    "Wie geht es dir wirklich?",
-                    "Was ist das Unerklärlichste, das dir je passiert ist?",
-                    "Erzähle mir eine nicht offensichtliche Sache über deinen Vater.",
-                    "Beschreibe deinen perfekten Tag.",
-                    "Welchen Ratschlag würdest du deinem jüngeren Ich geben?",
-                    "Wie alt fühlst du dich gefühlsmäßig?",
-                    "Werde ich deine Ex auf deinem Insta-Feed finden?",
-                    "Was ist das Peinlichste, das dir bei einem Date passiert ist?",
-                    "Was hättest du in früheren Beziehungen besser machen können?",
-                    "Gibt es ein Bild, das du bei ersten Dates vermittelst, von dem du gerne loskommen würdest?",
-                    "Was haben dir die Menschen, die dich großgezogen haben, über Liebe beigebracht?",
-                    "Beschreibe das perfekte Date.",
-                    "Was hast du über dich selbst gelernt, als du Single warst?",
-                    "Welche Frage wird dir bei einem Date am ungernsten gestellt?",
-                    "Wofür bist du leidenschaftlich?",
-                    "Wofür nimmst du dir momentan nicht genug Zeit?",
-                    "Was ist etwas, das du nicht an dir ändern möchtest?",
-                    "Hast du jemals 'Ich liebe dich' gesagt und es nicht so gemeint?",
-                    "Was willst du dir selbst noch beweisen?",
-                    "Worüber hast du deine Mutter zuletzt angelogen?",
-                    "Was war das beste Kompliment, das dir ein Fremder je gemacht hat?",
-                    "Gibt es ein Gefühl, das du vermisst?",
-                    "Was ist ein Kompliment, das du gerne öfter bekommen würdest?",
-                    "Wann war der Moment, in dem du gemerkt hast, dass du nicht unbesiegbar bist?",
-                    "Was an meinem Profil hat dich dazu gebracht, nach rechts zu wischen?",
-                    "Vollende den Satz: Verabredungen sind...",
-                    "Wenn du es dir aussuchen könntest: Mit wem würdest du zusammen sein? Wo? Was würdet ihr tun?"
+                    "Was war deine schönste Erinnerung im vergangenen Jahr?", "Hast du in letzter Zeit deine Meinung über etwas geändert?", "Was war deine früheste Erinnerung an Glück?", "Bei welcher Lektion hast du am längsten gebraucht, um sie zu verlernen?", "Belügst du dich selbst in Bezug auf irgendetwas?", "Welche Frage versuchst du in deinem Leben gerade zu beantworten?", "Wann hast du dich das letzte Mal selbst überrascht?", "Welchen Titel würdest du diesem Kapitel in deinem Leben geben?", "Wonach sehnst du dich mehr?", "Beende den Satz: Fremde würden mich als ___ beschreiben, nur ich weiß, dass ich ___ bin.", "Was war der schlimmste Schmerz, den du je erlebt hast?", "Hat ein Fremder jemals dein Leben verändert?", "Wie lautet der Name deiner ersten Liebe und warum hast du dich verliebt?", "Was würde dein jüngeres Ich über dein heutiges Leben nicht glauben?", "Wie würdest du das Gefühl des Verliebtseins mit einem Wort beschreiben?", "Wovor hast du mehr Angst: Versagen oder Erfolg?", "Was ist ein Traum, den du aufgegeben hast?", "Wenn du jemanden auf einer tieferen Ebene kennenlernen könntest, wer wäre das?", "Wie heißt deine Mutter und was ist das Schönste an ihr?", "Welcher Teil deines Lebens funktioniert, welcher Teil schmerzt?", "Wie kannst du ein besserer Mensch werden?", "Stimmt dein Selbstbild mit dem Bild überein, das andere von dir haben?", "Vermisst du im Moment jemanden?", "An welchem Fastfood-Restaurant fahre ich wohl vorbei?", "Wie oft antwortest du wahrheitsgemäß auf 'Wie geht es dir'?", "Wie geht es dir wirklich?", "Was ist das Unerklärlichste, das dir je passiert ist?", "Erzähle mir eine nicht offensichtliche Sache über deinen Vater.", "Beschreibe deinen perfekten Tag.", "Welchen Ratschlag würdest du deinem jüngeren Ich geben?", "Wie alt fühlst du dich gefühlsmäßig?", "Werde ich deine Ex auf deinem Insta-Feed finden?", "Was ist das Peinlichste, das dir bei einem Date passiert ist?", "Was hättest du in früheren Beziehungen besser machen können?", "Gibt es ein Bild, das du bei ersten Dates vermittelst, von dem du gerne loskommen würdest?", "Was haben dir die Menschen, die dich großgezogen haben, über Liebe beigebracht?", "Beschreibe das perfekte Date.", "Was hast du über dich selbst gelernt, als du Single warst?", "Welche Frage wird dir bei einem Date am ungernsten gestellt?", "Wofür bist du leidenschaftlich?", "Wofür nimmst du dir momentan nicht genug Zeit?", "Was ist etwas, das du nicht an dir ändern möchtest?", "Hast du jemals 'Ich liebe dich' gesagt und es nicht so gemeint?", "Was willst du dir selbst noch beweisen?", "Worüber hast du deine Mutter zuletzt angelogen?", "Was war das beste Kompliment, das dir ein Fremder je gemacht hat?", "Gibt es ein Gefühl, das du vermisst?", "Was ist ein Kompliment, das du gerne öfter bekommen würdest?", "Wann war der Moment, in dem du gemerkt hast, dass du nicht unbesiegbar bist?", "Was an meinem Profil hat dich dazu gebracht, nach rechts zu wischen?", "Vollende den Satz: Verabredungen sind...", "Wenn du es dir aussuchen könntest: Mit wem würdest du zusammen sein?",
+                    "Was ist deine größte Angst?", "Wann hast du das letzte Mal geweint?", "Was ist das Wichtigste, das du von deinen Eltern gelernt hast?", "Was ist der größte Fehler, den du je gemacht hast?", "Was ist deine schönste Kindheitserinnerung?", "Was ist das Verrückteste, das du je getan hast?", "Was ist deine größte Schwäche?", "Was ist deine größte Stärke?", "Was ist das Beste, was dir je passiert ist?", "Was ist das Schlimmste, was dir je passiert ist?", "Was würdest du tun, wenn du im Lotto gewinnen würdest?", "Was ist dein größtes Ziel im Leben?", "Was ist deine größte Reue?", "Was ist das Peinlichste, das du je getan hast?", "Was ist das Geheimnis, das du noch nie jemandem erzählt hast?", "Was ist deine größte Unsicherheit?", "Was ist das Beste an deinem Leben?", "Was würdest du ändern, wenn du die Zeit zurückdrehen könntest?", "Was ist das Wichtigste in einer Freundschaft?", "Was ist das Wichtigste in einer Beziehung?", "Was ist deine Definition von Liebe?", "Was ist deine Definition von Erfolg?", "Was ist deine Definition von Glück?", "Was ist der Sinn des Lebens für dich?", "Glaubst du an Schicksal?", "Glaubst du an Seelenverwandte?", "Glaubst du an Liebe auf den ersten Blick?"
                 ],
                 3: [
-                    "Was würdest du mir aufgrund dessen, was du über mich erfahren hast, zum Lesen empfehlen?",
-                    "Was an mir hat dich überrascht?",
-                    "Hast du eine Netflix-Empfehlung für mich, basierend auf dem, was du weißt?",
-                    "Was denkst du, ist meine Superkraft?",
-                    "Was denkst du, was unsere wichtigste Gemeinsamkeit ist?",
-                    "Was ist eine Sache, die ich tun könnte, um mein Leben drastisch zu verbessern?",
-                    "Was wäre das perfekte Geschenk für mich?",
-                    "Wie würdest du mich einem Fremden beschreiben?",
-                    "Was muss ich im Moment hören?",
-                    "Stellen meine sozialen Medien mich richtig dar?",
-                    "Was ist eine Lektion, die du aus unserem Gespräch mitnimmst?",
-                    "Womit kann ich dir helfen?",
-                    "Wovor habe ich deiner Meinung nach am meisten Angst?",
-                    "In welchen Bereichen kann ich am besten Ratschläge geben?",
-                    "Was an mir ist für dich am schwersten zu verstehen?",
-                    "Wenn wir eine Band wären, wie würde unser Name lauten?",
-                    "Welche Teile deiner selbst siehst du in mir?",
-                    "Wie verdient man deine Offenheit? Habe ich sie verdient?",
-                    "Was sollte ich deiner Meinung nach loslassen?",
-                    "Was hast du in diesem Gespräch über dich selbst gelernt?",
-                    "Was ist deiner Meinung nach mein Hauptmerkmal?",
-                    "Vor welcher Frage hattest du am meisten Angst?",
-                    "Was glaubst du, warum wir uns getroffen haben?",
-                    "Wenn dieses Spiel vorbei ist, was wird dir von mir in Erinnerung bleiben?",
-                    "Was denkst du, ist meine Schwäche?",
-                    "Wie ergänzen sich unsere Persönlichkeiten?",
-                    "Was sollte ich über mich wissen, was ich vielleicht noch nicht weiß?",
-                    "Wodurch würdest du dich mir näher fühlen?",
-                    "Was bewunderst du am meisten an mir?",
-                    "Beschreibe mit einem Wort, wie du dich gerade fühlst.",
-                    "Glaubst du, dass jeder eine Berufung hat? Habe ich meine gefunden?",
-                    "Was können wir gemeinsam erschaffen?",
-                    "Welche Antwort von mir hat dich zum Strahlen gebracht?",
-                    "Was ist die attraktivste Eigenschaft an mir (nicht körperlich)?",
-                    "Wann hast du dich in diesem Spiel am meisten mit mir verbunden gefühlt?",
-                    "Mit einem Wort: Wie würdest du unser Gespräch beschreiben?",
-                    "Bin ich so, wie du mich erwartet hast?",
-                    "Gib etwas zu.",
-                    "Wie würdest du mich einem Fremden beschreiben? (Nochmal)",
-                    "Was an mir hat dich am meisten überrascht?",
-                    "Wenn du mir für den Rest des Monats etwas verordnen könntest, was wäre das?"
+                    "Was würdest du mir aufgrund dessen, was du über mich erfahren hast, zum Lesen empfehlen?", "Was an mir hat dich überrascht?", "Hast du eine Netflix-Empfehlung für mich?", "Was denkst du, ist meine Superkraft?", "Was denkst du, was unsere wichtigste Gemeinsamkeit ist?", "Was ist eine Sache, die ich tun könnte, um mein Leben drastisch zu verbessern?", "Was wäre das perfekte Geschenk für mich?", "Wie würdest du mich einem Fremden beschreiben?", "Was muss ich im Moment hören?", "Stellen meine sozialen Medien mich richtig dar?", "Was ist eine Lektion, die du aus unserem Gespräch mitnimmst?", "Womit kann ich dir helfen?", "Wovor habe ich deiner Meinung nach am meisten Angst?", "In welchen Bereichen kann ich am besten Ratschläge geben?", "Was an mir ist für dich am schwersten zu verstehen?", "Wenn wir eine Band wären, wie würde unser Name lauten?", "Welche Teile deiner selbst siehst du in mir?", "Wie verdient man deine Offenheit? Habe ich sie verdient?", "Was sollte ich deiner Meinung nach loslassen?", "Was hast du in diesem Gespräch über dich selbst gelernt?", "Was ist deiner Meinung nach mein Hauptmerkmal?", "Vor welcher Frage hattest du am meisten Angst?", "Was glaubst du, warum wir uns getroffen haben?", "Wenn dieses Spiel vorbei ist, was wird dir von mir in Erinnerung bleiben?", "Was denkst du, ist meine Schwäche?", "Wie ergänzen sich unsere Persönlichkeiten?", "Was sollte ich über mich wissen, was ich vielleicht noch nicht weiß?", "Wodurch würdest du dich mir näher fühlen?", "Was bewunderst du am meisten an mir?", "Beschreibe mit einem Wort, wie du dich gerade fühlst.", "Glaubst du, dass jeder eine Berufung hat?", "Was können wir gemeinsam erschaffen?", "Welche Antwort von mir hat dich zum Strahlen gebracht?", "Was ist die attraktivste Eigenschaft an mir?", "Wann hast du dich in diesem Spiel am meisten mit mir verbunden gefühlt?", "Mit einem Wort: Wie würdest du unser Gespräch beschreiben?", "Bin ich so, wie du mich erwartet hast?", "Gib etwas zu.", "Wie würdest du mich einem Fremden beschreiben? (Nochmal)", "Was an mir hat dich am meisten überrascht?", "Wenn du mir für den Rest des Monats etwas verordnen könntest, was wäre das?",
+                    "Was denkst du, was ich in 5 Jahren mache?", "Was denkst du, was mein größter Traum ist?", "Was denkst du, was meine größte Angst ist?", "Was denkst du, was mich am glücklichsten macht?", "Was denkst du, was mich am traurigsten macht?", "Was denkst du, was mich am wütendsten macht?", "Was denkst du, was ich am meisten an mir mag?", "Was denkst du, was ich am wenigsten an mir mag?", "Was denkst du, was meine Freunde über mich sagen?", "Was denkst du, was meine Familie über mich sagt?", "Was denkst du, was mein Chef über mich sagt?", "Was denkst du, was mein Ex über mich sagt?", "Was denkst du, was ich über dich denke?", "Was denkst du, was wir gemeinsam haben?", "Was denkst du, was uns unterscheidet?", "Was denkst du, was wir voneinander lernen können?", "Was denkst du, wie wir uns gegenseitig helfen können?", "Was denkst du, wie unsere Zukunft aussieht?", "Was denkst du, was der Sinn unseres Treffens war?", "Was nimmst du aus diesem Gespräch mit?", "Was möchtest du mir noch sagen?", "Was möchtest du mich noch fragen?", "Was wünschst du mir?", "Was wünschst du uns?", "Was ist das Wichtigste, das du heute gelernt hast?", "Was hat dich heute am meisten berührt?"
                 ],
                 wildcards: [
-                    "Wildcard: Stellen und beantworten Sie die nächste Frage in einem anderen Akzent.",
-                    "Wildcard: Erfinde deine eigene Frage.",
-                    "Wildcard: Schreibe dein wichtigstes Ziel für den nächsten Monat auf. Vergleiche.",
-                    "Wildcard: Bewerte deine Tanzfähigkeiten (1-10). Bei 3 sagt ihr es laut!",
-                    "Wildcard: Zeichnet gemeinsam ein Bild (30 Sek).",
-                    "Wildcard: Denke an deine Lieblingsmüsli-Marke. Sagt es auf 3 laut!",
-                    "Wildcard: Denkt an eure Lieblingsserie aus der Kindheit. Sagt es auf 3 laut!",
-                    "Wildcard: Schreibe etwas auf, was andere nie über dich erraten würden. Vergleiche.",
-                    "Wildcard: Schaut euch für 30 Sekunden in die Augen. Was ist euch aufgefallen?",
-                    "Wildcard: Stell eine Vermutung über mich auf.",
-                    "Wildcard: Zeichne ein Porträt des anderen (1 Minute).",
-                    "Wildcard: Schließe deine Augen. Welche Farbe haben meine Augen?",
-                    "Wildcard: Schließe deine Augen. Welche Farbe hat mein Oberteil?",
-                    "Wildcard: Schreibe die 3 wichtigsten Dinge für eine Beziehung auf. Vergleiche.",
-                    "Wildcard: Schreibe auf, was dich beim Dating am meisten stört. Vergleiche.",
-                    "Wildcard: Zeichne deine aktuelle Stimmung.",
-                    "Wildcard: Stell eine Frage, die du dich sonst nicht trauen würdest.",
-                    "Wildcard: Erfindet einen geheimen Händedruck.",
-                    "Wildcard: Schreibe einen peinlichen Fakt über dich auf. Spielt Schnick-Schnack-Schnuck. Der Verlierer deckt auf.",
-                    "Wildcard: Tausche den Platz mit deinem Partner.",
-                    "Wildcard: Gib etwas zu.",
-                    "Wildcard: Sing den Refrain deines Lieblingssongs.",
-                    "Wildcard: Drücke 'Shuffle' bei deiner Musik. Erkläre den ersten Song.",
-                    "Wildcard: Staring Contest! Der erste der blinzelt, muss ein persönliches Problem nennen.",
-                    "Wildcard: Rufe jemanden an, den du bewunderst und sag ihm, warum du ihn schätzt.",
-                    "Wildcard: Zeige das erste Foto deiner Galerie. Erkläre es.",
-                    "Wildcard: Fordere deinen Partner auf, nächste Woche etwas außerhalb seiner Komfortzone zu tun.",
-                    "Wildcard: Wenn du mir für den Rest des Monats etwas verordnen könntest, was wäre das?",
-                    "Wildcard: Schreibt gegenseitig eure Dating-App-Biografien um (30 Sek).",
-                    "Wildcard: Zeichne deine Lieblingserinnerung mit mir.",
-                    "Wildcard: Beide schreiben einen Brief an ihr jüngeres Ich.",
-                    "Wildcard: Gebt euch gegenseitig Spitznamen.",
-                    "Wildcard: Schreibe eine Sache auf, die du dieses Jahr loslassen möchtest. Laut lesen, dann zerreißen.",
-                    "Wildcard: Schreibt ein Lied über euren Partner (30 Sek) und singt es.",
-                    "Wildcard: Eine Runde Schere, Stein, Papier. Der Gewinner darf alles fragen.",
-                    "Wildcard: Schreibe ein Ziel für dieses Jahr auf. Faltet und tauscht.",
-                    "Wildcard: Gib deinem Partner eine Umarmung. Eine warme, flauschige.",
-                    "Wildcard: Suche das Insta-Bild, das das Wesen deines Partners am besten repräsentiert.",
-                    "Wildcard: Mach deinem Partner ein Kompliment, das er nicht oft genug hört.",
-                    "Wildcard: Tausche einen Songvorschlag aus.",
-                    "Wildcard: Macht ein Selfie zusammen.",
-                    "Wildcard: Teilt etwas mit, wofür ihr gerade am dankbarsten seid."
+                    "Wildcard: Stellen und beantworten Sie die nächste Frage in einem anderen Akzent.", "Wildcard: Erfinde deine eigene Frage.", "Wildcard: Schreibe dein wichtigstes Ziel für den nächsten Monat auf. Vergleiche.", "Wildcard: Bewerte deine Tanzfähigkeiten (1-10). Bei 3 sagt ihr es laut!", "Wildcard: Zeichnet gemeinsam ein Bild (30 Sekunden).", "Wildcard: Denke an deine Lieblingsmüsli-Marke. Sagt es auf 3 laut!", "Wildcard: Denkt an eure Lieblingsserie aus der Kindheit. Sagt es auf 3 laut!", "Wildcard: Schreibe etwas auf, was andere nie über dich erraten würden.", "Wildcard: Schaut euch für 30 Sekunden in die Augen. Was ist euch aufgefallen?", "Wildcard: Stell eine Vermutung über mich auf.", "Wildcard: Zeichne ein Porträt des anderen (1 Minute).", "Wildcard: Schließe deine Augen. Welche Farbe haben meine Augen?", "Wildcard: Schließe deine Augen. Welche Farbe hat mein Oberteil?", "Wildcard: Schreibe die 3 wichtigsten Dinge für eine Beziehung auf. Vergleiche.", "Wildcard: Schreibe auf, was dich beim Dating am meisten stört. Vergleiche.", "Wildcard: Zeichne deine aktuelle Stimmung.", "Wildcard: Stell eine Frage, die du dich sonst nicht trauen würdest.", "Wildcard: Erfindet einen geheimen Händedruck.", "Wildcard: Schreibe einen peinlichen Fakt über dich auf. Spielt Schnick-Schnack-Schnuck.", "Wildcard: Tausche den Platz mit deinem Partner.", "Wildcard: Gib etwas zu.", "Wildcard: Sing den Refrain deines Lieblingssongs.", "Wildcard: Drücke 'Shuffle' bei deiner Musik. Erkläre den ersten Song.", "Wildcard: Staring Contest! Der erste der blinzelt, muss ein persönliches Problem nennen.", "Wildcard: Rufe jemanden an, den du bewunderst und sag ihm, warum du ihn schätzt.", "Wildcard: Zeige das erste Foto deiner Galerie. Erkläre es.", "Wildcard: Fordere deinen Partner auf, nächste Woche etwas außerhalb seiner Komfortzone zu tun.", "Wildcard: Wenn du mir für den Rest des Monats etwas verordnen könntest, was wäre das?", "Wildcard: Schreibt gegenseitig eure Dating-App-Biografien um (30 Sekunden).", "Wildcard: Zeichne deine Lieblingserinnerung mit mir.", "Wildcard: Beide schreiben einen Brief an ihr jüngeres Ich (1 Minute).", "Wildcard: Gebt euch gegenseitig Spitznamen.", "Wildcard: Schreibe eine Sache auf, die du dieses Jahr loslassen möchtest.", "Wildcard: Schreibt ein Lied über euren Partner (30 Sekunden) und singt es.", "Wildcard: Eine Runde Schere, Stein, Papier. Der Gewinner darf alles fragen.", "Wildcard: Schreibe ein Ziel für dieses Jahr auf. Faltet und tauscht.", "Wildcard: Gib deinem Partner eine Umarmung.", "Wildcard: Suche das Insta-Bild, das das Wesen deines Partners am besten repräsentiert.", "Wildcard: Mach deinem Partner ein Kompliment, das er nicht oft genug hört.", "Wildcard: Tausche einen Songvorschlag aus.", "Wildcard: Macht ein Selfie zusammen.", "Wildcard: Teilt etwas mit, wofür ihr gerade am dankbarsten seid.", "Wildcard: Erzähle deine Lebensgeschichte in 2 Minuten so detailliert wie möglich."
                 ]
             },
             'relationship': {
                 1: [
-                    "Was glaubst du, wie wichtig Geburtstage und Feiertage für mich sind? Erkläre.",
-                    "Was glaubst du, wer bei unserem ersten Treffen nervöser war? Erkläre.",
-                    "Was denkst du, wie mein perfekter Date-Abend aussehen würde?",
-                    "Was war das Erste, was dir an mir aufgefallen ist?",
-                    "Welche Vermutung hast du über mich geäußert, die sich als falsch herausgestellt hat?",
-                    "Auf einer Skala von 1-10, wie offen bin ich deiner Meinung nach dir gegenüber?"
+                    "Was glaubst du, wie wichtig Geburtstage und Feiertage für mich sind? Erkläre.", "Was glaubst du, wer bei unserem ersten Treffen nervöser war? Erkläre.", "Was denkst du, wie mein perfekter Date-Abend aussehen würde?", "Was war das Erste, was dir an mir aufgefallen ist?", "Welche Vermutung hast du über mich geäußert, die sich als falsch herausgestellt hat?", "Auf einer Skala von 1-10, wie offen bin ich deiner Meinung nach dir gegenüber?"
                 ],
                 2: [
-                    "Wie würde ein Tag aussehen, an dem ich komplett verwöhnt werde?",
-                    "Das Schwierigste für mich, dir etwas über mich zu verraten, war...",
-                    "Wie verdient man sich dein Vertrauen? Habe ich es verdient?",
-                    "Was hat dir diese Beziehung über dich selbst beigebracht?",
-                    "Was ist das Romantischste, was ich in letzter Zeit für dich getan habe?",
-                    "Auf welche Weise kann ich ein besserer Partner sein?",
-                    "Was ist die attraktivste Sache, die ich tue, ohne es zu merken?",
-                    "Was hast du aus unserem schlimmsten Streit gelernt?",
-                    "Woran arbeitest du gerade, was ich nicht sehe?",
-                    "Welches Lied beschreibt unsere Beziehung am besten?",
-                    "Denkst du, dass mein Job mich positiv oder negativ beeinflusst?",
-                    "Worauf reagierst du in letzter Zeit besonders sensibel?",
-                    "Welche Gefühle fallen dir schwer, mir mitzuteilen?",
-                    "Was hat dich sofort zu mir hingezogen? Und was mit der Zeit?",
-                    "Was ist das beste Geschenk, das ich dir je gemacht habe (materiell oder immateriell)?",
-                    "Was an dir ist am schwersten zu lieben?",
-                    "Was würdest du dir wünschen, dass wir mehr tun würden?",
-                    "Warum hast du dich in mich verliebt?",
-                    "Gibt es Unsicherheiten aus früheren Beziehungen, die du mitgenommen hast?",
-                    "Welches Erlebnis hat dich in letzter Zeit näher zu mir gebracht?",
-                    "Wie ergänzen sich unsere Stärken und Schwächen?",
-                    "Was habe ich dir geholfen, an dir selbst zu schätzen?",
-                    "Wie zeige ich, dass ich dich liebe, ohne es zu sagen?",
-                    "Wann habe ich dich das letzte Mal verletzt, vielleicht ungewollt?",
-                    "Habe ich dir geholfen, deine Meinung über etwas zu ändern?",
-                    "Wie wirkt sich unser Altersunterschied (oder das Fehlen) auf uns aus?",
-                    "Welche Angst, glaubst du, hält mich am meisten zurück?",
-                    "Wie können wir unser Intimleben auf eine kleine Weise verbessern?"
+                    "Wie würde ein Tag aussehen, an dem ich komplett verwöhnt werde?", "Das Schwierigste für mich, dir etwas über mich zu verraten, war...", "Wie verdient man sich dein Vertrauen?", "Was hat dir diese Beziehung über dich selbst beigebracht?", "Was ist das Romantischste, was ich in letzter Zeit für dich getan habe?", "Auf welche Weise kann ich ein besserer Partner sein?", "Was ist die attraktivste Sache, die ich tue, ohne es zu merken?", "Was hast du aus unserem schlimmsten Streit gelernt?", "Woran arbeitest du gerade, was ich nicht sehe?", "Welches Lied beschreibt unsere Beziehung am besten?", "Denkst du, dass mein Job mich positiv oder negativ beeinflusst?", "Worauf reagierst du in letzter Zeit besonders sensibel?", "Welche Gefühle fallen dir schwer, mir mitzuteilen?", "Was hat dich sofort zu mir hingezogen? Und was mit der Zeit?", "Was ist das beste Geschenk, das ich dir je gemacht habe?", "Was an dir ist am schwersten zu lieben?", "Was würdest du dir wünschen, dass wir mehr tun würden?", "Warum hast du dich in mich verliebt?", "Gibt es Unsicherheiten aus früheren Beziehungen, die du mitgenommen hast?", "Welches Erlebnis hat dich in letzter Zeit näher zu mir gebracht?", "Wie ergänzen sich unsere Stärken und Schwächen?", "Was habe ich dir geholfen, an dir selbst zu schätzen?", "Wie zeige ich, dass ich dich liebe, ohne es zu sagen?", "Wann habe ich dich das letzte Mal verletzt, vielleicht ungewollt?", "Habe ich dir geholfen, deine Meinung über etwas zu ändern?", "Wie wirkt sich unser Altersunterschied auf uns aus?", "Welche Angst, glaubst du, hält mich am meisten zurück?", "Wie können wir unser Intimleben verbessern?"
                 ],
                 3: [
-                    "Welche meiner Antworten hat dich am meisten überrascht?",
-                    "Gibt es etwas, das du noch nicht über mich weißt, aber gerne wüsstest?",
-                    "Welches Ziel würdest du dieses Jahr am liebsten erreichen?",
-                    "Worauf bist du in unserer Beziehung am meisten stolz?",
-                    "Was hast du in diesem Gespräch über unsere Beziehung gelernt?",
-                    "Vervollständige: Danke, dass du mir geholfen hast, ___ über mich zu erkennen.",
-                    "Was haben wir in dieser Beziehung, das du nie für möglich gehalten hättest?"
+                    "Welche meiner Antworten hat dich am meisten überrascht?", "Gibt es etwas, das du noch nicht über mich weißt, aber gerne wüsstest?", "Welches Ziel würdest du dieses Jahr am liebsten erreichen?", "Worauf bist du in unserer Beziehung am meisten stolz?", "Was hast du in diesem Gespräch über unsere Beziehung gelernt?", "Vervollständige: Danke, dass du mir geholfen hast, ___ über mich zu erkennen.", "Was haben wir in dieser Beziehung, das du nie für möglich gehalten hättest?"
                 ],
                 wildcards: [
-                    "Wildcard: Schreibe eine kleine Möglichkeit auf, wie du in dieser Beziehung besser sein kannst. (Beide Spieler)",
-                    "Wildcard: Skala 1-10: Wie wichtig ist es dir, Kinder zu haben? Vergleiche.",
-                    "Wildcard: Die 3 Dinge, die dein Partner tut, damit du dich geliebt fühlst.",
-                    "Wildcard: Schreibt ein Liebeslied für euren Partner (1 Min) und tragt es vor.",
-                    "Wildcard: Welchen Titel würdest du diesem Kapitel unserer Beziehung geben?",
-                    "Wildcard: Schreibe eine kurze Anleitung, wie man deinen Partner 'gut lieben' kann.",
-                    "Wildcard: Zeichne eine deiner schönsten Erinnerungen aus unserer Beziehung.",
-                    "Wildcard: Frage deinen Partner etwas, das du ihn noch nie gefragt hast.",
-                    "Wildcard: Schreibt die 3 Dinge auf, für die ihr beim Partner am dankbarsten seid.",
-                    "Wildcard: Schreibe deine 'Absicht' (Intention) für unsere Beziehung auf."
+                    "Wildcard: Schreibe eine kleine Möglichkeit auf, wie du in dieser Beziehung besser sein kannst.", "Wildcard: Skala 1-10: Wie wichtig ist es dir, Kinder zu haben?", "Wildcard: Die 3 Dinge, die dein Partner tut, damit du dich geliebt fühlst.", "Wildcard: Schreibt ein Liebeslied für euren Partner (1 Minute) und tragt es vor.", "Wildcard: Welchen Titel würdest du diesem Kapitel unserer Beziehung geben?", "Wildcard: Schreibe eine kurze Anleitung, wie man deinen Partner 'gut lieben' kann (30 Sekunden).", "Wildcard: Zeichne eine deiner schönsten Erinnerungen aus unserer Beziehung.", "Wildcard: Frage deinen Partner etwas, das du ihn noch nie gefragt hast.", "Wildcard: Schreibt die 3 Dinge auf, für die ihr beim Partner am dankbarsten seid.", "Wildcard: Schreibe deine 'Absicht' für unsere Beziehung auf."
                 ]
             },
             'ai': {
                 1: [
-                    "Wenn du dir eine Eigenschaft von mir aussuchen könntest, welche hättest du gerne selbst?",
-                    "Wirke ich wie jemand, der Entscheidungen aus dem Bauch oder mit dem Kopf trifft?",
-                    "Welches Buch oder welcher Film passt deiner Meinung nach zu meinem Leben?",
-                    "Glaubst du, ich hatte eine glückliche Kindheit? Warum?",
-                    "Was glaubst du, mache ich, wenn ich komplett allein zu Hause bin?",
-                    "Wirke ich wie jemand, der gut Geheimnisse bewahren kann?",
-                    "Was denkst du: Bin ich eher Optimist, Realist oder Pessimist?",
-                    "Welche Emotion zeige ich deiner Meinung nach am schwierigsten?",
-                    "Was ist eine 'kleine Freude', die mir den Tag retten kann?",
-                    "Bin ich eher jemand, der Konflikte sucht oder vermeidet?",
-                    "Wirke ich wie jemand, der gerne alleine reist?"
+                    "Wenn du dir eine Eigenschaft von mir aussuchen könntest, welche hättest du gerne selbst?", "Wirke ich wie jemand, der Entscheidungen aus dem Bauch oder mit dem Kopf trifft?", "Welches Buch oder welcher Film passt deiner Meinung nach zu meinem Leben?", "Glaubst du, ich hatte eine glückliche Kindheit?", "Was glaubst du, mache ich, wenn ich komplett allein zu Hause bin?", "Wirke ich wie jemand, der gut Geheimnisse bewahren kann?", "Was denkst du: Bin ich eher Optimist, Realist oder Pessimist?", "Welche Emotion zeige ich deiner Meinung nach am schwierigsten?", "Was ist eine 'kleine Freude', die mir den Tag retten kann?", "Bin ich eher jemand, der Konflikte sucht oder vermeidet?", "Wirke ich wie jemand, der gerne alleine reist?"
                 ],
                 2: [
-                    "Was ist eine Erinnerung, die du sehr schätzt, aber fast nie erzählst?",
-                    "Wann hast du zuletzt vor einer anderen Person geweint?",
-                    "Was ist eine Sache, für die du dich in der Vergangenheit geschämt hast, über die du heute lachst?",
-                    "Wenn du morgen aufwachst und eine neue Fähigkeit hättest, welche wäre das?",
-                    "Was ist das Mutigste, das du je getan hast?",
-                    "Was würdest du tun, wenn du wüsstest, dass du nicht scheitern kannst?",
-                    "Welche Rolle spielt Dankbarkeit in deinem Alltag?",
-                    "Was bedeutet für dich 'Zuhause'?",
-                    "Wenn du mit einer historischen Person zu Abend essen könntest, wer wäre es und warum?",
-                    "Was ist deine Sprache der Liebe (Words, Touch, Gifts, Acts, Time)?",
-                    "Was ist dein Bindungsstil (sicher, ängstlich, vermeidend) und wie beeinflusst er uns?",
-                    "Was ist eine Sache, die du deinen Eltern noch nie gesagt hast?",
-                    "Wenn du eine Kristallkugel hättest, die dir die Wahrheit über dich, dein Leben oder die Zukunft verrät, was würdest du wissen wollen?",
-                    "Gibt es etwas, das du schon lange tun wolltest? Warum hast du es noch nicht getan?"
+                    "Was ist eine Erinnerung, die du sehr schätzt, aber fast nie erzählst?", "Wann hast du zuletzt vor einer anderen Person geweint?", "Was ist eine Sache, für die du dich in der Vergangenheit geschämt hast?", "Wenn du morgen aufwachst und eine neue Fähigkeit hättest, welche wäre das?", "Was ist das Mutigste, das du je getan hast?", "Was würdest du tun, wenn du wüsstest, dass du nicht scheitern kannst?", "Welche Rolle spielt Dankbarkeit in deinem Alltag?", "Was bedeutet für dich 'Zuhause'?", "Wenn du mit einer historischen Person zu Abend essen könntest, wer wäre es?", "Was ist deine Sprache der Liebe?", "Was ist dein Bindungsstil und wie beeinflusst er uns?", "Was ist eine Sache, die du deinen Eltern noch nie gesagt hast?", "Wenn du eine Kristallkugel hättest, was würdest du wissen wollen?", "Gibt es etwas, das du schon lange tun wolltest? Warum nicht?"
                 ],
                 3: [
-                    "Teile ein persönliches Problem und frage dein Gegenüber, wie er/sie es lösen würde.",
-                    "Was schätzt du an unserer Freundschaft/Beziehung am meisten?",
-                    "Was ist eine Sache, die du an mir bewunderst, die ich selbst vielleicht gar nicht sehe?",
-                    "Wenn wir uns in 10 Jahren treffen, wo siehst du uns beide?",
-                    "Was bedeutet Verletzlichkeit für dich?",
-                    "Was würdest du an deiner Art, wie du erzogen wurdest, ändern, wenn du könntest?",
-                    "Wenn du heute Abend sterben würdest, ohne mit jemandem sprechen zu können: Was würdest du am meisten bereuen, nicht gesagt zu haben?",
-                    "Erzähle mir von einem Moment, in dem du dich richtig stolz auf dich gefühlt hast.",
-                    "Was ist für dich zu ernst, um darüber Witze zu machen?"
+                    "Teile ein persönliches Problem und frage dein Gegenüber, wie er/sie es lösen würde.", "Was schätzt du an unserer Freundschaft am meisten?", "Was ist eine Sache, die du an mir bewunderst?", "Wenn wir uns in 10 Jahren treffen, wo siehst du uns beide?", "Was bedeutet Verletzlichkeit für dich?", "Was würdest du an deiner Art, wie du erzogen wurdest, ändern?", "Wenn du heute Abend sterben würdest: Was würdest du bereuen, nicht gesagt zu haben?", "Erzähle mir von einem Moment, in dem du dich richtig stolz gefühlt hast.", "Was ist für dich zu ernst, um darüber Witze zu machen?"
                 ],
                 wildcards: [
-                    "Wildcard: Erzähle deine Lebensgeschichte in 2 Minuten so detailliert wie möglich.",
-                    "Wildcard: Mache deinem Gegenüber drei ehrliche 'Wir'-Komplimente (z.B. 'Ich mag, wie wir zusammen lachen').",
-                    "Wildcard: Schließe die Augen und beschreibe das Gesicht deines Gegenübers."
+                    "Wildcard: Erzähle deine Lebensgeschichte in 2 Minuten so detailliert wie möglich.", "Wildcard: Mache deinem Gegenüber drei ehrliche 'Wir'-Komplimente.", "Wildcard: Schließe die Augen und beschreibe das Gesicht deines Gegenübers."
                 ]
             },
             'christian': {
                 1: [
-                    "Was ist ein frommes Klischee, das auf mich so gar nicht zutrifft?",
-                    "Wirke ich wie jemand, der im Gottesdienst eher die Hände hebt oder still sitzt?",
-                    "Glaubst du, ich habe mehr Zweifel oder mehr Gewissheit?",
-                    "Welche biblische Figur passt am ehesten zu meinem Charakter?",
-                    "Glaubst du, ich bin eher gesetzlich oder eher liberal?",
-                    "Welches christliche Lied kannst du heimlich nicht mehr hören?",
-                    "Was ist ein Vorurteil über Christen, das dich nervt?",
-                    "Was denkst du: Was ist mein Lieblingsbuch in der Bibel?",
-                    "Welche christliche Phrase benutzt du oft, weißt aber eigentlich gar nicht, was sie bedeutet?",
-                    "Wenn du Gott eine Frage stellen könntest, die er sofort beantwortet, welche wäre das?"
+                    "Was ist ein frommes Klischee, das auf mich so gar nicht zutrifft?", "Wirke ich wie jemand, der im Gottesdienst eher die Hände hebt oder still sitzt?", "Glaubst du, ich habe mehr Zweifel oder mehr Gewissheit?", "Welche biblische Figur passt am ehesten zu meinem Charakter?", "Glaubst du, ich bin eher gesetzlich oder eher liberal?", "Welches christliche Lied kannst du heimlich nicht mehr hören?", "Was ist ein Vorurteil über Christen, das dich nervt?", "Was denkst du: Was ist mein Lieblingsbuch in der Bibel?", "Welche christliche Phrase benutzt du oft, weißt aber nicht, was sie bedeutet?", "Wenn du Gott eine Frage stellen könntest, welche wäre das?"
                 ],
                 2: [
-                    "Welche religiöse Regel hast du gebrochen und dich dabei gut gefühlt?",
-                    "Wie hat sich dein Gottesbild in den letzten 5 Jahren verändert?",
-                    "Hast du dich schon mal für deine Gemeinde geschämt?",
-                    "Was ist eine Frage an Gott, auf die du noch keine Antwort hast?",
-                    "Wann hast du dich zuletzt von der Kirche/Gemeinde enttäuscht gefühlt?",
-                    "Was bedeutet für dich 'Gnade' im echten Leben, nicht theologisch?",
-                    "Welchen Teil der Bibel findest du schwierig oder sogar abstoßend?",
-                    "Gibt es eine Sünde, die wir als Christen zu wichtig nehmen, und eine, die wir ignorieren?",
-                    "Wie gehst du mit dem 'Schweigen Gottes' um?",
-                    "Wo hast du Gott zuletzt im Alltag erlebt (außerhalb vom Gottesdienst)?",
-                    "Was würdest du dem 'Du' von vor 10 Jahren über den Glauben sagen?",
-                    "Fühlst du dich in deiner Gemeinde wirklich gesehen?",
-                    "Was ist ein Glaubenssatz, den du dekonstruiert/abgelegt hast?",
-                    "Wann hast du das letzte Mal gebetet und hattest das Gefühl, niemand hört zu?",
-                    "Welche theologische Überzeugung hast du geändert?",
-                    "Was bedeutet 'Freiheit' im Glauben für dich?"
+                    "Welche religiöse Regel hast du gebrochen und dich dabei gut gefühlt?", "Wie hat sich dein Gottesbild in den letzten 5 Jahren verändert?", "Hast du dich schon mal für deine Gemeinde geschämt?", "Was ist eine Frage an Gott, auf die du noch keine Antwort hast?", "Wann hast du dich zuletzt von der Kirche enttäuscht gefühlt?", "Was bedeutet für dich 'Gnade' im echten Leben?", "Welchen Teil der Bibel findest du schwierig oder abstoßend?", "Gibt es eine Sünde, die wir als Christen zu wichtig nehmen?", "Wie gehst du mit dem 'Schweigen Gottes' um?", "Wo hast du Gott zuletzt im Alltag erlebt?", "Was würdest du dem 'Du' von vor 10 Jahren über den Glauben sagen?", "Fühlst du dich in deiner Gemeinde wirklich gesehen?", "Was ist ein Glaubenssatz, den du dekonstruiert hast?", "Wann hast du das letzte Mal gebetet und hattest das Gefühl, niemand hört zu?", "Welche theologische Überzeugung hast du geändert?", "Was bedeutet 'Freiheit' im Glauben für dich?"
                 ],
                 3: [
-                    "Was schätzt du an meiner Art, meinen Glauben (oder Zweifel) zu leben?",
-                    "Wo können wir uns gegenseitig in unserer geistlichen Reise unterstützen?",
-                    "Was glaubst du, ist meine geistliche Gabe?",
-                    "Was ist das Mutigste, das du in deinem Glaubensleben je getan hast?",
-                    "Was können wir tun, um unsere Werte authentischer zu leben?",
-                    "Was ist das 'Heiligste' in unserem gemeinsamen Leben?",
-                    "Welche geistliche Verletzung trägst du noch mit dir rum?",
-                    "Wenn Jesus heute hier säße, was würde er zu uns sagen?",
-                    "Glaubst du, dass Zweifel zum Glauben dazugehören?",
-                    "Was bedeutet 'Nächstenliebe' konkret für unsere Beziehung?"
+                    "Was schätzt du an meiner Art, meinen Glauben zu leben?", "Wo können wir uns gegenseitig in unserer geistlichen Reise unterstützen?", "Was glaubst du, ist meine geistliche Gabe?", "Was ist das Mutigste, das du in deinem Glaubensleben je getan hast?", "Was können wir tun, um unsere Werte authentischer zu leben?", "Was ist das 'Heiligste' in unserem gemeinsamen Leben?", "Welche geistliche Verletzung trägst du noch mit dir rum?", "Wenn Jesus heute hier säße, was würde er zu uns sagen?", "Glaubst du, dass Zweifel zum Glauben dazugehören?", "Was bedeutet 'Nächstenliebe' konkret für unsere Beziehung?"
                 ],
                 wildcards: [
-                    "Wildcard: Betet füreinander. Aber dankt Gott nur für Eigenschaften des anderen.",
-                    "Wildcard: Erzähle von einem Moment, in dem du an Gott gezweifelt hast.",
-                    "Wildcard: Teile deinen lieblings Worship-Song und warum er dich berührt."
+                    "Wildcard: Betet füreinander (Eigenschaften danken).", "Wildcard: Erzähle von einem Moment, in dem du an Gott gezweifelt hast.", "Wildcard: Teile deinen lieblings Worship-Song und warum er dich berührt."
                 ]
             }
         };
@@ -743,22 +482,20 @@
         // --- STATE VARIABLES ---
         let activePacks = ['standard'];
         let currentStack = [];
+        let globalWildcardStack = []; // Der zentrale Topf für Wildcards
         let currentLevel = 1;
         let cardsPlayedCount = 0;
         let cardsLimit = 15;
         let isRotationEnabled = false;
         let isRotated = false;
-        
-        // Neu: Globaler Wildcard-Stapel
-        let globalWildcardStack = [];
+        let timerInterval = null;
 
-        // --- SETUP & UI FUNCTIONS ---
+        // --- UI FUNKTIONEN ---
 
         function checkPassword() {
             const inputElement = document.getElementById('password-input');
             if(!inputElement) return;
             const cleanInput = inputElement.value.trim().toLowerCase();
-            
             if (cleanInput === "banane") { 
                 showScreen('menu-screen');
             } else {
@@ -799,26 +536,24 @@
             cardsLimit = value;
         }
 
-        // --- SPIEL LOGIK ---
+        // --- GAME LOGIC ---
 
         function initGame() {
             if (activePacks.length === 0) {
                 alert("Bitte wähle mindestens ein Pack aus!");
                 return;
             }
-            
-            // 1. Alle Wildcards aus den aktiven Packs sammeln
+
+            // 1. Alle Wildcards sammeln
             let allWildcards = [];
             activePacks.forEach(pack => {
                 if (databases[pack]['wildcards']) {
                     allWildcards = allWildcards.concat(databases[pack]['wildcards'].map(t => ({text: t, type: 'wildcard'})));
                 }
             });
-            
-            // 2. Einmal global mischen
+            // 2. Einmalig mischen
             shuffleArray(allWildcards);
-            
-            // 3. In den globalen Speicher legen, damit sie über die Level hinweg aufgebraucht werden können
+            // 3. Global speichern
             globalWildcardStack = allWildcards;
 
             currentLevel = 1;
@@ -828,9 +563,7 @@
 
         function quitGame() {
             showScreen('menu-screen');
-            const cardDisplay = document.getElementById('card-display');
-            cardDisplay.classList.remove('rotated');
-            isRotated = false;
+            resetCardDisplay();
         }
 
         function loadLevel(level) {
@@ -839,9 +572,8 @@
             document.getElementById('next-level-btn').style.display = 'none';
             document.getElementById('level-indicator').innerText = "Level " + level;
 
+            // Fragen laden
             let levelQuestions = [];
-
-            // Fragen für das aktuelle Level sammeln
             activePacks.forEach(pack => {
                 if (databases[pack][level]) {
                     levelQuestions = levelQuestions.concat(databases[pack][level].map(t => ({text: t, type: 'normal'})));
@@ -854,21 +586,14 @@
                 return;
             }
 
-            // Fragen mischen
             shuffleArray(levelQuestions);
 
-            // Jetzt Wildcards aus dem globalen Topf beimischen
-            // Wir berechnen, wie viele Wildcards wir für diesen Stapel wollen
-            // z.B. ca. 20% der Fragenanzahl, aber mindestens 1 (wenn noch welche da sind)
+            // Wildcards beimischen (ca. 20% der Fragenmenge)
             let wildcardsNeeded = Math.ceil(levelQuestions.length / 5);
-            
-            // Wir nehmen die benötigten Karten oben vom globalen Stapel weg (splice entfernt sie dort!)
-            // Dadurch kann keine Wildcard doppelt kommen.
+            // Nimm Karten oben vom globalen Stapel (keine Doppelten!)
             let wildcardsToAdd = globalWildcardStack.splice(0, wildcardsNeeded);
 
             let combinedStack = [...levelQuestions];
-
-            // Die gezogenen Wildcards an zufällige Positionen stecken
             wildcardsToAdd.forEach(wc => {
                 const randomPos = Math.floor(Math.random() * (combinedStack.length + 1));
                 combinedStack.splice(randomPos, 0, wc);
@@ -878,37 +603,33 @@
             nextCard(true);
         }
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-
         function nextCard(isInitial = false) {
             if (!isInitial) cardsPlayedCount++;
+            
+            // Timer stoppen & UI resetten
+            resetTimerUI();
 
             const cardDisplay = document.getElementById('card-display');
             const cardText = document.getElementById('card-text');
             const nextBtn = document.getElementById('next-level-btn');
 
+            // Rotation
             if (isRotationEnabled && !isInitial) {
                 isRotated = !isRotated; 
-                if (isRotated) {
-                    cardDisplay.classList.add('rotated');
-                } else {
-                    cardDisplay.classList.remove('rotated');
-                }
+                if (isRotated) cardDisplay.classList.add('rotated');
+                else cardDisplay.classList.remove('rotated');
             } else if (isInitial) {
                 isRotated = false;
                 cardDisplay.classList.remove('rotated');
             }
 
+            // Limit Check
             if (cardsPlayedCount >= cardsLimit) {
                 nextBtn.style.display = "block";
                 nextBtn.innerText = currentLevel < 3 ? "WEITER ZU LEVEL " + (currentLevel + 1) : "ZUM ABSCHLUSS";
             }
 
+            // Stapel leer?
             if (currentStack.length === 0) {
                 if (currentLevel < 3) {
                     cardText.innerText = "Level " + currentLevel + " durchgespielt!";
@@ -922,6 +643,7 @@
                 }
             }
 
+            // Text Update
             const content = document.getElementById('card-content-wrapper');
             content.classList.remove('fade-in-text');
             void content.offsetWidth; 
@@ -930,11 +652,80 @@
             const card = currentStack.pop();
             cardText.innerText = card.text;
 
-            cardDisplay.classList.remove('wildcard', 'endcard');
-            
+            // Design
+            cardDisplay.classList.remove('wildcard', 'endcard', 'flash');
             if (card.type === "wildcard") {
                 cardDisplay.classList.add("wildcard");
+                checkForTimer(card.text); // Timer prüfen
             }
+        }
+
+        // --- TIMER LOGIK ---
+        function checkForTimer(text) {
+            // Regex sucht nach "X Minute(n)" oder "X Sekunde(n)"
+            // \d+ = Zahl, \s* = Leerzeichen egal, (Min|Sek) = Wörter
+            const regex = /(\d+)\s*(Min|Sek)/i;
+            const match = text.match(regex);
+
+            if (match) {
+                let value = parseInt(match[1]);
+                const unit = match[2].toLowerCase();
+                
+                let seconds = 0;
+                if (unit.startsWith('min')) seconds = value * 60;
+                else seconds = value;
+
+                // UI zeigen
+                const container = document.getElementById('timer-container');
+                const btn = container.querySelector('.timer-btn');
+                const display = document.getElementById('timer-display');
+                
+                container.style.display = 'flex';
+                btn.style.display = 'block';
+                btn.innerText = "Timer starten (" + match[0] + ")";
+                display.innerText = "";
+                
+                // Speichern für Start-Klick
+                btn.onclick = function() { startTimer(seconds); };
+            }
+        }
+
+        function startTimer(duration) {
+            const btn = document.querySelector('.timer-btn');
+            const display = document.getElementById('timer-display');
+            
+            btn.style.display = 'none'; // Button weg
+            let timeLeft = duration;
+            
+            display.innerText = formatTime(timeLeft);
+
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                display.innerText = formatTime(timeLeft);
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    display.innerText = "ZEIT UM!";
+                    // Flash Effekt
+                    document.getElementById('card-display').classList.add('flash');
+                    // Optional: Vibration (falls vom Handy unterstützt)
+                    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                }
+            }, 1000);
+        }
+
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return m + ":" + (s < 10 ? "0" : "") + s;
+        }
+
+        function resetTimerUI() {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('timer-container').style.display = 'none';
+            document.getElementById('card-display').classList.remove('flash');
         }
 
         function advanceToNextLevel() {
@@ -957,21 +748,25 @@
             cardDisplay.classList.remove('wildcard', 'rotated');
             cardDisplay.classList.add('endcard');
             isRotated = false;
-            
             levelInd.innerText = "Finale";
         }
 
+        function resetCardDisplay() {
+            const cardDisplay = document.getElementById('card-display');
+            cardDisplay.classList.remove('rotated', 'wildcard', 'endcard');
+            isRotated = false;
+            resetTimerUI();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').then(reg => {
-                reg.onupdatefound = () => {
-                    const installingWorker = reg.installing;
-                    installingWorker.onstatechange = () => {
-                        if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            console.log('Neues Update verfügbar!');
-                        }
-                    };
-                };
-            });
+            navigator.serviceWorker.register('sw.js');
         }
     </script>
 </body>
