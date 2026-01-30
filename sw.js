@@ -1,4 +1,4 @@
-const CACHE_NAME = "deeptalk-v10";
+const CACHE_NAME = "deeptalk-v11";
 // Liste aller Dateien, die offline verfügbar sein sollen
 const ASSETS = [
     "./",
