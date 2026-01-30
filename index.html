@@ -578,14 +578,19 @@
         // --- SETUP & UI FUNCTIONS ---
 
         function checkPassword() {
-            const input = document.getElementById('password-input').value;
-            if (input === "banane") { // DEIN PASSWORT
+            // Holen, Leerzeichen wegmachen (.trim), alles klein machen (.toLowerCase)
+            const rawInput = document.getElementById('password-input').value;
+            const cleanInput = rawInput.trim().toLowerCase();
+            
+            // Debugging-Hilfe (nur für dich, falls es klemmt)
+            console.log("Eingegeben:", rawInput, "Geprüft als:", cleanInput);
+
+            if (cleanInput === "banane") { 
                 showScreen('menu-screen');
             } else {
-                alert("Falsches Passwort!");
+                alert("Falsches Passwort! Du hast eingegeben: '" + rawInput + "'");
             }
         }
-
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
