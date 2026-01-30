@@ -17,7 +17,7 @@
             --wildcard-bg: #b82326;
             --wildcard-text: #ffffff;
             --btn-color: #111;
-            --btn-red: #b82326;
+            --btn-red: #b82326; /* WNRS Rot */
         }
 
         body {
@@ -31,6 +31,7 @@
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
             overscroll-behavior: none;
+            /* Safe Areas */
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
             box-sizing: border-box;
@@ -39,10 +40,11 @@
         .screen {
             width: 100%;
             height: 100%;
-            display: none; /* WICHTIG: Standardmäßig unsichtbar */
+            display: none; 
             flex-direction: column;
             align-items: center;
-            padding: 0 20px;
+            /* Padding nur global, wird bei game-screen überschrieben */
+            padding: 0 20px; 
             box-sizing: border-box;
             text-align: center;
             position: absolute;
@@ -51,21 +53,15 @@
             z-index: 1;
         }
 
-        /* --- LAYOUTS --- */
-        
-        #login-screen {
-            justify-content: center;
-        }
+        .screen.active { display: flex; z-index: 10; }
 
+        /* --- STARTSEITE --- */
         #menu-screen {
-            /* Hier stand vorher fälschlicherweise display: flex */
             justify-content: space-between; 
+            /* Symmetrischer Abstand oben */
             padding-top: calc(env(safe-area-inset-top) + 30px); 
             padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
         }
-
-        /* Nur wenn die Klasse .active da ist, wird flex aktiviert */
-        .screen.active { display: flex; z-index: 10; }
 
         h1 { 
             font-size: 2.5rem; 
@@ -83,13 +79,19 @@
             flex-direction: column;
             gap: 15px;
             flex-grow: 1;
-            justify-content: center;
+            justify-content: center; /* Inhalt vertikal zentrieren */
         }
 
         .menu-footer {
             width: 100%;
             max-width: 380px;
-            margin-bottom: 20px; /* Mehr Abstand nach unten */
+            /* Flexibles Layout für Footer, um Abstand zu erzwingen */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px; /* Mindestabstand zum Inhalt */
+            /* Viel Platz unten für Symmetrie zu Oben */
+            margin-bottom: 20px; 
         }
 
         .section-title {
@@ -173,7 +175,8 @@
             transition: transform 0.3s;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .toggle-container.active .toggle-switch { background: #111; }
+        /* TISCH MODUS ROT */
+        .toggle-container.active .toggle-switch { background: var(--btn-red); }
         .toggle-container.active .toggle-switch::after { transform: translateX(18px); }
 
         .options-container { display: flex; gap: 8px; width: 100%; }
@@ -190,8 +193,9 @@
         }
         .opt-btn.active { border-color: #111; color: #111; background: white; }
 
+        /* START BUTTON ROT */
         .btn-primary {
-            background-color: var(--btn-color);
+            background-color: var(--btn-red);
             color: white;
             border: none;
             padding: 18px 0;
@@ -201,20 +205,19 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: bold;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 20px rgba(184, 35, 38, 0.3);
             transition: transform 0.1s;
             width: 100%;
-            margin-bottom: 15px; /* Abstand zur Anleitung */
         }
         .btn-primary:active { transform: scale(0.96); }
 
-        /* ANLEITUNG */
+        /* --- ANLEITUNG --- */
         #rules-screen {
             justify-content: flex-start;
             padding-top: max(40px, env(safe-area-inset-top)); 
             padding-bottom: 40px;
             overflow-y: auto; 
-            overflow-x: hidden; /* Fix: Kein seitliches Wackeln */
+            overflow-x: hidden; 
             width: 100%;
         }
 
@@ -223,7 +226,7 @@
             padding: 25px;
             border-radius: 20px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            line-height: 1.6;
+            line-height: 1.5;
             text-align: left;
             max-width: 400px;
             width: 100%;
@@ -231,7 +234,7 @@
             font-size: 0.9rem;
         }
 
-        .btn-red {
+        .btn-back {
             margin-top: 25px;
             padding: 14px 50px;
             background: var(--btn-red);
@@ -244,19 +247,19 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             box-shadow: 0 5px 15px rgba(184, 35, 38, 0.25);
-            transition: transform 0.1s;
         }
-        .btn-red:active { transform: scale(0.95); }
 
-        /* GAME SCREEN */
+        /* --- GAME SCREEN (FIXED) --- */
         #game-screen {
             justify-content: center; 
             align-items: center;    
+            padding: 0; /* WICHTIG: Kein Padding, damit Karten zentriert bleiben */
         }
 
         #card-display {
             background: var(--card-bg);
-            width: 88%;
+            /* WICHTIG: Viewport Width Unit nutzen für perfekte Zentrierung */
+            width: 85vw; 
             max-width: 360px;
             aspect-ratio: 3/4; 
             border-radius: 25px;
@@ -274,7 +277,7 @@
             transform-style: preserve-3d;
             cursor: pointer;
             -webkit-font-smoothing: antialiased;
-            margin: auto; 
+            margin: 0 auto; /* Zentrieren */
         }
 
         #card-display.wildcard { background: var(--wildcard-bg); color: var(--wildcard-text); }
@@ -377,14 +380,7 @@
 </head>
 <body>
 
-    <div id="login-screen" class="screen active">
-        <h1>Deep Talk</h1>
-        <p style="opacity: 0.6; margin-top: -10px; margin-bottom: 30px;">Private Edition</p>
-        <input type="password" id="password-input" placeholder="Passwort">
-        <button class="btn-primary" onclick="checkPassword()">Eintreten</button>
-    </div>
-
-    <div id="menu-screen" class="screen">
+    <div id="menu-screen" class="screen active">
         <h1>Deep Talk</h1>
         
         <div class="menu-content">
@@ -435,7 +431,6 @@
     <div id="rules-screen" class="screen">
         <h2 style="margin-top:10px;">Anleitung</h2>
         <div class="rules-content">
-            
             <p><strong>So wird gespielt:</strong></p>
             <ol style="padding-left: 20px; margin-top: 5px;">
                 <li>Setzt euch einander gegenüber.</li>
@@ -445,20 +440,17 @@
                 <li>Dann wird gewechselt.</li>
             </ol>
 
-            <p><strong>Spezialkarten:</strong></p>
-            <p><strong>Wildcards:</strong> Aktionskarten, die das Spiel unterbrechen (z.B. "Zeichnet ein Bild"). Wenn eine Zeitangabe (z.B. "2 Min") dabei steht, erscheint ein Timer-Button. Wildcards kommen zufällig.</p>
-
-            <p><strong>Die Bibliotheken:</strong></p>
+            <p><strong>Bibliotheken:</strong></p>
             <ul style="padding-left:20px; margin-top: 5px; font-size: 0.85rem; color: #555;">
-                <li>Standard: Das Original (~215 Karten)</li>
-                <li>Beziehung: Für Paare (~66 Karten)</li>
-                <li>Psychologie: Deep Talk & Studien (~80 Karten)</li>
-                <li>Glaube: Zweifel & Hoffnung (~80 Karten)</li>
+                <li>Standard (~215 Karten)</li>
+                <li>Beziehung (~66 Karten)</li>
+                <li>Psychologie (~80 Karten)</li>
+                <li>Glaube (~80 Karten)</li>
             </ul>
             
-            <p style="font-size: 0.8rem; opacity: 0.7;"><strong>Tipp:</strong> Aktiviert den "Tisch-Modus", wenn das Handy flach liegt. Die Karten drehen sich dann automatisch zum Vorlesen.</p>
+            <p style="font-size: 0.8rem; opacity: 0.7;"><strong>Tipp:</strong> Aktiviert den "Tisch-Modus", wenn das Handy flach liegt. Die Karten drehen sich dann automatisch.</p>
         </div>
-        <button class="btn-red" onclick="showScreen('menu-screen')">Zurück</button>
+        <button class="btn-back" onclick="showScreen('menu-screen')">Zurück</button>
     </div>
 
     <div id="game-screen" class="screen">
@@ -560,16 +552,7 @@
         // --- UI FUNKTIONEN ---
 
         function checkPassword() {
-            const inputElement = document.getElementById('password-input');
-            if(!inputElement) return;
-            const cleanInput = inputElement.value.trim().toLowerCase();
-            
-            // PASSWORT HIER
-            if (cleanInput === "banane") { 
-                showScreen('menu-screen');
-            } else {
-                alert("Falsches Passwort!");
-            }
+            // Deaktiviert
         }
 
         function showScreen(screenId) {
