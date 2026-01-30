@@ -17,6 +17,7 @@
             --wildcard-bg: #b82326;
             --wildcard-text: #ffffff;
             --btn-color: #111;
+            --btn-red: #b82326;
         }
 
         body {
@@ -38,7 +39,7 @@
         .screen {
             width: 100%;
             height: 100%;
-            display: none;
+            display: none; /* WICHTIG: Standardmäßig unsichtbar */
             flex-direction: column;
             align-items: center;
             padding: 0 20px;
@@ -50,16 +51,20 @@
             z-index: 1;
         }
 
-        /* --- STARTSEITE LAYOUT OPTIMIERUNG --- */
+        /* --- LAYOUTS --- */
+        
+        #login-screen {
+            justify-content: center;
+        }
+
         #menu-screen {
-            /* Flexbox verteilt den Platz vertikal */
-            display: flex;
-            flex-direction: column;
+            /* Hier stand vorher fälschlicherweise display: flex */
             justify-content: space-between; 
             padding-top: calc(env(safe-area-inset-top) + 30px); 
             padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
         }
 
+        /* Nur wenn die Klasse .active da ist, wird flex aktiviert */
         .screen.active { display: flex; z-index: 10; }
 
         h1 { 
@@ -71,22 +76,20 @@
             flex-shrink: 0;
         }
         
-        /* Der Hauptinhalt zentriert sich im verfügbaren Platz */
         .menu-content {
             width: 100%;
             max-width: 380px;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            flex-grow: 1; /* Nimmt den Platz ein */
-            justify-content: center; /* Zentriert die Boxen vertikal */
+            flex-grow: 1;
+            justify-content: center;
         }
 
-        /* Der Footer (Button + Link) wird nach unten geschoben */
         .menu-footer {
             width: 100%;
             max-width: 380px;
-            margin-bottom: 10px;
+            margin-bottom: 20px; /* Mehr Abstand nach unten */
         }
 
         .section-title {
@@ -201,18 +204,18 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
             transition: transform 0.1s;
             width: 100%;
-            margin-bottom: 20px; /* Platz zur Anleitung */
+            margin-bottom: 15px; /* Abstand zur Anleitung */
         }
         .btn-primary:active { transform: scale(0.96); }
 
-        /* ANLEITUNG SCREEN FIX */
+        /* ANLEITUNG */
         #rules-screen {
             justify-content: flex-start;
             padding-top: max(40px, env(safe-area-inset-top)); 
             padding-bottom: 40px;
             overflow-y: auto; 
-            overflow-x: hidden; /* Verhindert seitliches Wackeln */
-            width: 100vw; /* Volle Breite erzwingen */
+            overflow-x: hidden; /* Fix: Kein seitliches Wackeln */
+            width: 100%;
         }
 
         .rules-content {
@@ -223,27 +226,29 @@
             line-height: 1.6;
             text-align: left;
             max-width: 400px;
-            width: 100%; /* Passt sich an */
-            box-sizing: border-box; /* Wichtig für Padding */
+            width: 100%;
+            box-sizing: border-box;
             font-size: 0.9rem;
         }
 
         .btn-red {
-            margin-top: 20px;
-            padding: 12px 40px;
-            background: #b82326; /* WNRS Rot */
+            margin-top: 25px;
+            padding: 14px 50px;
+            background: var(--btn-red);
             color: white;
             border: none;
-            border-radius: 30px;
+            border-radius: 50px;
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 4px 10px rgba(184, 35, 38, 0.3);
+            box-shadow: 0 5px 15px rgba(184, 35, 38, 0.25);
+            transition: transform 0.1s;
         }
+        .btn-red:active { transform: scale(0.95); }
 
-        /* KARTEN DESIGN */
+        /* GAME SCREEN */
         #game-screen {
             justify-content: center; 
             align-items: center;    
@@ -372,7 +377,7 @@
 </head>
 <body>
 
-    <div id="login-screen" class="screen active" style="justify-content: center;">
+    <div id="login-screen" class="screen active">
         <h1>Deep Talk</h1>
         <p style="opacity: 0.6; margin-top: -10px; margin-bottom: 30px;">Private Edition</p>
         <input type="password" id="password-input" placeholder="Passwort">
@@ -436,12 +441,12 @@
                 <li>Setzt euch einander gegenüber.</li>
                 <li>Schaut euch tief in die Augen. <strong>Wer zuerst blinzelt, fängt an.</strong></li>
                 <li>Spieler A zieht eine Karte und liest sie vor. Spieler B antwortet.</li>
-                <li><em>(Optional: Spieler A darf danach auch antworten, wenn er möchte).</em></li>
+                <li><em>(Optional: Spieler A darf danach auch antworten, um das Gespräch zu vertiefen).</em></li>
                 <li>Dann wird gewechselt.</li>
             </ol>
 
             <p><strong>Spezialkarten:</strong></p>
-            <p><strong>Wildcards:</strong> Aktionskarten, die das Spiel unterbrechen. Sie müssen sofort ausgeführt werden. Wenn eine Zeitangabe (z.B. "2 Min") dabei steht, erscheint ein Timer-Button. Diese Karten werden zufällig untergemischt.</p>
+            <p><strong>Wildcards:</strong> Aktionskarten, die das Spiel unterbrechen (z.B. "Zeichnet ein Bild"). Wenn eine Zeitangabe (z.B. "2 Min") dabei steht, erscheint ein Timer-Button. Wildcards kommen zufällig.</p>
 
             <p><strong>Die Bibliotheken:</strong></p>
             <ul style="padding-left:20px; margin-top: 5px; font-size: 0.85rem; color: #555;">
@@ -774,7 +779,7 @@
                     // Flash Effekt
                     document.getElementById('card-display').classList.add('flash');
                     
-                    // VIBRATION
+                    // VIBRATION (funktioniert auf Android immer, auf iOS nur nach User-Interaktion)
                     if ("vibrate" in navigator) {
                         navigator.vibrate([500, 200, 500]);
                     }
